@@ -1,14 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragment.Home">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="홈페이지" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        >
 
-</FrameLayout>
+        <Button
+            android:id="@+id/home_search_btn"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="검색필터"
+            android:textSize="25dp"
+            android:drawableLeft="@drawable/drawable_left_search"
+            android:background="#E0E0E0"
+            android:layout_alignParentLeft="true"
+            />
+
+        <Button
+            android:id="@+id/home_create_study"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="스터디생성"
+            android:textSize="25dp"
+            android:background="#E0E0E0"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
+
+</LinearLayout>
