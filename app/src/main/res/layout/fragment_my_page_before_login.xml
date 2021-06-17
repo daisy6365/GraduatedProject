@@ -8,11 +8,14 @@
     tools:context=".Fragment.MyPage">
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
         <ImageView
@@ -20,40 +23,24 @@
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_margin="10dp"
-            android:layout_weight="2.5"
+            android:layout_weight="1.7"
             android:src="@drawable/profile_init" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/my_page_place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:text="로그인 해주세요"
+            android:textSize="25dp"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/my_page_apply_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="스터디 가입 내역"
-                android:textSize="10dp" />
-
-            <TextView
-                android:id="@+id/my_page_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="한다빈"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/my_page_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="인천 남동구 구월동"
-                android:textSize="20dp"
-
-                />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/my_page_login_btn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="25dp"
+            android:src="@drawable/arrow_btn" />
 
 
     </LinearLayout>
@@ -64,7 +51,7 @@
         android:layout_weight="0.1"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         tools:ignore="MissingConstraints">
 
         <Button
