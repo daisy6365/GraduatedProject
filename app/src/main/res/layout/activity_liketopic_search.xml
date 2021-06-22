@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.LiketopicSearchActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/liketopic_searchview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:completionHint="관심주제를 입력해주세요.(ex.토익)"
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="검색결과"
+        android:layout_marginLeft="20dp"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/liketopicsearch_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+         />
+
+</LinearLayout>

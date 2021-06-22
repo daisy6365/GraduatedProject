@@ -58,10 +58,36 @@ class MyPage : Fragment() {
         Log.d("Life_cycle", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
 
+        //친구목록
+        val my_page_friends_btn : Button = view.findViewById(R.id.my_page_friends_btn)
+        my_page_friends_btn.setOnClickListener {
+
+        }
+
+        //관심주제
+        val my_page_likes_btn : Button = view.findViewById(R.id.my_page_likes_btn)
+        my_page_likes_btn.setOnClickListener {
+            val intent = Intent(getActivity(), MainActivity::class.java)
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        }
+
+        //동네정보
+        val my_page_place_btn : Button = view.findViewById(R.id.my_page_place_btn)
+        my_page_place_btn.setOnClickListener {
+
+        }
+
 
         //로그아웃
         val my_page_logout_btn : Button = view.findViewById(R.id.my_page_logout_btn)
         val myPage = this
+        var kakaoToken : String = ""
+
+
+        //accessToken을 가져옴
+        val pref = requireActivity().getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
+        var accessToken :String = pref.getString("access_token", "").toString()
+
         my_page_logout_btn.setOnClickListener {
             UserApiClient.instance.logout { error ->
                 if (error != null) {
@@ -72,18 +98,12 @@ class MyPage : Fragment() {
 
                 //startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
             }
-            val paramObject = JsonObject()
 
-            ServerUtil.retrofitService.requestLogout(paramObject)
+            //accesstoken을 서버에 보냄 -> 로그아웃 요청
+            ServerUtil.retrofitService.requestLogout(accessToken)
                 .enqueue(object : Callback<LogoutDTO> {
                     override fun onResponse(call: Call<LogoutDTO>, response: Response<LogoutDTO>) {
                         if (response.isSuccessful) {
-                            //accessToken을 가져옴
-                            val pref = requireActivity().getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
-                            var accessToken :String = pref.getString("access_token", "").toString()
-
-                            //accesstoken을 서버에 보냄 -> 로그아웃 요청
-                            paramObject.addProperty("access_token", accessToken)
 
                             Log.d(TAG, "로그아웃 성공")
                             Toast.makeText(getActivity(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -114,18 +134,11 @@ class MyPage : Fragment() {
                     //startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
                 }
             }
-            val paramObject = JsonObject()
 
-            ServerUtil.retrofitService.requestLogdelete(paramObject)
+            ServerUtil.retrofitService.requestLogdelete(accessToken)
                 .enqueue(object : Callback<LogdeleteDTO> {
                     override fun onResponse(call: Call<LogdeleteDTO>, response: Response<LogdeleteDTO>) {
                         if (response.isSuccessful) {
-                            //accessToken을 가져옴
-                            val pref = requireActivity().getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
-                            var accessToken :String = pref.getString("access_token", "").toString()
-
-                            //accesstoken을 서버에 보냄 -> 회원탈퇴 요청
-                            paramObject.addProperty("access_token", accessToken)
 
                             Log.d(TAG, "회원탈퇴 성공")
                             Toast.makeText(getActivity(), "회원탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();

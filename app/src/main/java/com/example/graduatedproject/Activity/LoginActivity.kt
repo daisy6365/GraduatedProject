@@ -21,6 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.google.gson.JsonObject
+import org.jetbrains.anko.editText
 import com.kakao.kakaotalk.StringSet.token as token1
 
 class LoginActivity : AppCompatActivity() {
@@ -35,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         lateinit var accessToken : String
         lateinit var refreshToken : String
 
-        val paramObject = JsonObject()
+        var kakaoToken : String = ""
 
         //한 번 로그인시 sdk에서 토큰 소유 -> 로그아웃,회원탈퇴를 할 시 토큰 삭제 -> 토큰을 확인해 유효한 토큰이 존재하는지 확인한 뒤
         // 토큰 존재시 로그인 상태이므로 SecondActivity로 넘겨주고, 토큰이 존재하지 않을시 MainActivity에 머무르게 하기.
@@ -46,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
             else if (tokenInfo != null) {
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
                 //카카오토큰을 paramObject를 사용하여 서버로 보냄
-                paramObject.addProperty("kakao_token", tokenInfo.toString())
+                kakaoToken = tokenInfo.toString()
 
                 //토큰을 sharedpreference에 저장
 //                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
@@ -56,20 +57,21 @@ class LoginActivity : AppCompatActivity() {
             }
         }//토큰 확인 코드
 
-        ServerUtil.retrofitService.requestLogin(paramObject)
+        ServerUtil.retrofitService.requestLogin(kakaoToken)
             .enqueue(object : Callback<LoginDTO> {
                 override fun onResponse(call: Call<LoginDTO>, response: Response<LoginDTO>) {
                     if (response.isSuccessful) {
                         //서버에서 받은 AccessToken과 RefreshToken을 받아옴
 
-                        accessToken = response.body()!!.kakaoToken
-                        refreshToken = response.body()!!.kakaoToken
+                        accessToken = response.headers().get("accessToken").toString()
+                        //headers()!!.accessToken
+                        refreshToken = response.headers()!!.get("refreshToken").toString();
 
                         //토큰들을 SharedPreference에 저장
                         val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
                         val editor = sp.edit()
-                        editor.putString("access_token", accessToken.toString())
-                        editor.putString("refresh_token", refreshToken.toString())
+                        editor.putString("access_token", accessToken)
+                        editor.putString("refresh_token", refreshToken)
                         editor.commit()
 
                         Log.d(TAG, "로그인 성공")
