@@ -25,6 +25,11 @@ class MainActivity : AppCompatActivity() {
         val pref: SharedPreferences = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
         var token = pref.getString("access_token", "").toString()
 
+        /**
+         * 1. 로그아웃을 할 때 sharedPreference 에 액세스 토큰을 지운다. 리프레시 토큰도
+         * 2. 만약 로그인을 하고 그냥 껏다가 키면 액세스토큰이 존재하지만 카카오토큰이 존재하지 않는다.
+         * 3. 여기서 카카오 토큰을 생성하면 되지 않을까??
+         */
 
         configureBottomNavigation(token)
 
