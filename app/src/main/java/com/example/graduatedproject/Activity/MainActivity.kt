@@ -4,34 +4,40 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import com.example.graduatedproject.Adapter.AfterLoginAdapter
 import com.example.graduatedproject.Adapter.BeforeLoginAdpater
 import com.example.graduatedproject.R
 import com.example.graduatedproject.R.id.btn_bottom_navi_mypage_tab
+import com.kakao.auth.api.AuthApi
+import com.kakao.sdk.auth.AuthApiClient
+import com.kakao.util.helper.Utility
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var token : String
-    val PREFERENCE = "SharedPreference"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        configureBottomNavigation()
+        val pref: SharedPreferences = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+        var token = pref.getString("access_token", "").toString()
+
+
+        configureBottomNavigation(token)
+
+        val keyHash = Utility.getKeyHash(this)
+        Log.d("Hash", keyHash)
     }
 
-    private fun configureBottomNavigation(){
-
-        val pref : SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
-        token = pref.getString("access_token", "").toString()
+    private fun configureBottomNavigation(token : String){
 
         val bottomNaviLayout: View = this.layoutInflater.inflate(R.layout.bottom_navigation_tab, null, false)
 
 
-        if(token == null){
+        if(token.isEmpty()){
             main_frag_pager.adapter = BeforeLoginAdpater(supportFragmentManager, 4)
             main_bottom_menu.setupWithViewPager(main_frag_pager)
 
@@ -41,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             main_bottom_menu.getTabAt(3)!!.customView = bottomNaviLayout.findViewById(btn_bottom_navi_mypage_tab) as RelativeLayout
 
         }
-        else if(token != null){
+        else if(token.isNotEmpty()){
             main_frag_pager.adapter = AfterLoginAdapter(supportFragmentManager, 4)
             main_bottom_menu.setupWithViewPager(main_frag_pager)
 

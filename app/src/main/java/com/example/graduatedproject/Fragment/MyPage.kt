@@ -16,6 +16,7 @@ import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.Activity.MapActivity
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
+import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.user.UserApiClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,7 +85,7 @@ class MyPage : Fragment() {
 
         my_page_logout_btn.setOnClickListener {
             //accessToken을 가져옴
-            val pref = requireActivity().getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
+            val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
             var accessToken :String =  "Bearer " + pref.getString("access_token", "").toString()
 
             UserApiClient.instance.logout { error ->

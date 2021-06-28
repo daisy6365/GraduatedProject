@@ -34,22 +34,22 @@ class LoginActivity : AppCompatActivity() {
 
         //한 번 로그인시 sdk에서 토큰 소유 -> 로그아웃,회원탈퇴를 할 시 토큰 삭제 -> 토큰을 확인해 유효한 토큰이 존재하는지 확인한 뒤
         // 토큰 존재시 로그인 상태이므로 SecondActivity로 넘겨주고, 토큰이 존재하지 않을시 MainActivity에 머무르게 하기.
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                Toast.makeText(this, "토큰 정보 보기 실패", Toast.LENGTH_SHORT).show()
-            }
-            else if (tokenInfo != null) {
-                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
-                //카카오토큰을 paramObject를 사용하여 서버로 보냄
-                kakaoToken = tokenInfo.toString()
-
-                //토큰을 sharedpreference에 저장
-//                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-//                val editor = sp.edit()
-//                editor.putString("kakao_token", tokenInfo.toString())
-//                editor.commit()
-            }
-        }//토큰 확인 코드
+//        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+//            if (error != null) {
+//                Toast.makeText(this, "토큰 정보 보기 실패", Toast.LENGTH_SHORT).show()
+//            }
+//            else if (tokenInfo != null) {
+//                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
+//                //카카오토큰을 paramObject를 사용하여 서버로 보냄
+//                kakaoToken = tokenInfo.toString()
+//
+//                //토큰을 sharedpreference에 저장
+////                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+////                val editor = sp.edit()
+////                editor.putString("kakao_token", tokenInfo.toString())
+////                editor.commit()
+//            }
+//        }//토큰 확인 코드
 
 
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -86,6 +86,9 @@ class LoginActivity : AppCompatActivity() {
             } //각종 로그인 오류 토스트 메시지 호출
 
             else if (token != null) {
+                Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show() //로그인 성공시 activity2로 이동
+                kakaoToken = token.accessToken.toString();
+
                 ServerUtil.retrofitService.requestLogin(kakaoToken)
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
