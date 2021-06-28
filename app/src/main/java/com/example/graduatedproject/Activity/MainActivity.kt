@@ -26,12 +26,12 @@ class MainActivity : AppCompatActivity() {
     private fun configureBottomNavigation(){
 
         val pref : SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
-        token = pref.getString("userToken", "").toString()
+        token = pref.getString("access_token", "").toString()
 
         val bottomNaviLayout: View = this.layoutInflater.inflate(R.layout.bottom_navigation_tab, null, false)
 
 
-        if(token!!.isEmpty()){
+        if(token == null){
             main_frag_pager.adapter = BeforeLoginAdpater(supportFragmentManager, 4)
             main_bottom_menu.setupWithViewPager(main_frag_pager)
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             main_bottom_menu.getTabAt(3)!!.customView = bottomNaviLayout.findViewById(btn_bottom_navi_mypage_tab) as RelativeLayout
 
         }
-        else if(token!!.isNotEmpty()){
+        else if(token != null){
             main_frag_pager.adapter = AfterLoginAdapter(supportFragmentManager, 4)
             main_bottom_menu.setupWithViewPager(main_frag_pager)
 

@@ -19,11 +19,20 @@
             android:id="@+id/liketopic_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
             app:layout_constraintVertical_weight="1"
-            app:title="관심주제 설정"
             tools:ignore="MissingConstraints"
+            >
 
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="관심주제 설정"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                />
+        </androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:layout_width="match_parent"

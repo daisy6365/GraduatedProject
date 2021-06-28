@@ -8,6 +8,6 @@ class GlobalApplication : Application() {
         super.onCreate()
 
         //NATIVE App key 넣기
-        KakaoSdk.init(this, "876f90163f139441098f9d9ff3a97ee6")
+        KakaoSdk.init(this, "6926e70a0f244bc29fdd1a01fe4997d5")
     }
 }

@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
-    id 'com.google.gms.google-services'
+    //id 'com.google.gms.google-services'
 }
 
 android {
@@ -17,7 +17,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi', 'armeabi-v7a'
+        }
     }
 
     buildTypes {
@@ -25,9 +27,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-    dataBinding {
-        enabled true
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -55,6 +54,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0-rc01'
 
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -67,6 +68,12 @@ dependencies {
     implementation 'org.jetbrains.anko:anko-sdk21-listeners:0.10.8'
     implementation 'org.jetbrains.anko:anko-appcompat-v7:0.10.8'
 
+    //카카오 지도API
+    compile files('libs/libDaumMapAndroid.jar')
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
+
     def retrofit_version = "2.7.1"
     def rxjava_version = '2.2.7'
     def rxandroid_version = '2.1.1'
@@ -76,8 +83,8 @@ dependencies {
     def glide_version = "4.11.0"
     def okhttpVersion = '3.9.0'
     def koin_version = '2.0.1'
-    def firebase_messaging_version = '20.1.6'
-    def firebase_core_version = '17.4.0'
+//    def firebase_messaging_version = '20.1.6'
+//    def firebase_core_version = '17.4.0'
     def material_version = '1.2.0-alpha04'
 
 
@@ -133,10 +140,11 @@ dependencies {
 
     // 카카오톡 sdk를 사용하기 위해 필요.
     implementation group: 'com.kakao.sdk', name: 'kakaotalk', version: '1.27.0'
+//
 
-    //파이어베이스
-    implementation "com.google.firebase:firebase-messaging:$firebase_messaging_version"
-    implementation "com.google.firebase:firebase-core:$firebase_core_version"
+//    파이어베이스
+//    implementation "com.google.firebase:firebase-messaging:$firebase_messaging_version"
+//    implementation "com.google.firebase:firebase-core:$firebase_core_version"
 
 }
 androidExtensions {

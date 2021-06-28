@@ -1,28 +1,22 @@
 package com.example.graduatedproject.Activity
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.graduatedproject.Model.LoginDTO
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.common.model.AuthErrorCause.*
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.google.gson.JsonObject
-import org.jetbrains.anko.editText
-import com.kakao.kakaotalk.StringSet.token as token1
 
 class LoginActivity : AppCompatActivity() {
     private val TAG = LoginActivity::class.java.simpleName
@@ -56,39 +50,6 @@ class LoginActivity : AppCompatActivity() {
 //                editor.commit()
             }
         }//토큰 확인 코드
-
-        ServerUtil.retrofitService.requestLogin(kakaoToken)
-            .enqueue(object : Callback<LoginDTO> {
-                override fun onResponse(call: Call<LoginDTO>, response: Response<LoginDTO>) {
-                    if (response.isSuccessful) {
-                        //서버에서 받은 AccessToken과 RefreshToken을 받아옴
-
-                        accessToken = response.headers().get("accessToken").toString()
-                        //headers()!!.accessToken
-                        refreshToken = response.headers()!!.get("refreshToken").toString();
-
-                        //토큰들을 SharedPreference에 저장
-                        val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-                        val editor = sp.edit()
-                        editor.putString("access_token", accessToken)
-                        editor.putString("refresh_token", refreshToken)
-                        editor.commit()
-
-                        Log.d(TAG, "로그인 성공")
-                        Toast.makeText(this@LoginActivity, "로그인에 성공하였습니다.", Toast.LENGTH_LONG).show()
-                        //메인화면으로 전환
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-
-                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                        finish()
-                    }
-                }
-
-                override fun onFailure(call: Call<LoginDTO>, t: Throwable) {
-                    Log.d(TAG, "로그인 실패")
-                    Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_LONG).show()
-                }
-            })
 
 
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -125,9 +86,43 @@ class LoginActivity : AppCompatActivity() {
             } //각종 로그인 오류 토스트 메시지 호출
 
             else if (token != null) {
+                ServerUtil.retrofitService.requestLogin(kakaoToken)
+                    .enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                //서버에서 받은 AccessToken과 RefreshToken을 받아옴
+
+                                accessToken = response.headers().get("accessToken").toString()
+                                Log.d("",accessToken)
+                                //headers()!!.accessToken
+                                refreshToken = response.headers()!!.get("refreshToken").toString()
+                                Log.d("",refreshToken)
+
+                                //토큰들을 SharedPreference에 저장
+                                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+                                val editor = sp.edit()
+                                editor.putString("access_token", accessToken)
+                                editor.putString("refresh_token", refreshToken)
+                                editor.commit()
+
+                                Log.d(TAG, "로그인 성공")
+                                Toast.makeText(this@LoginActivity, "로그인에 성공하였습니다.", Toast.LENGTH_LONG).show()
+                                //메인화면으로 전환
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                finish()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.d(TAG, "로그인 실패")
+                            Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_LONG).show()
+                        }
+                    })
+
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show() //로그인 성공시 activity2로 이동
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+
             }//.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) > 로그아웃,회원탈퇴를 할 시 이전 화면으로 이동
         }
 

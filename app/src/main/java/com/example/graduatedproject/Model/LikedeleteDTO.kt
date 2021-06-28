@@ -5,8 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 class LikedeleteDTO {
     //보낼 (삭제될)관심주제 키워드
-    @SerializedName("likeTopic")
+    @SerializedName("/users/tags/{tagId}")
     @Expose
-    var likeTopicdelete : String = ""
-
+    var tagId : Int = 0
 }

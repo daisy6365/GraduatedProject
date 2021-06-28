@@ -47,7 +47,6 @@ class LiketopicSearchActivity : AppCompatActivity() {
                                 //6개정도만 반복문 돌려서
                                 // 서버로 부터 받은 검색결과를 List에 하나씩 넣음 & 하나씩 화면에 붙임
                                 for(i in 0 .. listSize){
-                                    searchList.add(LikeSerch(response.body()!!.get(0).likeSearches.toString()))
                                 }
 
                                 Log.d(TAG, "검색결과리스트 받기 성공")
@@ -72,5 +71,7 @@ class LiketopicSearchActivity : AppCompatActivity() {
                 return false
             }
         })
+
+
     }
 }
