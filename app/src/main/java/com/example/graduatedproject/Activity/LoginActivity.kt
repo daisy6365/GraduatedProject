@@ -33,7 +33,6 @@ class LoginActivity : AppCompatActivity() {
         val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
         val editor = sp.edit()
 
-
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 when {
@@ -68,9 +67,8 @@ class LoginActivity : AppCompatActivity() {
             } //각종 로그인 오류 토스트 메시지 호출
 
             else if (token != null) {
-                kakaoToken = token.toString()
-                //카카오토큰 저장
-                editor.putString("kakao_token", kakaoToken)
+                Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show() //로그인 성공시 activity2로 이동
+                kakaoToken = token.accessToken
 
                 ServerUtil.retrofitService.requestLogin(kakaoToken)
                     .enqueue(object : Callback<Void> {
@@ -105,7 +103,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     })
 
-            }//.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) > 로그아웃,회원탈퇴를 할 시 이전 화면으로 이동
+            }
         }
 
         kakao_login_button.setOnClickListener {

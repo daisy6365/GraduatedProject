@@ -36,6 +36,7 @@ interface InfoService {
             @Header("Authorization") accessToken: String
     ): Call<ArrayList<Likelist>>
 
+
     //관심주제검색결과
     @POST("/study-service/tags?page=0&size=20&name=%EC%8A%A4%ED%94%84%EB%A7%81")
     abstract fun requestLikesearch(
@@ -49,7 +50,7 @@ interface InfoService {
         //관심주제 검색 시 전달 값
         @Header("Authorization") accessToken: String,
         @Body body: JsonObject
-    ): Call<Likesearch>>
+    ): Call<Likesearch>
 
     //관심주제삭제
     @DELETE("/user-service/users/tags/2")
