@@ -75,8 +75,11 @@ class MyPage : Fragment() {
         //관심주제
         val my_page_likes_btn: Button = view.findViewById(R.id.my_page_likes_btn)
         my_page_likes_btn.setOnClickListener {
-            val intent = Intent(getActivity(), LiketopicActivity::class.java)
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            activity?.let {
+                val intent = Intent(context, LiketopicActivity::class.java)
+                startActivity(intent)
+//                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            }
         }
 
         //동네정보
@@ -125,6 +128,7 @@ class MyPage : Fragment() {
                             val intent = Intent(getActivity(), MainActivity::class.java)
                             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                         }
+
                     }
 
                     override fun onFailure(call: Call<Void>, t: Throwable) {

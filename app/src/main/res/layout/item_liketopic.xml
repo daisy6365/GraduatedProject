@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.google.android.material.chip.Chip
-        android:id="@+id/liketopic_chip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_marginTop="20dp"
-        android:text="한국사"
-        app:chipIconVisible="false"
-        android:checkable="false"
-        style="@style/Widget.MaterialComponents.Chip.Entry"
-        android:textAlignment="center"
-        android:theme="@style/ChipTextStyle"
-        />
-
-
-
-</LinearLayout>
+    android:id="@+id/liketopic_chip"
+    style="@style/Widget.MaterialComponents.Chip.Entry"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:layout_marginTop="20dp"
+    android:checkable="false"
+    android:text=""
+    android:textAlignment="center"
+    android:theme="@style/ChipTextStyle"
+    app:chipIconVisible="false" />

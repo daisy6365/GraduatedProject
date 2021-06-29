@@ -33,10 +33,10 @@ class Profile(
     var image : Image
 )
 
- class Image {
-    @SerializedName("image.profileImage")
+class Image {
+    @SerializedName("profileImage")
     var profileImage: String = ""
 
-    @SerializedName("image.thumbnailImage")
+    @SerializedName("thumbnailImage")
     var thumbnailImage: String = ""
 }

@@ -30,7 +30,7 @@ interface InfoService {
     ): Call<Void>
 
     //관심주제리스트조회
-    @GET("/user-service//users/tags")
+    @GET("/user-service/users/tags")
     abstract fun requestLikelist(
             //관심주제리스트 조회시 전달 값
             @Header("Authorization") accessToken: String
@@ -53,11 +53,11 @@ interface InfoService {
     ): Call<Likesearch>
 
     //관심주제삭제
-    @DELETE("/user-service/users/tags/2")
-    abstract fun requestLikedelete(
+    @DELETE("/user-service/users/tags/{tagId}")
+    abstract fun requestLikeDelete(
             //관심주제삭제시 전달 값
             @Header("Authorization") accessToken: String,
-            @Body body: JsonObject
+            @Path("tagId") tagId : Int
     ): Call<Void>
 
     //동네정보조회
