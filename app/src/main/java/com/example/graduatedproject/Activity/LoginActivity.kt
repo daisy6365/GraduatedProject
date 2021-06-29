@@ -2,13 +2,13 @@ package com.example.graduatedproject.Activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
-import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.model.AuthErrorCause.*
@@ -29,27 +29,9 @@ class LoginActivity : AppCompatActivity() {
 
         lateinit var accessToken : String
         lateinit var refreshToken : String
-
         var kakaoToken : String = ""
-
-        //한 번 로그인시 sdk에서 토큰 소유 -> 로그아웃,회원탈퇴를 할 시 토큰 삭제 -> 토큰을 확인해 유효한 토큰이 존재하는지 확인한 뒤
-        // 토큰 존재시 로그인 상태이므로 SecondActivity로 넘겨주고, 토큰이 존재하지 않을시 MainActivity에 머무르게 하기.
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                Toast.makeText(this, "토큰 정보 보기 실패", Toast.LENGTH_SHORT).show()
-            }
-            else if (tokenInfo != null) {
-                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
-                //카카오토큰을 paramObject를 사용하여 서버로 보냄
-                kakaoToken = tokenInfo.toString()
-
-                //토큰을 sharedpreference에 저장
-//                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-//                val editor = sp.edit()
-//                editor.putString("kakao_token", tokenInfo.toString())
-//                editor.commit()
-            }
-        }//토큰 확인 코드
+        val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+        val editor = sp.edit()
 
 
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -86,6 +68,10 @@ class LoginActivity : AppCompatActivity() {
             } //각종 로그인 오류 토스트 메시지 호출
 
             else if (token != null) {
+                kakaoToken = token.toString()
+                //카카오토큰 저장
+                editor.putString("kakao_token", kakaoToken)
+
                 ServerUtil.retrofitService.requestLogin(kakaoToken)
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -99,8 +85,6 @@ class LoginActivity : AppCompatActivity() {
                                 Log.d("",refreshToken)
 
                                 //토큰들을 SharedPreference에 저장
-                                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-                                val editor = sp.edit()
                                 editor.putString("access_token", accessToken)
                                 editor.putString("refresh_token", refreshToken)
                                 editor.commit()
@@ -108,8 +92,8 @@ class LoginActivity : AppCompatActivity() {
                                 Log.d(TAG, "로그인 성공")
                                 Toast.makeText(this@LoginActivity, "로그인에 성공하였습니다.", Toast.LENGTH_LONG).show()
                                 //메인화면으로 전환
-                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
 
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                 finish()
                             }
@@ -121,24 +105,16 @@ class LoginActivity : AppCompatActivity() {
                         }
                     })
 
-                Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show() //로그인 성공시 activity2로 이동
-
             }//.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) > 로그아웃,회원탈퇴를 할 시 이전 화면으로 이동
         }
 
-
-
         kakao_login_button.setOnClickListener {
-            if(LoginClient.instance.isKakaoTalkLoginAvailable(this)){
-                LoginClient.instance.loginWithKakaoTalk(this, callback = callback)
+            // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+            if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
+                UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
             }else{
-                LoginClient.instance.loginWithKakaoAccount(this, callback = callback)
+                UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
             }
         }
-
-
-
-
-
     }
 }

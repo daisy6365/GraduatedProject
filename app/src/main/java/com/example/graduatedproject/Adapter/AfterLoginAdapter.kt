@@ -11,8 +11,6 @@ import com.example.graduatedproject.Fragment.fcmNotice
 class AfterLoginAdapter (fm : FragmentManager, val fragmentCount : Int) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int) : Fragment {
-
-
         when(position){
             0 -> return Home()
             1 -> return MyStudy()

@@ -5,21 +5,14 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-data class LikelistDTO (
-    //받을 사용자의 관심주제 리스트
-    @SerializedName("likeTopiclist")
-    @Expose
-    var liketopicList : ArrayList<TopicList>
-)
-@Parcelize
-data class TopicList (
+class Likelist {
+    //Gson을 사용할 때 클래스 필드에 @SerializedName 어노테이션을 붙여야 한다.
     @SerializedName("id")
-    var id : Int = 0,
+    var id : Int = 0
 
     @SerializedName("tagId")
-    var tagId : Int = 0,
+    var tagId : Int = 0
 
     @SerializedName("name")
     var name : String = ""
-) : Parcelable
-
+}

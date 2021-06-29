@@ -4,8 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.graduatedproject.Model.LikeSerch
-import com.example.graduatedproject.Model.LikesearchDTO
+import com.example.graduatedproject.Model.Content
+import com.example.graduatedproject.Model.Likelist
+import com.example.graduatedproject.Model.Likesearch
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject
@@ -18,12 +19,13 @@ class LiketopicSearchActivity : AppCompatActivity() {
     private val TAG = LiketopicSearchActivity::class.java.simpleName
     val PREFERENCE = "SharedPreference"
 
+    val listSize = 10
+    var Likesearch : ArrayList<Content>? = arrayListOf()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_liketopic_search)
-
-        val listSize = 6
-        val searchList = ArrayList<LikeSerch>()
 
 
         // 관심주제 검색
@@ -40,9 +42,11 @@ class LiketopicSearchActivity : AppCompatActivity() {
 
                 //검색결과 리스트 받기
                 ServerUtil.retrofitService.requestLikesearch(paramObject)
-                    .enqueue(object : Callback<LikesearchDTO> {
-                        override fun onResponse(call: Call<LikesearchDTO>, response: Response<LikesearchDTO>) {
+                    .enqueue(object : Callback<Likesearch> {
+                        override fun onResponse(call: Call<Likesearch>, response: Response<Likesearch>) {
                             if (response.isSuccessful) {
+                                //응답값 다 받기
+                                //Likesearch = response.body().Content
 
                                 //6개정도만 반복문 돌려서
                                 // 서버로 부터 받은 검색결과를 List에 하나씩 넣음 & 하나씩 화면에 붙임
@@ -57,7 +61,7 @@ class LiketopicSearchActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<LikesearchDTO>, t: Throwable) {
+                        override fun onFailure(call: Call<Likesearch>, t: Throwable) {
                             Log.d(TAG, "검색결과리스트 받기 실패")
                             Toast.makeText(this@LiketopicSearchActivity, "검색결과리스트 받기 실패", Toast.LENGTH_LONG).show()
                         }

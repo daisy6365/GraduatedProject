@@ -14,26 +14,15 @@ import androidx.fragment.app.Fragment
 import com.example.graduatedproject.Activity.LiketopicActivity
 import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.Activity.MapActivity
+import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
+import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.user.UserApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MyPage.newInstance] factory method to
- * create an instance of this fragment.
- * var pref = getSharedPreferences(PREFERENCE, MODE_PRIVATE)
-var token:String = pref.getString("userToken", "").toString()
- */
 class MyPage : Fragment() {
     val PREFERENCE = "SharedPreference"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,21 +44,43 @@ class MyPage : Fragment() {
         Log.d("Life_cycle", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
 
+        //accessToken을 가져옴
+        val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+        var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
+
+        //프로필 정보 요청
+        ServerUtil.retrofitService.requestProfile(accessToken)
+            .enqueue(object : Callback<Profile> {
+                override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
+                    if (response.isSuccessful) {
+
+
+                        Log.d(TAG, "프로필 받기 성공")
+                        //받은 정보들 화면에 뿌리기
+                    }
+                }
+
+                override fun onFailure(call: Call<Profile>, t: Throwable) {
+                    Log.d(TAG, "프로필 받기 실패")
+                }
+            })
+
+
         //친구목록
-        val my_page_friends_btn : Button = view.findViewById(R.id.my_page_friends_btn)
+        val my_page_friends_btn: Button = view.findViewById(R.id.my_page_friends_btn)
         my_page_friends_btn.setOnClickListener {
 
         }
 
         //관심주제
-        val my_page_likes_btn : Button = view.findViewById(R.id.my_page_likes_btn)
+        val my_page_likes_btn: Button = view.findViewById(R.id.my_page_likes_btn)
         my_page_likes_btn.setOnClickListener {
             val intent = Intent(getActivity(), LiketopicActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
 
         //동네정보
-        val my_page_place_btn : Button = view.findViewById(R.id.my_page_place_btn)
+        val my_page_place_btn: Button = view.findViewById(R.id.my_page_place_btn)
         my_page_place_btn.setOnClickListener {
             val intent = Intent(getActivity(), MapActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
@@ -78,64 +89,77 @@ class MyPage : Fragment() {
 
 
         //로그아웃
-        val my_page_logout_btn : Button = view.findViewById(R.id.my_page_logout_btn)
+        val my_page_logout_btn: Button = view.findViewById(R.id.my_page_logout_btn)
         val myPage = this
 
-
+        /**
+         * 만약 카카오 토큰이 존재한다면 만료시키고 없으면 그냥 아무것도 하지마
+         * 그리고 우리 서버에다가 로그아웃 요청을 하자
+         */
         my_page_logout_btn.setOnClickListener {
             //accessToken을 가져옴
-            val pref = requireActivity().getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
-            var accessToken :String =  "Bearer " + pref.getString("access_token", "").toString()
+            val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+            var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
-            UserApiClient.instance.logout { error ->
-                if (error != null) {
-                    Toast.makeText(getActivity(),"로그아웃 실패 $error", Toast.LENGTH_SHORT).show()
-                }else {
-                    //accesstoken을 서버에 보냄 -> 로그아웃 요청
-                    ServerUtil.retrofitService.requestLogout(accessToken)
-                        .enqueue(object : Callback<Void> {
-                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                if (response.isSuccessful) {
-
-                                    Log.d(TAG, "로그아웃 성공")
-                                    Toast.makeText(getActivity(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
-                                    //메인화면으로 전환
-                                    val intent = Intent(getActivity(), MainActivity::class.java)
-                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                                }
-                            }
-
-                            override fun onFailure(call: Call<Void>, t: Throwable) {
-                                Log.d(TAG, "로그아웃 실패")
-                            }
-                        })
-
+            if (AuthApiClient.instance.hasToken()) {
+                UserApiClient.instance.logout { error ->
+                    if (error != null) {
+                        Toast.makeText(getActivity(), "로그아웃 실패 $error", Toast.LENGTH_SHORT).show()
+                    }
                 }
-
-                //startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
             }
+            //accesstoken을 서버에 보냄 -> 로그아웃 요청
+            ServerUtil.retrofitService.requestLogout(accessToken)
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            val editor = pref.edit();
+                            editor.remove("access_token")
+                            editor.remove("refresh_token")
+                            editor.commit()
+
+                            Log.d(TAG, "로그아웃 성공")
+                            Toast.makeText(getActivity(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+
+                            //메인화면으로 전환
+                            val intent = Intent(getActivity(), MainActivity::class.java)
+                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.d(TAG, "로그아웃 실패")
+                    }
+                })
         }
 
 
         //회원탈퇴
-        val my_page_delete_btn : Button = view.findViewById(R.id.my_page_delete_btn)
+        val my_page_delete_btn: Button = view.findViewById(R.id.my_page_delete_btn)
         my_page_delete_btn.setOnClickListener {
             //accessToken을 가져옴
-            val pref = requireActivity().getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
-            var accessToken :String =  "Bearer " + pref.getString("access_token", "").toString()
+            val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+            var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
             UserApiClient.instance.unlink { error ->
                 if (error != null) {
                     Toast.makeText(getActivity(), "회원 탈퇴 실패 $error", Toast.LENGTH_SHORT).show()
 
-                }else {
+                } else {
                     ServerUtil.retrofitService.requestLogdelete(accessToken)
                         .enqueue(object : Callback<Void> {
                             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                 if (response.isSuccessful) {
 
                                     Log.d(TAG, "회원탈퇴 성공")
-                                    Toast.makeText(getActivity(), "회원탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "회원탈퇴 되었습니다.", Toast.LENGTH_SHORT)
+                                        .show();
+
+                                    val editor = pref.edit();
+                                    editor.remove("access_token")
+                                    editor.remove("refresh_token")
+                                    editor.commit()
+
                                     //메인화면으로 전환
                                     val intent = Intent(getActivity(), MainActivity::class.java)
                                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
@@ -146,13 +170,8 @@ class MyPage : Fragment() {
                                 Log.d(TAG, "회원탈퇴 실패")
                             }
                         })
-                    //val intent = Intent(this, LoginActivity::class.java)
-                    //startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
                 }
             }
-
-
         }
     }
-
 }

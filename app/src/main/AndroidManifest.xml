@@ -21,10 +21,7 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="6926e70a0f244bc29fdd1a01fe4997d5"/>
 
-        <activity
-            android:name=".Activity.MapSearchActivity"
-            android:label="@string/title_activity_map_search"
-            android:theme="@style/Theme.GraduatedProject.NoActionBar"></activity>
+        <activity android:name=".Activity.MapSearchActivity"/>
         <activity android:name=".Activity.MapActivity" />
         <activity android:name=".Activity.LiketopicSearchActivity" />
         <activity android:name=".Activity.LiketopicActivity" />

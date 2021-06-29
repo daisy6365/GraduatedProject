@@ -24,7 +24,7 @@ class MapActivity : AppCompatActivity() {
         //서버에 보내야 할것 : 액세스토큰
         //받아야 할것 : 사용자의 설정위치
         //저장된 엑세스 토큰을 가져옴
-        var pref = getSharedPreferences(PREFERENCE, MODE_PRIVATE)
+        var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
         ServerUtil.retrofitService.requestLocation(accessToken)

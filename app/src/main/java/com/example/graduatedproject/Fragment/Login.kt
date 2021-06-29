@@ -11,7 +11,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.example.graduatedproject.Activity.LoginActivity
 import com.example.graduatedproject.R
-import com.kakao.sdk.auth.LoginClient
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
