@@ -13,31 +13,38 @@ class Likesearch {
     @Expose
     val pageable: Pageable = Pageable()
 
+    //마지막 페이지 여부!!!
     @SerializedName("last")
-    var last:Boolean = true
+    var last : Boolean = false
 
+    //총 페이지 수
     @SerializedName("totalPages")
     var totalPages: Int = 0
 
+    //총 결과 수!!!!
     @SerializedName("totalElementsd")
     var totalElements: Int = 0
 
+    //페이지 크기
     @SerializedName("size")
     var size: Int = 0
 
+    //페이지 번호
     @SerializedName("numberd")
     var number: Int = 0
 
-    //보낼 관심주제 키워드
     @Expose
     var sort: Sort = Sort()
 
+    //현재 페이지 크기
     @SerializedName("numberOfElements")
     var numberOfElements: Int = 0
 
+    //처음 페이지 여부
     @SerializedName("first")
     var first:Boolean = true
 
+    //값이 비 었는지 여부
     @SerializedName("empty")
     var empty: Boolean = true
 }
@@ -45,18 +52,23 @@ class Likesearch {
 class Pageable {
     var sort : Sort = Sort()
 
+    //페이지 크기
     @SerializedName("offset")
     var offset: Int = 0
 
+    //현재 페이지 번호
     @SerializedName("pageNumber")
     var pageNumber: Int = 0
 
+    //페이지 크기
     @SerializedName("pageSize")
     var pageSize: Int = 0
 
+    //페이징 여부
     @SerializedName("paged")
     var paged: Boolean = true
 
+    //비 페이징 여부
     @SerializedName("unpaged")
     var unpaged: Boolean = true
 

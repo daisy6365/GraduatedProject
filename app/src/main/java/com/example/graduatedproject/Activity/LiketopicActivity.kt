@@ -56,6 +56,9 @@ class LiketopicActivity : AppCompatActivity() {
                             chip = inflater.inflate(R.layout.item_liketopic, chipGroup, false) as Chip
                             chip.text = liketopicList!![i].name
                             chipGroup.addView(chip)
+
+                            // chip 닫기 버튼을 눌렀을때
+                            // 텍스트를 받아와서 서버로 보냄
                             chip.setOnCloseIconClickListener {
                                 deletetopic = (it as TextView).text.toString()
                                 val findDeleteTopic = liketopicList!!.find({ it.name.equals(deletetopic) })
