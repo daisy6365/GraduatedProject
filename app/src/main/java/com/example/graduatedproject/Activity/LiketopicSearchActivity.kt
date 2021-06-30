@@ -125,7 +125,6 @@ class LiketopicSearchActivity : AppCompatActivity() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
                 val layoutManager = liketopicsearch_recycler.layoutManager
 
                 // hasNextPage() -> 마지막 페이지가 아닌경우
