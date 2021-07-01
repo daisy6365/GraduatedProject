@@ -9,8 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.graduatedproject.Activity.LiketopicActivity
 import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.Activity.MapActivity
@@ -49,14 +53,24 @@ class MyPage : Fragment() {
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
         //프로필 정보 요청
+        var profile : Profile?
+        var my_page_name : TextView = view.findViewById(R.id.my_page_name)
+        var my_page_profile : ImageView = view.findViewById(R.id.my_page_profile)
         ServerUtil.retrofitService.requestProfile(accessToken)
             .enqueue(object : Callback<Profile> {
                 override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
                     if (response.isSuccessful) {
+                        profile = response.body()
 
+                        //이름 화면에 붙이기
+                        my_page_name.setText(profile!!.nickName)
+                        //사진 화면에 붙이기
+                        var imageUrl : String = profile!!.image.profileImage
+                        Glide.with(view)
+                            .load(imageUrl)
+                            .into(my_page_profile)
 
                         Log.d(TAG, "프로필 받기 성공")
-                        //받은 정보들 화면에 뿌리기
                     }
                 }
 
@@ -64,12 +78,24 @@ class MyPage : Fragment() {
                     Log.d(TAG, "프로필 받기 실패")
                 }
             })
+        var profile_modify_btn : ImageView = view.findViewById(R.id.profile_modify_btn)
+        profile_modify_btn.setOnClickListener {
+            activity?.let {
+                val intent = Intent(context, LiketopicActivity::class.java)
+                startActivity(intent)
+//                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            }
+        }
 
 
         //친구목록
         val my_page_friends_btn: Button = view.findViewById(R.id.my_page_friends_btn)
         my_page_friends_btn.setOnClickListener {
-
+            activity?.let {
+                val intent = Intent(context, LiketopicActivity::class.java)
+                startActivity(intent)
+//                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            }
         }
 
         //관심주제
@@ -85,8 +111,11 @@ class MyPage : Fragment() {
         //동네정보
         val my_page_place_btn: Button = view.findViewById(R.id.my_page_place_btn)
         my_page_place_btn.setOnClickListener {
-            val intent = Intent(getActivity(), MapActivity::class.java)
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            activity?.let {
+                val intent = Intent(context, MapActivity::class.java)
+                startActivity(intent)
+//                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            }
 
         }
 
