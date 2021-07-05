@@ -15,6 +15,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
@@ -102,11 +103,6 @@ class EditProfile() : DialogFragment() {
             intent.setAction(Intent.ACTION_GET_CONTENT)
             startActivityForResult(intent, PICK_IMAGE_FROM_ALBUM)
 
-            // RequestBody로 변환 후 MultipartBody.Part로 파일 컨버전
-            requestImg= RequestBody.create(MediaType.parse("multipart/form-data"),imageFile)
-            Bmp = MultipartBody.Part
-                .createFormData("IMG_FILE", imageFile.getName(), requestImg)
-
 
             //원하는 사진 누르면 edit_profile_img에 갖다 붙임
             //원하는 사진의 url 받아 놓기
@@ -126,7 +122,7 @@ class EditProfile() : DialogFragment() {
                 .error(imageUrl)
                 .into(edit_profile_img)
 
-            deleteImage = false
+            deleteImage = true
         }
 
         //확인 버튼
@@ -135,26 +131,29 @@ class EditProfile() : DialogFragment() {
             val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
             var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
+            // RequestBody로 변환 후 MultipartBody.Part로 파일 컨버전
+            requestImg= RequestBody.create(MediaType.parse("multipart/form-data"),imageFile)
+            Bmp = MultipartBody.Part.createFormData("IMG_FILE", imageFile.getName(), requestImg)
+
             //create(MediaType.parse("multipart/form-data"),deleteImage)
             reqestnickname = RequestBody.create(MediaType.parse("multipart/form-data"),nickname)
 
             //변경된이름을 EditText로부터 가져옴
-//            ServerUtil.retrofitService.requestModifyProfile(accessToken,Bmp,requestdelete,requestdelete)
-//                .enqueue(object : Callback<Void> {
-//                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                        if (response.isSuccessful) {
-//                            Log.d(TAG, "프로필변경 성공")
-//                            Toast.makeText(getActivity(), "프로필변경 되었습니다.", Toast.LENGTH_SHORT).show();
-//                            dismiss()
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<Void>, t: Throwable) {
-//                        Log.d(TAG, "프로필변경 실패")
-//                    }
-//                })
+            ServerUtil.retrofitService.requestModifyProfile(accessToken,Bmp,requestdelete,requestdelete)
+                .enqueue(object : retrofit2.Callback<Void> {
+                    override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
+                        if (response.isSuccessful) {
+                            Log.d(TAG, "프로필변경 성공")
+                            Toast.makeText(getActivity(), "프로필변경 되었습니다.", Toast.LENGTH_SHORT).show();
+                            dismiss()
+                        }
+                    }
 
-//            dismiss()
+                    override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                        Log.d(TAG, "프로필변경 실패")
+                    }
+                })
+            dismiss()
         }
     }
 

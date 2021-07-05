@@ -42,6 +42,29 @@ class LiketopicActivity : AppCompatActivity() {
         var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
+        if (intent.hasExtra("add_item"))
+        {
+            val new_addtag = intent.getIntExtra("add_item",0)
+
+            ServerUtil.retrofitService.requestLikeadd(accessToken,new_addtag)
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            Log.d(TAG, "관심태그추가 성공")
+                        }
+                        finish()
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.d(TAG, "관심태그추가 실패")
+                        Toast.makeText(this@LiketopicActivity, "관심태그추가 실패", Toast.LENGTH_LONG).show()
+                    }
+                })
+        }
+
+        else { }
+
+
         //엑세스토큰 서버에 보냄 -> 관심주제 리스트 받아오기 위해서
         ServerUtil.retrofitService.requestLikelist(accessToken)
             .enqueue(object : Callback<ArrayList<Likelist>> {
@@ -94,9 +117,6 @@ class LiketopicActivity : AppCompatActivity() {
             val intent = Intent(this@LiketopicActivity, LiketopicSearchActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 
-            //키워드를 주고 화면전환이 되면
-            //화면에 키워드 추가
         }
-
     }
 }

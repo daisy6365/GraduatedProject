@@ -1,7 +1,7 @@
 package com.example.graduatedproject.Util
 
 import com.example.graduatedproject.Model.*
-import com.google.gson.JsonObject
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -68,21 +68,36 @@ interface InfoService {
 
 
 
+    //지역정보 검색
+    @GET("/location-service/locations")
+    abstract fun requestLocationsearch(
+        @Header("Authorization") accessToken: String,
+        @Query("page") page : Int,
+        @Query("size") size : Int,
+        @Query("name") searchName : String
+    ): Call<LocationSearch>
 
-    //동네정보조회
-    @POST("/user-service/users/tags/2")
-    abstract fun requestLocation(
-        //관심주제 검색 시 전달 값
-        @Header("Authorization") accessToken: String
+    //지역정보 추가, 저장
+    @POST("/location-service/locations")
+    abstract fun requestLocationmodify(
+        @Header("Authorization") accessToken: String,
+        @Path("locationId") LocationId : Int
     ): Call<Void>
 
-    //친구목록
+    //지역정보 ID 조회
+    @GET("/location-service/locations/{locationId}")
+    abstract fun requestLocationId(
+        @Header("Authorization") accessToken: String,
+        @Path("locationId") locationId : Int
+    ) : Call<Location>
 
 
-    //프로필정보
+
+
+    //사용자 정보 (이름, 프로필사진, 지역정보)
     @GET("/user-service/users/profile")
     abstract fun requestProfile(
-        //프로필조회시 전달값
+        //사용자조회시 전달값
         @Header("Authorization") accessToken: String
     ): Call<Profile>
 
@@ -92,9 +107,12 @@ interface InfoService {
     abstract fun requestModifyProfile(
         //프로필수정시 전달값
         @Header("Authorization") accessToken: String,
-        @Part("image") request : RequestBody,
-        @Part("deleteImage") deleteImage : RequestBody,
-        @Part("nickName") nickName : RequestBody
+        @Part imageFile : MultipartBody.Part,
+
+        //deleteImage,nickName
+        @Body requestBody: RequestBody
     ): Call<Void>
+
+    //친구목록
 
 }

@@ -7,7 +7,7 @@
     >
 
     <TextView
-        android:id="@+id/liketopicsearch_item"
+        android:id="@+id/search_item"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="관심주제"

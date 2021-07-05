@@ -3,7 +3,7 @@ package com.example.graduatedproject.Model
 import com.google.gson.annotations.SerializedName
 
 
-class Content(
+class ContentTag(
     //태그 (주제) ID
     @SerializedName("id")
     var id: Int = 0,

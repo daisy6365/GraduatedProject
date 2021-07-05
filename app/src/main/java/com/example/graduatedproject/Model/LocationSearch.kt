@@ -3,15 +3,15 @@ package com.example.graduatedproject.Model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Likesearch {
+class LocationSearch {
     //보낼 관심주제 검색 키워드
     @SerializedName("content")
     @Expose
-    var content: ArrayList<ContentTag> = ArrayList()
+    var content: ArrayList<ContentLocation> = ArrayList()
 
     //받을 관심주제 검색결과 리스트
     @Expose
-    val pageable: PageableTag = PageableTag()
+    val pageable: PageableLocation = PageableLocation()
 
     //마지막 페이지 여부!!!
     @SerializedName("last")
@@ -49,7 +49,7 @@ class Likesearch {
     var empty: Boolean = true
 }
 
-class PageableTag {
+class PageableLocation {
     var sort : Sort = Sort()
 
     //페이지 크기

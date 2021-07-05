@@ -54,7 +54,7 @@ class MyPage : Fragment() {
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
         //프로필 정보 요청
-       var profile : Profile?
+        var profile : Profile?
         var my_page_name : TextView = view.findViewById(R.id.my_page_name)
         var my_page_profile : ImageView = view.findViewById(R.id.my_page_profile)
         lateinit var nickname : String
@@ -87,8 +87,6 @@ class MyPage : Fragment() {
             //수정 버튼 누르면 새로운 프래그먼트 띄우기
             //EditProfile.kt 띄우기
             //Fragment에서 FragmentDialog를 호출하도록 코드 추가
-            nickname = "꽃님이 "
-            imageUrl = "http://goo.gl/gEgYUd"
 
             var args : Bundle = Bundle()
             args.putString("nickname", nickname)

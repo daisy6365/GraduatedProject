@@ -1,30 +1,22 @@
 package com.example.graduatedproject.Adapter
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.LiketopicActivity
-import com.example.graduatedproject.Activity.LiketopicSearchActivity
-import com.example.graduatedproject.Model.Content
+import com.example.graduatedproject.Activity.MapActivity
+import com.example.graduatedproject.Model.ContentTag
 import com.example.graduatedproject.Model.Likesearch
 import com.example.graduatedproject.R
-import com.example.graduatedproject.Util.ServerUtil
-import kotlinx.android.synthetic.main.activity_liketopic_search.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class SearchRecyclerAdapter(
+class LikeSearchRecyclerAdapter(
     var searchList: Likesearch?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val items = ArrayList<Content>()
+    private val items = ArrayList<ContentTag>()
 
     companion object {
 
@@ -35,10 +27,10 @@ class SearchRecyclerAdapter(
 
     // 아이템뷰에 게시물이 들어가는 경우
     inner class SearchViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        var liketopicsearch_item : TextView
+        var search_item : TextView
 
         init {
-            liketopicsearch_item = itemView.findViewById(R.id.liketopicsearch_item)
+            search_item = itemView.findViewById(R.id.search_item)
         }
     }
 
@@ -57,7 +49,7 @@ class SearchRecyclerAdapter(
             TYPE_POST -> {
                 val inflatedView = LayoutInflater
                     .from(parent.context)
-                    .inflate(R.layout.item_liketopicsearch, parent, false)
+                    .inflate(R.layout.item_search, parent, false)
                 return SearchViewHolder(inflatedView)
             }
 
@@ -86,21 +78,26 @@ class SearchRecyclerAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is SearchViewHolder){
-            holder.liketopicsearch_item.setText(searchList!!.content.get(position).name)
-            holder.liketopicsearch_item.setOnClickListener {
+            holder.search_item.setText(searchList!!.content.get(position).name)
+            holder.search_item.setOnClickListener {
+                for(i in 0 .. searchList!!.content.size-1){
+                    if(holder.search_item.text == searchList!!.content[i].name){
+                        val locationId = searchList!!.content[i].id
 
-                val intent : Intent = Intent(holder.liketopicsearch_item.context,LiketopicSearchActivity::class.java)
-                intent.putExtra("add_item",holder.liketopicsearch_item.text)
-                ContextCompat.startActivity(holder.liketopicsearch_item.context,intent,null)
+                        val intent : Intent = Intent(holder.search_item.context,MapActivity::class.java)
+                        intent.putExtra("add_item",locationId)
+                        ContextCompat.startActivity(holder.search_item.context,intent,null)
+                    }
+                }
             }
         }
         else{}
 
     }
 
-    fun setList(notice: MutableList<Content>) {
+    fun setList(notice: MutableList<ContentTag>) {
         items.addAll(notice)
-        items.add(Content(0 ," ")) // progress bar 넣을 자리
+        items.add(ContentTag(0 ," ")) // progress bar 넣을 자리
     }
 
     fun deleteLoading(){
