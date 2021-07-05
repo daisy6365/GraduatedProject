@@ -26,6 +26,7 @@
         android:layout_marginLeft="20dp"
         />
     <androidx.recyclerview.widget.RecyclerView
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:id="@+id/liketopicsearch_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

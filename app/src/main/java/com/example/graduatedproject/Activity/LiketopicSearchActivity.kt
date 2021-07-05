@@ -40,10 +40,10 @@ class LiketopicSearchActivity : AppCompatActivity() {
             //쿼리텍스트가 제출됐을때 반응
             override fun onQueryTextSubmit(query: String?): Boolean {
                 //쿼리텍스트 서버로 보내기
+                PAGE_NUM = 0
                 paramObject.addProperty("page", PAGE_NUM++)
                 paramObject.addProperty("size", LIST_LENGTH)
                 paramObject.addProperty("name", query.toString())
-
                 loadList(paramObject)
                 return true
             }
@@ -65,6 +65,7 @@ class LiketopicSearchActivity : AppCompatActivity() {
 
                 // 스크롤이 끝에 도달했는지 확인
                 if (!liketopicsearch_recycler.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
+                    paramObject.addProperty("page",PAGE_NUM++)
                     adapter.deleteLoading()
                     loadList(paramObject)
                 }
@@ -84,6 +85,7 @@ class LiketopicSearchActivity : AppCompatActivity() {
                         //응답값 다 받기
                         var Likesearch = response.body()
 
+                        liketopicsearch_recycler.layoutManager = LinearLayoutManager(applicationContext)
                         adapter = SearchRecyclerAdapter(Likesearch)
                         liketopicsearch_recycler.adapter = adapter
                         //setList 메서드를 이용해 새로 가져온 리스트들을 설정한다.
@@ -94,14 +96,13 @@ class LiketopicSearchActivity : AppCompatActivity() {
                         adapter.notifyItemRangeInserted((PAGE_NUM) * LIST_LENGTH, LIST_LENGTH)
 
 
-
                         var pref = getSharedPreferences("login_sp", AppCompatActivity.MODE_PRIVATE)
                         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
                         if (intent.hasExtra("add_item"))
                         {
                             val new_addtag = intent.getStringExtra("add_item")
-                            for (i in 0 .. Likesearch.size){
+                            for (i in 0 .. Likesearch.size-1){
                                 if(Likesearch!!.content[i].name == new_addtag){
                                     val new_addtagId = Likesearch!!.content[i].id
 
