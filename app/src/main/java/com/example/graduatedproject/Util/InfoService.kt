@@ -2,6 +2,7 @@ package com.example.graduatedproject.Util
 
 import com.example.graduatedproject.Model.*
 import com.google.gson.JsonObject
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -48,20 +49,21 @@ interface InfoService {
     ): Call<Void>
 
     //관심주제검색리스트(페이징)
-    @POST("/study-service/tags?page=0&size=20&name=%EC%8A%A4%ED%94%84%EB%A7%81")
+    @GET("/study-service/tags")
     abstract fun requestLikesearch(
         //관심주제 검색 시 전달 값
-        @Body body: JsonObject
+        @Query("page") page : Int,
+        @Query("size") size : Int,
+        @Query("name") name : String
     ): Call<Likesearch>
 
     //관심주제추가
-    @POST("/user-service/users/tags/2")
+    @POST("/user-service/users/tags/{tagId}")
     abstract fun requestLikeadd(
         //관심주제 검색 시 전달 값
         @Header("Authorization") accessToken: String,
         @Path("tagId") tagId : Int
     ): Call<Void>
-
 
 
 
@@ -76,6 +78,7 @@ interface InfoService {
 
     //친구목록
 
+
     //프로필정보
     @GET("/user-service/users/profile")
     abstract fun requestProfile(
@@ -83,5 +86,15 @@ interface InfoService {
         @Header("Authorization") accessToken: String
     ): Call<Profile>
 
+    //프로필수정
+    @Multipart
+    @PATCH("/user-service/users/profile")
+    abstract fun requestModifyProfile(
+        //프로필수정시 전달값
+        @Header("Authorization") accessToken: String,
+        @Part("image") request : RequestBody,
+        @Part("deleteImage") deleteImage : RequestBody,
+        @Part("nickName") nickName : RequestBody
+    ): Call<Void>
 
 }

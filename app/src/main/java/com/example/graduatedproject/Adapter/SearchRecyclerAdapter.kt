@@ -1,14 +1,26 @@
 package com.example.graduatedproject.Adapter
 
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.graduatedproject.Activity.LiketopicActivity
+import com.example.graduatedproject.Activity.LiketopicSearchActivity
 import com.example.graduatedproject.Model.Content
 import com.example.graduatedproject.Model.Likesearch
 import com.example.graduatedproject.R
+import com.example.graduatedproject.Util.ServerUtil
+import kotlinx.android.synthetic.main.activity_liketopic_search.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SearchRecyclerAdapter(
     var searchList: Likesearch?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -75,9 +87,15 @@ class SearchRecyclerAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is SearchViewHolder){
             holder.liketopicsearch_item.setText(searchList!!.content.get(position).name)
-        }else{
+            holder.liketopicsearch_item.setOnClickListener {
 
+                val intent : Intent = Intent(holder.liketopicsearch_item.context,LiketopicSearchActivity::class.java)
+                intent.putExtra("add_item",holder.liketopicsearch_item.text)
+                ContextCompat.startActivity(holder.liketopicsearch_item.context,intent,null)
+            }
         }
+        else{}
+
     }
 
     fun setList(notice: MutableList<Content>) {

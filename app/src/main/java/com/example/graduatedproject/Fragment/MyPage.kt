@@ -12,10 +12,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.net.toUri
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.graduatedproject.Activity.LiketopicActivity
+import com.example.graduatedproject.Activity.LoginActivity
 import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.Activity.MapActivity
 import com.example.graduatedproject.Model.Profile
@@ -28,7 +29,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MyPage : Fragment() {
-    val PREFERENCE = "SharedPreference"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,15 +47,18 @@ class MyPage : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d("Life_cycle", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+        val TAG = MyPage::class.java.simpleName
 
-        //accessToken을 가져옴
+//        //accessToken을 가져옴
         val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
         //프로필 정보 요청
-        var profile : Profile?
+       var profile : Profile?
         var my_page_name : TextView = view.findViewById(R.id.my_page_name)
         var my_page_profile : ImageView = view.findViewById(R.id.my_page_profile)
+        lateinit var nickname : String
+        lateinit var imageUrl : String
         ServerUtil.retrofitService.requestProfile(accessToken)
             .enqueue(object : Callback<Profile> {
                 override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
@@ -63,9 +66,10 @@ class MyPage : Fragment() {
                         profile = response.body()
 
                         //이름 화면에 붙이기
-                        my_page_name.setText(profile!!.nickName)
+                        nickname = profile!!.nickName
+                        my_page_name.setText(nickname)
                         //사진 화면에 붙이기
-                        var imageUrl : String = profile!!.image.profileImage
+                        imageUrl = profile!!.image.profileImage
                         Glide.with(view)
                             .load(imageUrl)
                             .into(my_page_profile)
@@ -80,11 +84,18 @@ class MyPage : Fragment() {
             })
         var profile_modify_btn : ImageView = view.findViewById(R.id.profile_modify_btn)
         profile_modify_btn.setOnClickListener {
-            activity?.let {
-                val intent = Intent(context, LiketopicActivity::class.java)
-                startActivity(intent)
-//                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-            }
+            //수정 버튼 누르면 새로운 프래그먼트 띄우기
+            //EditProfile.kt 띄우기
+            //Fragment에서 FragmentDialog를 호출하도록 코드 추가
+            nickname = "꽃님이 "
+            imageUrl = "http://goo.gl/gEgYUd"
+
+            var args : Bundle = Bundle()
+            args.putString("nickname", nickname)
+            args.putString("imageUrl", imageUrl)
+            val dialog = EditProfile().getInstance()
+            dialog.setArguments(args)
+            dialog.show(requireActivity().getSupportFragmentManager(),"tag")
         }
 
 

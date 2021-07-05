@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         val pref: SharedPreferences = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
         var token = pref.getString("access_token", "").toString()
 
-        configureBottomNavigation(token)
+        configureBottomNavigation("123")
 
         val keyHash = Utility.getKeyHash(this)
         Log.d("Hash", keyHash)
