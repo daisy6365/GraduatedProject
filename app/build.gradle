@@ -70,7 +70,7 @@ dependencies {
     implementation 'org.jetbrains.anko:anko-appcompat-v7:0.10.8'
 
     //카카오 지도API
-    compile files('libs/libDaumMapAndroid.jar')
+    implementation files('libs/libDaumMapAndroid.jar')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/libDaumMapAndroid.jar')

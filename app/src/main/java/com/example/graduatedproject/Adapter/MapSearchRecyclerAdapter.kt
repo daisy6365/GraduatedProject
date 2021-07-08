@@ -1,12 +1,15 @@
 package com.example.graduatedproject.Adapter
 
+import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.LiketopicActivity
 import com.example.graduatedproject.Activity.MapActivity
@@ -14,12 +17,10 @@ import com.example.graduatedproject.Model.ContentLocation
 import com.example.graduatedproject.Model.LocationSearch
 import com.example.graduatedproject.R
 
-class MapSearchRecyclerAdapter (
-    var locationSearch: LocationSearch?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        private val items = ArrayList<ContentLocation>()
+class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val items =  ArrayList<ContentLocation>()
 
         companion object {
-
             //아이템뷰의 타입을 두가지로 나눔
             private const val TYPE_POST = 0
             private const val TYPE_LOADING = 1
@@ -64,13 +65,14 @@ class MapSearchRecyclerAdapter (
         }
 
         override fun getItemCount(): Int {
-            return locationSearch!!.content.size
+            return items.size!!
+
         }
 
         // 뷰의 타입을 정해주는 곳이다.
         override fun getItemViewType(position: Int): Int {
             // 게시물과 프로그레스바 아이템뷰를 구분할 기준이 필요하다.
-            return when (locationSearch!!.content[position].dong) {
+            return when (items[position].dong) {
                 " " -> TYPE_LOADING
                 else -> TYPE_POST
             }
@@ -78,16 +80,18 @@ class MapSearchRecyclerAdapter (
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if(holder is SearchViewHolder){
-                holder.search_item.setText(locationSearch!!.content.get(position).dong)
+                holder.search_item.setText(items[position].dong)
                 holder.search_item.setOnClickListener {
-                    for(i in 0 .. locationSearch!!.content.size-1){
-                        if(holder.search_item.text == locationSearch!!.content[i].dong){
-                            val addTag = locationSearch!!.content[i].id
+                    for(i in 0 .. items.size-1){
+                        if(holder.search_item.text == items[i].dong){
+                            val addTag = items[i].id
+                            Log.d("test my search item", holder.search_item.text.toString())
+                            Log.d("test my search item",items[i].dong)
+                            Log.d("test my search item", items[i].id.toString())
 
-                            val intent : Intent = Intent(holder.search_item.context,
-                                MapActivity::class.java)
-                            intent.putExtra("modify_item",addTag)
-                            ContextCompat.startActivity(holder.search_item.context,intent,null)
+                            moveDetail(addTag)
+
+
                         }
                     }
                 }
@@ -96,9 +100,16 @@ class MapSearchRecyclerAdapter (
 
         }
 
+    private fun moveDetail(addTag: Int) {
+        val intent : Intent = Intent(context, MapActivity::class.java)
+        intent.putExtra("modify_item",addTag)
+        context.startActivity(intent)
+
+    }
+
         fun setList(notice: MutableList<ContentLocation>) {
             items.addAll(notice)
-            items.add(ContentLocation(0 ," "," "," "," "," ",0,0," ")) // progress bar 넣을 자리
+            items.add(ContentLocation(0 ," "," "," "," "," ",0.0,0.0," ")) // progress bar 넣을 자리
         }
 
         fun deleteLoading(){

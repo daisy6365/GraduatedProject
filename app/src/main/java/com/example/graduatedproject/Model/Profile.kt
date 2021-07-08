@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-class Profile(
+data class Profile(
     //받을 사용자의 프로필 정보
     @SerializedName("id")
     var id: Int = 0,
@@ -30,13 +30,14 @@ class Profile(
     var locationId: Int = 0,
 
     @SerializedName("image")
-    var image : Image
+    var image: Image = Image()
 )
 
-class Image {
+
+data class Image (
     @SerializedName("profileImage")
-    var profileImage: String = ""
+    var profileImage: String = "",
 
     @SerializedName("thumbnailImage")
     var thumbnailImage: String = ""
-}
+)

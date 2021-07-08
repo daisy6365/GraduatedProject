@@ -69,20 +69,20 @@ interface InfoService {
 
 
     //지역정보 검색
-    @GET("/location-service/locations")
+    @GET("/location-service/locations/search")
     abstract fun requestLocationsearch(
         @Header("Authorization") accessToken: String,
         @Query("page") page : Int,
         @Query("size") size : Int,
-        @Query("name") searchName : String
+        @Query("searchName") searchName : String
     ): Call<LocationSearch>
 
     //지역정보 추가, 저장
-    @POST("/location-service/locations")
+    @PATCH("/user-service/users/locations/{locationId}")
     abstract fun requestLocationmodify(
         @Header("Authorization") accessToken: String,
         @Path("locationId") LocationId : Int
-    ): Call<Void>
+    ): Call<Profile>
 
     //지역정보 ID 조회
     @GET("/location-service/locations/{locationId}")
@@ -107,10 +107,11 @@ interface InfoService {
     abstract fun requestModifyProfile(
         //프로필수정시 전달값
         @Header("Authorization") accessToken: String,
-        @Part imageFile : MultipartBody.Part,
+        @Part imageFile : MultipartBody.Part?,
 
         //deleteImage,nickName
-        @Body requestBody: RequestBody
+        @Part("deleteImage") deleteImage: RequestBody,
+        @Part("nickName") nickName: RequestBody
     ): Call<Void>
 
     //친구목록

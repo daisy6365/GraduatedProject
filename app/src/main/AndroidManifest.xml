@@ -2,17 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.graduatedproject">
     <!-- 인터넷 허용 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 위치 허용 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
-    <!--갤러리 권한-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--갤러리 권한-->
-    <uses-permission android:name="android.permission.CAMERA"/>
-
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 위치 허용 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 갤러리 권한 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 갤러리 권한 -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".Activity.GlobalApplication"
@@ -22,13 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduatedProject"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Activity.MapCurrentActivity"
+            android:exported="true" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="6926e70a0f244bc29fdd1a01fe4997d5"/>
+            android:value="6926e70a0f244bc29fdd1a01fe4997d5" />
 
-        <activity android:name=".Activity.MapSearchActivity"/>
+        <activity android:name=".Activity.MapSearchActivity" />
         <activity android:name=".Activity.MapActivity" />
         <activity android:name=".Activity.LiketopicSearchActivity" />
         <activity android:name=".Activity.LiketopicActivity" />
@@ -39,7 +37,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
@@ -53,6 +50,7 @@
                     android:scheme="kakao6926e70a0f244bc29fdd1a01fe4997d5" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -60,9 +58,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/provider_paths" />
+                android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
 
 </manifest>

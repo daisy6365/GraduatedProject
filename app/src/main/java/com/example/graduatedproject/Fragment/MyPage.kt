@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -19,6 +20,7 @@ import com.example.graduatedproject.Activity.LiketopicActivity
 import com.example.graduatedproject.Activity.LoginActivity
 import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.Activity.MapActivity
+import com.example.graduatedproject.Model.Image
 import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
@@ -54,25 +56,36 @@ class MyPage : Fragment() {
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
         //프로필 정보 요청
-        var profile : Profile?
+        var profile = Profile()
+        var profileImage : Image = Image()
         var my_page_name : TextView = view.findViewById(R.id.my_page_name)
         var my_page_profile : ImageView = view.findViewById(R.id.my_page_profile)
-        lateinit var nickname : String
-        lateinit var imageUrl : String
+        var nickname : String? = null
+        var imageUrl : String? = null
         ServerUtil.retrofitService.requestProfile(accessToken)
             .enqueue(object : Callback<Profile> {
                 override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
                     if (response.isSuccessful) {
-                        profile = response.body()
+                        profile = response.body()!!
+                        profileImage = profile.image
 
                         //이름 화면에 붙이기
                         nickname = profile!!.nickName
                         my_page_name.setText(nickname)
+
                         //사진 화면에 붙이기
-                        imageUrl = profile!!.image.profileImage
-                        Glide.with(view)
-                            .load(imageUrl)
-                            .into(my_page_profile)
+                        if(profile?.image?.profileImage == null){
+                            imageUrl = R.drawable.profile_init.toString()
+                            Glide.with(view)
+                                .load(imageUrl!!.toInt())
+                                .into(my_page_profile)
+                        }
+                        else {
+                            imageUrl = profile!!.image.profileImage
+                            Glide.with(view)
+                                .load(imageUrl)
+                                .into(my_page_profile)
+                        }
 
                         Log.d(TAG, "프로필 받기 성공")
                     }
@@ -123,7 +136,6 @@ class MyPage : Fragment() {
             activity?.let {
                 val intent = Intent(context, MapActivity::class.java)
                 startActivity(intent)
-//                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
             }
 
         }
@@ -131,7 +143,6 @@ class MyPage : Fragment() {
 
         //로그아웃
         val my_page_logout_btn: Button = view.findViewById(R.id.my_page_logout_btn)
-        val myPage = this
 
         /**
          * 만약 카카오 토큰이 존재한다면 만료시키고 없으면 그냥 아무것도 하지마

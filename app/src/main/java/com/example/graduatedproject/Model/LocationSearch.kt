@@ -3,73 +3,73 @@ package com.example.graduatedproject.Model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class LocationSearch {
+data class LocationSearch (
     //보낼 관심주제 검색 키워드
     @SerializedName("content")
     @Expose
-    var content: ArrayList<ContentLocation> = ArrayList()
+    var content: ArrayList<ContentLocation>,
 
     //받을 관심주제 검색결과 리스트
     @Expose
-    val pageable: PageableLocation = PageableLocation()
+    val pageable: PageableLocation = PageableLocation(),
 
     //마지막 페이지 여부!!!
     @SerializedName("last")
-    var last : Boolean = false
+    var last : Boolean = false,
 
     //총 페이지 수
     @SerializedName("totalPages")
-    var totalPages: Int = 0
+    var totalPages: Int = 0,
 
     //총 결과 수!!!!
-    @SerializedName("totalElementsd")
-    var totalElements: Int = 0
+    @SerializedName("totalElements")
+    var totalElements: Int = 0,
 
     //페이지 크기
     @SerializedName("size")
-    var size: Int = 0
+    var size: Int = 0,
 
     //페이지 번호
-    @SerializedName("numberd")
-    var number: Int = 0
+    @SerializedName("number")
+    var number: Int = 0,
 
     @Expose
-    var sort: Sort = Sort()
+    var sort: Sort = Sort(),
 
     //현재 페이지 크기
     @SerializedName("numberOfElements")
-    var numberOfElements: Int = 0
+    var numberOfElements: Int = 0,
 
     //처음 페이지 여부
     @SerializedName("first")
-    var first:Boolean = true
+    var first:Boolean = true,
 
     //값이 비 었는지 여부
     @SerializedName("empty")
     var empty: Boolean = true
-}
+)
 
-class PageableLocation {
-    var sort : Sort = Sort()
+data class PageableLocation (
+    var sort : Sort = Sort(),
 
     //페이지 크기
     @SerializedName("offset")
-    var offset: Int = 0
+    var offset: Int = 0,
 
     //현재 페이지 번호
     @SerializedName("pageNumber")
-    var pageNumber: Int = 0
+    var pageNumber: Int = 0,
 
     //페이지 크기
     @SerializedName("pageSize")
-    var pageSize: Int = 0
+    var pageSize: Int = 0,
 
     //페이징 여부
     @SerializedName("paged")
-    var paged: Boolean = true
+    var paged: Boolean = true,
 
     //비 페이징 여부
     @SerializedName("unpaged")
     var unpaged: Boolean = true
 
-}
+)

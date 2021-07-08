@@ -2,7 +2,7 @@ package com.example.graduatedproject.Model
 
 import com.google.gson.annotations.SerializedName
 
-class ContentLocation (
+data class ContentLocation (
     @SerializedName("id")
     var id: Int = 0,
 
@@ -23,11 +23,11 @@ class ContentLocation (
 
     //위도
     @SerializedName("let")
-    var let: Int = 0,
+    var let: Double = 0.0,
 
     //경도
     @SerializedName("len")
-    var len: Int = 0,
+    var len: Double = 0.0,
 
     @SerializedName("codeType")
     var codeType: String = ""
