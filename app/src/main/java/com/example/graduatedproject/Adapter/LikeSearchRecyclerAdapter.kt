@@ -1,21 +1,18 @@
 package com.example.graduatedproject.Adapter
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.LiketopicActivity
-import com.example.graduatedproject.Activity.MapActivity
 import com.example.graduatedproject.Model.ContentTag
-import com.example.graduatedproject.Model.Likesearch
 import com.example.graduatedproject.R
 
-class LikeSearchRecyclerAdapter(
-    var searchList: Likesearch?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LikeSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val items = ArrayList<ContentTag>()
 
     companion object {
@@ -64,13 +61,13 @@ class LikeSearchRecyclerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return searchList!!.content.size
+        return items.size!!
     }
 
     // 뷰의 타입을 정해주는 곳이다.
     override fun getItemViewType(position: Int): Int {
         // 게시물과 프로그레스바 아이템뷰를 구분할 기준이 필요하다.
-        return when (searchList!!.content[position].name) {
+        return when (items[position].name) {
             " " -> TYPE_LOADING
             else -> TYPE_POST
         }
@@ -78,20 +75,24 @@ class LikeSearchRecyclerAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is SearchViewHolder){
-            holder.search_item.setText(searchList!!.content.get(position).name)
+            holder.search_item.setText(items[position].name)
             holder.search_item.setOnClickListener {
-                for(i in 0 .. searchList!!.content.size-1){
-                    if(holder.search_item.text == searchList!!.content[i].name){
-                        val locationId = searchList!!.content[i].id
+                for(i in 0 .. items.size - 1){
+                    if(holder.search_item.text == items[i].name){
+                        val addTagId = items[i].id
 
-                        val intent : Intent = Intent(holder.search_item.context,MapActivity::class.java)
-                        intent.putExtra("add_item",locationId)
-                        ContextCompat.startActivity(holder.search_item.context,intent,null)
+                        moveDetail(addTagId)
                     }
                 }
             }
         }
         else{}
+
+    }
+    private fun moveDetail(addTagId: Int) {
+        val intent : Intent = Intent(context, LiketopicActivity::class.java)
+        intent.putExtra("add_item",addTagId)
+        context.startActivity(intent)
 
     }
 

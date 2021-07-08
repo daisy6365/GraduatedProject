@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.LikeSearchRecyclerAdapter
+import com.example.graduatedproject.Model.ContentTag
 import com.example.graduatedproject.Model.Likesearch
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
@@ -21,8 +22,10 @@ class LiketopicSearchActivity : AppCompatActivity() {
     private val TAG = LiketopicSearchActivity::class.java.simpleName
     lateinit var adapter : LikeSearchRecyclerAdapter
 
-    var PAGE_NUM = 1 //현재페이지
+    var PAGE_NUM = 0 //현재페이지
     val LIST_LENGTH = 10 //리스트개수
+    var contentTag  =  ArrayList<ContentTag>()
+    var tagSearch : Likesearch? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +40,15 @@ class LiketopicSearchActivity : AppCompatActivity() {
             //쿼리텍스트가 제출됐을때 반응
             override fun onQueryTextSubmit(query: String?): Boolean {
                 //쿼리텍스트 서버로 보내기
-                PAGE_NUM = 1
+                PAGE_NUM = 0
                 paramObject.addProperty("page", PAGE_NUM++)
                 paramObject.addProperty("size", LIST_LENGTH)
                 paramObject.addProperty("name", query.toString())
+                liketopic_searchview.apply{
+                    liketopicsearch_recycler.layoutManager = LinearLayoutManager(applicationContext)
+                    adapter = LikeSearchRecyclerAdapter(context)
+                    liketopicsearch_recycler.adapter = adapter
+                }
                 loadList(paramObject)
                 return true
             }
@@ -61,10 +69,12 @@ class LiketopicSearchActivity : AppCompatActivity() {
                 val itemTotalCount = recyclerView.adapter!!.itemCount-1
 
                 // 스크롤이 끝에 도달했는지 확인
-                if (!liketopicsearch_recycler.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
-                    paramObject.addProperty("page",PAGE_NUM++)
-                    adapter.deleteLoading()
-                    loadList(paramObject)
+                if (!liketopicsearch_recycler.canScrollVertically(1)) {
+                    if(lastVisibleItemPosition == itemTotalCount){
+                        adapter.deleteLoading()
+                        paramObject.addProperty("page", PAGE_NUM++)
+                        loadList(paramObject)
+                    }
                 }
             }
         })
@@ -72,23 +82,21 @@ class LiketopicSearchActivity : AppCompatActivity() {
     }
 
     fun loadList(paramObject : JsonObject){
+
         ServerUtil.retrofitService.requestLikesearch(paramObject.get("page").asInt,paramObject.get("size").asInt,paramObject.get("name").asString)
             .enqueue(object : Callback<Likesearch> {
                 override fun onResponse(call: Call<Likesearch>, response: Response<Likesearch>) {
                     if (response.isSuccessful) {
                         Log.d(TAG, "검색결과리스트 받기 성공")
                         //응답값 다 받기
-                        var Likesearch = response.body()
+                        tagSearch = response.body()
 
-                        liketopicsearch_recycler.layoutManager = LinearLayoutManager(applicationContext)
-                        adapter = LikeSearchRecyclerAdapter(Likesearch)
-                        liketopicsearch_recycler.adapter = adapter
                         //setList 메서드를 이용해 새로 가져온 리스트들을 설정한다.
-                        adapter.setList(Likesearch!!.content)
+                        adapter.setList(tagSearch!!.content)
 
                         // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
                         //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
-                        adapter.notifyItemRangeInserted((PAGE_NUM - 1) * LIST_LENGTH, LIST_LENGTH)
+                        adapter.notifyItemRangeInserted((PAGE_NUM-1)*10, 10)
                     }
                 }
 

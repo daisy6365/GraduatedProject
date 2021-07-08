@@ -19,10 +19,10 @@ import kotlinx.android.synthetic.main.item_liketopic.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.zip.Inflater
 
 class LiketopicActivity : AppCompatActivity() {
     private val TAG = LiketopicActivity::class.java.simpleName
-    val PREFERENCE = "SharedPreference"
     var liketopicList : ArrayList<Likelist>? = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,38 +33,31 @@ class LiketopicActivity : AppCompatActivity() {
         var chipGroup: ChipGroup = liketopic_chipgroup
         var inflater: LayoutInflater = LayoutInflater.from(chipGroup.context)
 
-        lateinit var chip: Chip
-        lateinit var deletetopic: String
-
         //서버에 보내야 할것 : 액세스토큰, 입력값
         //받아야 할것 : 관심주제검색어, 관심주제리스트
         //저장된 엑세스 토큰을 가져옴
         var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
-        if (intent.hasExtra("add_item"))
-        {
-            val new_addtag = intent.getIntExtra("add_item",0)
-
-            ServerUtil.retrofitService.requestLikeadd(accessToken,new_addtag)
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
-                            Log.d(TAG, "관심태그추가 성공")
-                        }
-                        finish()
-                    }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        Log.d(TAG, "관심태그추가 실패")
-                        Toast.makeText(this@LiketopicActivity, "관심태그추가 실패", Toast.LENGTH_LONG).show()
-                    }
-                })
+        if (intent.hasExtra("add_item")) {
+            addLikeTag(accessToken)
+            myTag(accessToken, inflater, chipGroup)
         }
 
-        else { }
+        else {
+            myTag(accessToken, inflater, chipGroup)
+        }
+
+        // 관심주제 추가 -> 검색
+        liketopicplus_chip.setOnClickListener {
+            val intent = Intent(this@LiketopicActivity, LiketopicSearchActivity::class.java)
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+
+        }
+    }
 
 
+    fun myTag(accessToken : String, inflater : LayoutInflater, chipGroup: ChipGroup){
         //엑세스토큰 서버에 보냄 -> 관심주제 리스트 받아오기 위해서
         ServerUtil.retrofitService.requestLikelist(accessToken)
             .enqueue(object : Callback<ArrayList<Likelist>> {
@@ -76,14 +69,14 @@ class LiketopicActivity : AppCompatActivity() {
 
                         //chip에 넣기
                         for (i in 0..liketopicList!!.size-1) {
-                            chip = inflater.inflate(R.layout.item_liketopic, chipGroup, false) as Chip
+                            var chip : Chip = inflater.inflate(R.layout.item_liketopic, chipGroup, false) as Chip
                             chip.text = liketopicList!![i].name
                             chipGroup.addView(chip)
 
                             // chip 닫기 버튼을 눌렀을때
                             // 텍스트를 받아와서 서버로 보냄
                             chip.setOnCloseIconClickListener {
-                                deletetopic = (it as TextView).text.toString()
+                                var deletetopic = (it as TextView).text.toString()
                                 val findDeleteTopic = liketopicList!!.find({ it.name.equals(deletetopic) })
 
                                 ServerUtil.retrofitService.requestLikeDelete(accessToken, findDeleteTopic!!.tagId)
@@ -111,12 +104,23 @@ class LiketopicActivity : AppCompatActivity() {
                         .show()
                 }
             })
+    }
 
-        // 관심주제 추가 -> 검색
-        liketopicplus_chip.setOnClickListener {
-            val intent = Intent(this@LiketopicActivity, LiketopicSearchActivity::class.java)
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    fun addLikeTag(accessToken : String){
+        val new_addtag = intent.getIntExtra("add_item",0)
 
-        }
+        ServerUtil.retrofitService.requestLikeadd(accessToken,new_addtag)
+            .enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d(TAG, "관심태그추가 성공")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.d(TAG, "관심태그추가 실패")
+                    Toast.makeText(this@LiketopicActivity, "관심태그추가 실패", Toast.LENGTH_LONG).show()
+                }
+            })
     }
 }

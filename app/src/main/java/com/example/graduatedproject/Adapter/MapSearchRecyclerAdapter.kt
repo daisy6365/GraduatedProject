@@ -84,12 +84,9 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
                 holder.search_item.setOnClickListener {
                     for(i in 0 .. items.size-1){
                         if(holder.search_item.text == items[i].dong){
-                            val addTag = items[i].id
-                            Log.d("test my search item", holder.search_item.text.toString())
-                            Log.d("test my search item",items[i].dong)
-                            Log.d("test my search item", items[i].id.toString())
+                            val locationId = items[i].id
 
-                            moveDetail(addTag)
+                            moveDetail(locationId)
 
 
                         }
