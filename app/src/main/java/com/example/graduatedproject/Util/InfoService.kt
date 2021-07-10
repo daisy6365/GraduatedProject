@@ -1,6 +1,7 @@
 package com.example.graduatedproject.Util
 
 import com.example.graduatedproject.Model.*
+import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -86,11 +87,25 @@ interface InfoService {
 
     //지역정보 ID 조회
     @GET("/location-service/locations/{locationId}")
-    abstract fun requestLocationId(
+    abstract fun requestLocation(
         @Header("Authorization") accessToken: String,
         @Path("locationId") locationId : Int
-    ) : Call<Location>
+    ) : Call<MyLocation>
 
+    //현재위치 행정코드 받기 with kakaoretrofit
+    @GET("/v2/local/geo/coord2regioncode.json")
+    abstract fun requestCode(
+        @Header("Authorization") kakaoToken: String,
+        @Query("x") longitudeX : Double,
+        @Query("y") latitudeY : Double
+    ): Call<MapCode>
+
+
+    @GET("/location-service/locations/code")
+    abstract fun requestLocationId(
+        @Header("Authorization") accessToken: String,
+        @Query("code") code : String
+    ): Call<MyLocation>
 
 
 
@@ -110,8 +125,7 @@ interface InfoService {
         @Part imageFile : MultipartBody.Part?,
 
         //deleteImage,nickName
-        @Part("deleteImage") deleteImage: RequestBody,
-        @Part("nickName") nickName: RequestBody
+        @Part("request") requestBody: RequestBody
     ): Call<Void>
 
     //친구목록

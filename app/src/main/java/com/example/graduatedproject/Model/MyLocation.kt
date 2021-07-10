@@ -2,7 +2,7 @@ package com.example.graduatedproject.Model
 
 import com.google.gson.annotations.SerializedName
 
-data class Location (
+data class MyLocation (
     @SerializedName("id")
     var id: Int = 1,
 
@@ -30,7 +30,7 @@ data class Location (
     var len: Double = 0.0,
 
     @SerializedName("codeType")
-    var codeType: String = "",
+    var codeType: String = ""
 )
 
 

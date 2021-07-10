@@ -16,40 +16,15 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
-        android:completionHint="동명으로 검색 (ex. 송도동)"
+        app:queryHint="동명으로 검색 (ex. 송도동)"
         />
 
-    <LinearLayout
-        android:id="@+id/currentplace_search_btn"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="20dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="@drawable/background_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="0.0" >
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="25dp"
-            android:src="@drawable/location_pin_white"
-            android:layout_marginRight="10dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="현재위치로 찾기"
-            android:textColor="@color/colorWhite"
-            android:textSize="25dp"
-            />
-    </LinearLayout>
+        android:text="검색결과"
+        android:layout_marginLeft="20dp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/placesearch_recycler"

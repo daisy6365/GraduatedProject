@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -82,6 +83,7 @@ class LikeSearchRecyclerAdapter(private val context: Context): RecyclerView.Adap
                         val addTagId = items[i].id
 
                         moveDetail(addTagId)
+
                     }
                 }
             }
@@ -92,7 +94,9 @@ class LikeSearchRecyclerAdapter(private val context: Context): RecyclerView.Adap
     private fun moveDetail(addTagId: Int) {
         val intent : Intent = Intent(context, LiketopicActivity::class.java)
         intent.putExtra("add_item",addTagId)
-        context.startActivity(intent)
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+
+
 
     }
 

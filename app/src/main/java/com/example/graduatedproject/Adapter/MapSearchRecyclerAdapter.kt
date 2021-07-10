@@ -81,6 +81,7 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if(holder is SearchViewHolder){
                 holder.search_item.setText(items[position].dong)
+
                 holder.search_item.setOnClickListener {
                     for(i in 0 .. items.size-1){
                         if(holder.search_item.text == items[i].dong){
@@ -100,7 +101,7 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
     private fun moveDetail(addTag: Int) {
         val intent : Intent = Intent(context, MapActivity::class.java)
         intent.putExtra("modify_item",addTag)
-        context.startActivity(intent)
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 
     }
 

@@ -23,7 +23,7 @@ class LiketopicSearchActivity : AppCompatActivity() {
     lateinit var adapter : LikeSearchRecyclerAdapter
 
     var PAGE_NUM = 0 //현재페이지
-    val LIST_LENGTH = 10 //리스트개수
+    val LIST_LENGTH = 20 //리스트개수
     var contentTag  =  ArrayList<ContentTag>()
     var tagSearch : Likesearch? = null
 
@@ -96,7 +96,8 @@ class LiketopicSearchActivity : AppCompatActivity() {
 
                         // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
                         //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
-                        adapter.notifyItemRangeInserted((PAGE_NUM-1)*10, 10)
+                        adapter.notifyDataSetChanged()
+                        //adapter.notifyItemRangeInserted((PAGE_NUM-1)*20, 20)
                     }
                 }
 

@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit
 object ServerUtil {
     private val TAG = this::class.java.simpleName
     var retrofitService: InfoService
+    var kakaoService : InfoService
 
     init {
         val interceptor = HttpLoggingInterceptor()
@@ -41,7 +42,16 @@ object ServerUtil {
             .client(logger)
             .build()
 
+        val kakaoretrofit = Retrofit
+            .Builder()
+            .baseUrl("https://dapi.kakao.com")
+            //Gson은 Json문서를 받아서 자동으로 java class 형태로 만들어주는 역할
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(logger)
+            .build()
+
         retrofitService = retrofit.create(InfoService::class.java)
+        kakaoService = kakaoretrofit.create(InfoService::class.java)
         Log.d(TAG, "서버 연결")
 
     }

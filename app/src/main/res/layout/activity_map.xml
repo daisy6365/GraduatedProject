@@ -61,29 +61,56 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:background="@drawable/background_button"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="0.0" >
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="25dp"
-            android:src="@drawable/location_pin_white"
             android:layout_marginRight="10dp"
-            />
+            android:src="@drawable/location_pin_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="위치 설정"
-            android:textSize="25dp"
+            android:text="위치 검색"
             android:textColor="@color/colorWhite"
-            />
+            android:textSize="25dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/currentplace_search_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/background_button"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/place_modify_btn"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/location_pin_white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="현재위치로 찾기"
+            android:textColor="@color/colorWhite"
+            android:textSize="25dp" />
     </LinearLayout>
 
     <SeekBar
@@ -92,19 +119,19 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
-
         android:max="3"
-        android:progress="2"
-        android:thumb="@drawable/seekbar_thumb"
-        android:progressDrawable="@drawable/seek_bar"
 
+        android:progress="2"
+        android:progressDrawable="@drawable/seek_bar"
+        android:thumb="@drawable/seekbar_thumb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/place_modify_btn"
+        app:layout_constraintTop_toBottomOf="@+id/currentplace_search_btn"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

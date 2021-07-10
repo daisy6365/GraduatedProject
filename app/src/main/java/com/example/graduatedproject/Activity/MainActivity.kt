@@ -33,8 +33,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val pref: SharedPreferences = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+//        val editor = pref.edit();
+//        editor.remove("access_token")
+//        editor.remove("refresh_token")
+//        editor.commit()
         var token = pref.getString("access_token", "").toString()
-
 
         configureBottomNavigation(token)
 

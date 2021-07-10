@@ -43,10 +43,10 @@ class LiketopicActivity : AppCompatActivity() {
             addLikeTag(accessToken)
             myTag(accessToken, inflater, chipGroup)
         }
-
-        else {
+        else{
             myTag(accessToken, inflater, chipGroup)
         }
+
 
         // 관심주제 추가 -> 검색
         liketopicplus_chip.setOnClickListener {

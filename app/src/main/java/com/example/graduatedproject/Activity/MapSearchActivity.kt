@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -31,7 +32,7 @@ class MapSearchActivity : AppCompatActivity() {
     lateinit var adapter : MapSearchRecyclerAdapter
 
     private var PAGE_NUM = 0 //현재페이지
-    val LIST_LENGTH = 10 //리스트개수
+    val LIST_LENGTH = 20 //리스트개수
     var contentLocation  =  ArrayList<ContentLocation>()
     var locationSearch : LocationSearch? = null
 
@@ -90,10 +91,6 @@ class MapSearchActivity : AppCompatActivity() {
                 }
             }
         })
-
-        currentplace_search_btn.setOnClickListener {
-
-        }
     }
 
     fun loadList(paramObject : JsonObject){
@@ -118,7 +115,8 @@ class MapSearchActivity : AppCompatActivity() {
 //                        if(PAGE_NUM > 0){
 //
 //                        }
-                        adapter.notifyItemRangeInserted((PAGE_NUM-1)*10, 10)
+                        adapter.notifyDataSetChanged()
+                        //adapter.notifyItemRangeInserted((PAGE_NUM-1)*20, 20)
                     }
                 }
 

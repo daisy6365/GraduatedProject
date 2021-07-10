@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide.with
 import com.bumptech.glide.load.model.GlideUrl
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -91,7 +92,7 @@ class EditProfile() : DialogFragment() {
         //그 사용자한테 저장된 이미지, 닉네임 불러옴
         // 변경전 사진 화면에 붙이기
         Glide.with(requireContext())
-            .load(imageUrl.toInt())
+            .load(imageUrl)
             .centerCrop()
             .into(edit_profile_img)
         // 변경전 닉네임 화면에 붙이기
@@ -130,18 +131,26 @@ class EditProfile() : DialogFragment() {
             newNickname = edit_profile_name.text.toString()
 
             // RequestBody로 변환 후 MultipartBody.Part로 파일 컨버전
-
             if(imageFile != null){
                 requestImg= RequestBody.create(MediaType.parse("image/*"),imageFile)
                 imageBitmap = MultipartBody.Part.createFormData("image", imageFile?.getName(), requestImg)
 
             }else{}
 
-            requestdelete = RequestBody.create(MediaType.parse("deleteImage"),deleteImage.toString())
-            reqestnickname = RequestBody.create(MediaType.parse("nickName"),newNickname)
+            //deleteImage여부, 새로운 닉네임
+            val paramObject = JsonObject()
+            paramObject.addProperty("deleteImage", deleteImage)
+            paramObject.addProperty("nickName", newNickname)
+
+            val request = RequestBody.create(MediaType.parse("application/json"),paramObject.toString())
+
+//            requestdelete = RequestBody.create(MediaType.parse("deleteImage"),deleteImage.toString())
+//            reqestnickname = RequestBody.create(MediaType.parse("nickName"),newNickname)
+
+
 
             //변경된이름을 EditText로부터 가져옴
-            ServerUtil.retrofitService.requestModifyProfile(accessToken,imageBitmap,requestdelete,reqestnickname)
+            ServerUtil.retrofitService.requestModifyProfile(accessToken,imageBitmap,request)
                 .enqueue(object : retrofit2.Callback<Void> {
                     override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
                         if (response.isSuccessful) {
@@ -150,7 +159,6 @@ class EditProfile() : DialogFragment() {
                             dismiss()
                         }
                     }
-
                     override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
                         Log.d("EditProfile", "프로필변경 실패")
                     }
