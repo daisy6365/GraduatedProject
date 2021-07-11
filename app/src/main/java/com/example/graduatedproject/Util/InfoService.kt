@@ -126,8 +126,22 @@ interface InfoService {
 
         //deleteImage,nickName
         @Part("request") requestBody: RequestBody
-    ): Call<Void>
+    ): Call<Study>
 
     //친구목록
+
+
+
+
+    //스터디생성
+    @POST("/study-service/studies")
+    abstract fun SendCreateStudyInfo(
+        @Header("Authorization") accessToken: String,
+        @Part imageFile : MultipartBody.Part?,
+
+        //name,numberOfPeople,content,tags
+        //online,offline,locationCode,categoryId
+        @Part("request") requestBody: RequestBody
+    ): Call<Void>
 
 }

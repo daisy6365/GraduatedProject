@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.example.graduatedproject.Activity.LiketopicActivity
+import com.example.graduatedproject.Activity.StudyCreateActivity
+import com.example.graduatedproject.Activity.StudySearchActivity
 import com.example.graduatedproject.R
 
 
@@ -28,10 +30,18 @@ class Home : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val home_search_btn : LinearLayout = view.findViewById(R.id.home_search_btn)
+        home_search_btn.setOnClickListener {
+            activity?.let {
+                val intent = Intent(context, StudySearchActivity::class.java)
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            }
+        }
+
         val home_create_study : LinearLayout = view.findViewById(R.id.home_create_study)
         home_create_study.setOnClickListener {
             activity?.let {
-                val intent = Intent(context, LiketopicActivity::class.java)
+                val intent = Intent(context, StudyCreateActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
             }
         }
