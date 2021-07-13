@@ -184,11 +184,21 @@ class MapActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<MapCode>, response: Response<MapCode>) {
                     if (response.isSuccessful) {
                         //GPS를 통해 행정/법정동 코드를 받아옴
-                        var code = response.body()?.documents?.get(0)?.code
 
 
-                        Log.d( "회원 지역CODE",code.toString())
-                        findLocationId(code.toString())
+                        if(response.body()?.documents?.size == 2){
+                            var code_one = response.body()?.documents?.get(1)?.code
+                            findLocationId(code_one.toString())
+                            Log.d( "회원 지역CODE",code_one.toString())
+                        }
+                        else{
+                            var code_zero = response.body()?.documents?.get(0)?.code
+                            findLocationId(code_zero.toString())
+                            Log.d( "회원 지역CODE",code_zero.toString())
+                        }
+
+
+
 
                     }
                 }

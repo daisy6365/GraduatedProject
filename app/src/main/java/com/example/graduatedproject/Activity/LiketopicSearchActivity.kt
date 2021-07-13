@@ -41,7 +41,7 @@ class LiketopicSearchActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 //쿼리텍스트 서버로 보내기
                 PAGE_NUM = 0
-                paramObject.addProperty("page", PAGE_NUM++)
+                paramObject.addProperty("page", PAGE_NUM)
                 paramObject.addProperty("size", LIST_LENGTH)
                 paramObject.addProperty("name", query.toString())
                 liketopic_searchview.apply{
@@ -70,10 +70,12 @@ class LiketopicSearchActivity : AppCompatActivity() {
 
                 // 스크롤이 끝에 도달했는지 확인
                 if (!liketopicsearch_recycler.canScrollVertically(1)) {
+                    adapter.deleteLoading()
                     if(lastVisibleItemPosition == itemTotalCount){
-                        adapter.deleteLoading()
-                        paramObject.addProperty("page", PAGE_NUM++)
-                        loadList(paramObject)
+                        if(tagSearch!!.last == false){
+                            paramObject.addProperty("page",PAGE_NUM)
+                            loadList(paramObject)
+                        }
                     }
                 }
             }
@@ -91,13 +93,19 @@ class LiketopicSearchActivity : AppCompatActivity() {
                         //응답값 다 받기
                         tagSearch = response.body()
 
-                        //setList 메서드를 이용해 새로 가져온 리스트들을 설정한다.
-                        adapter.setList(tagSearch!!.content)
-
-                        // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
-                        //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
-                        adapter.notifyDataSetChanged()
-                        //adapter.notifyItemRangeInserted((PAGE_NUM-1)*20, 20)
+                        if(tagSearch!!.last == false){
+                            adapter.setList(tagSearch!!.content)
+                            // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
+                            //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
+                            adapter.notifyDataSetChanged()
+                            PAGE_NUM++
+                        }
+                        else{
+                            adapter.setList(tagSearch!!.content)
+                            adapter.notifyDataSetChanged()
+                            Toast.makeText(this@LiketopicSearchActivity, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
+                            adapter.deleteLoading()
+                        }
                     }
                 }
 

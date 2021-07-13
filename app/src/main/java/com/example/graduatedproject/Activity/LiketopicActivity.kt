@@ -29,9 +29,6 @@ class LiketopicActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_liketopic)
 
-        //칩 그룹 지정
-        var chipGroup: ChipGroup = liketopic_chipgroup
-        var inflater: LayoutInflater = LayoutInflater.from(chipGroup.context)
 
         //서버에 보내야 할것 : 액세스토큰, 입력값
         //받아야 할것 : 관심주제검색어, 관심주제리스트
@@ -41,10 +38,9 @@ class LiketopicActivity : AppCompatActivity() {
 
         if (intent.hasExtra("add_item")) {
             addLikeTag(accessToken)
-            myTag(accessToken, inflater, chipGroup)
         }
         else{
-            myTag(accessToken, inflater, chipGroup)
+            myTag(accessToken)
         }
 
 
@@ -57,7 +53,11 @@ class LiketopicActivity : AppCompatActivity() {
     }
 
 
-    fun myTag(accessToken : String, inflater : LayoutInflater, chipGroup: ChipGroup){
+    fun myTag(accessToken : String){
+        //칩 그룹 지정
+        var chipGroup: ChipGroup = liketopic_chipgroup
+        var inflater: LayoutInflater = LayoutInflater.from(chipGroup.context)
+
         //엑세스토큰 서버에 보냄 -> 관심주제 리스트 받아오기 위해서
         ServerUtil.retrofitService.requestLikelist(accessToken)
             .enqueue(object : Callback<ArrayList<Likelist>> {
@@ -114,6 +114,7 @@ class LiketopicActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d(TAG, "관심태그추가 성공")
+                        myTag(accessToken)
                     }
                 }
 

@@ -48,7 +48,7 @@ class MapSearchActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 //쿼리텍스트 서버로 보내기
                 PAGE_NUM = 0
-                paramObject.addProperty("page", PAGE_NUM++)
+                paramObject.addProperty("page", PAGE_NUM)
                 paramObject.addProperty("size", LIST_LENGTH)
                 paramObject.addProperty("searchName", query.toString())
 
@@ -83,10 +83,12 @@ class MapSearchActivity : AppCompatActivity() {
 
                 // 스크롤이 끝에 도달했는지 확인
                 if (!placesearch_recycler.canScrollVertically(1)) {
+                    adapter.deleteLoading()
                     if(lastVisibleItemPosition == itemTotalCount){
-                        adapter.deleteLoading()
-                        paramObject.addProperty("page", PAGE_NUM++)
-                        loadList(paramObject)
+                        if(locationSearch!!.last == false){
+                            paramObject.addProperty("page",PAGE_NUM)
+                            loadList(paramObject)
+                        }
                     }
                 }
             }
@@ -103,20 +105,22 @@ class MapSearchActivity : AppCompatActivity() {
             .enqueue(object : Callback<LocationSearch> {
                 override fun onResponse(call: Call<LocationSearch>, response: Response<LocationSearch>) {
                     if (response.isSuccessful) {
-
                         //응답값 다 받기
                         locationSearch = response!!.body()
-                        adapter.setList(locationSearch!!.content)
+
+                        if(locationSearch!!.last == false){
+                            adapter.setList(locationSearch!!.content)
+                            adapter.notifyDataSetChanged()
+                            PAGE_NUM++
+                        }
+                        else{
+                            adapter.setList(locationSearch!!.content)
+                            adapter.notifyDataSetChanged()
+                            Toast.makeText(this@MapSearchActivity, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
+                            adapter.deleteLoading()
+                        }
 
                         Log.d(TAG, "검색결과리스트 받기 성공")
-
-                        // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
-                        //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
-//                        if(PAGE_NUM > 0){
-//
-//                        }
-                        adapter.notifyDataSetChanged()
-                        //adapter.notifyItemRangeInserted((PAGE_NUM-1)*20, 20)
                     }
                 }
 

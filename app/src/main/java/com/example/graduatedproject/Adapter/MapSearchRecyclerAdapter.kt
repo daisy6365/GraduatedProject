@@ -105,12 +105,12 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
 
     }
 
-        fun setList(notice: MutableList<ContentLocation>) {
-            items.addAll(notice)
-            items.add(ContentLocation(0 ," "," "," "," "," ",0.0,0.0," ")) // progress bar 넣을 자리
-        }
+    fun setList(notice: MutableList<ContentLocation>) {
+        items.addAll(notice)
+        items.add(ContentLocation(0, " ", " ", " ", " ", " ", 0.0, 0.0, " ")) // progress bar 넣을 자리
+    }
 
-        fun deleteLoading(){
-            items.removeAt(items.lastIndex) // 로딩이 완료되면 프로그레스바를 지움
-        }
+    fun deleteLoading() {
+        items.removeAt(items.lastIndex) // 로딩이 완료되면 프로그레스바를 지움
+    }
 }

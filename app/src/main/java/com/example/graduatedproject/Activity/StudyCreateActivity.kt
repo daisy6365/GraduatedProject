@@ -53,8 +53,8 @@ class StudyCreateActivity : AppCompatActivity() {
     var people_num : Int = 0
     //태그 넣을 리스트
     var tagArray = arrayListOf<String>()
-    var offline : Boolean = false
-    var online : Boolean = false
+    var offline : Boolean = true
+    var online : Boolean = true
 
 
 
@@ -192,24 +192,24 @@ class StudyCreateActivity : AppCompatActivity() {
         val request = RequestBody.create(MediaType.parse("application/json"),paramObject.toString())
 
         //locationCode 가져오기
-        ServerUtil.retrofitService.SendCreateStudyInfo(accessToken, imageBitmap, request)
-            .enqueue(object : Callback<Study> {
-                override fun onResponse(call: Call<Study>, response: Response<Study>) {
-                    if (response.isSuccessful) {
-
-                        Log.d(TAG, "스터디생성정보 전송 성공")
-
-
-                        val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
-                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-
-                    }
-                }
-                override fun onFailure(call: Call<Study>, t: Throwable) {
-                    Log.d(TAG, "스터디생성정보 전송 실패")
-                    Toast.makeText(this@StudyCreateActivity, "스터디생성정보 전송 실패", Toast.LENGTH_LONG).show()
-                }
-            })
+//        ServerUtil.retrofitService.SendCreateStudyInfo(accessToken, imageBitmap, request)
+//            .enqueue(object : Callback<Study> {
+//                override fun onResponse(call: Call<Study>, response: Response<Study>) {
+//                    if (response.isSuccessful) {
+//
+//                        Log.d(TAG, "스터디생성정보 전송 성공")
+//
+//
+//                        val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
+//                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+//
+//                    }
+//                }
+//                override fun onFailure(call: Call<Study>, t: Throwable) {
+//                    Log.d(TAG, "스터디생성정보 전송 실패")
+//                    Toast.makeText(this@StudyCreateActivity, "스터디생성정보 전송 실패", Toast.LENGTH_LONG).show()
+//                }
+//            })
 
     }
     private fun openGalley() {

@@ -126,7 +126,7 @@ interface InfoService {
 
         //deleteImage,nickName
         @Part("request") requestBody: RequestBody
-    ): Call<Study>
+    ): Call<Void>
 
     //친구목록
 
