@@ -15,7 +15,7 @@ data class LocationSearch (
 
     //마지막 페이지 여부!!!
     @SerializedName("last")
-    var last : Boolean = false,
+    var last : Boolean? = null,
 
     //총 페이지 수
     @SerializedName("totalPages")

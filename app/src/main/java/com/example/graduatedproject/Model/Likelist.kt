@@ -14,5 +14,5 @@ data class Likelist(
     var tagId: Int = 0,
 
     @SerializedName("name")
-    var name: String = "",
+    var name: String = ""
 )

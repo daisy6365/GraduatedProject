@@ -18,9 +18,10 @@
 
             <ImageView
                 android:id="@+id/create_study_cover_img"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/cover"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_weight="2"
+                android:src="@drawable/background_button"
                 />
 
 
@@ -38,6 +39,7 @@
                 android:orientation="vertical"
                 android:background="#DBE3CB"
                 android:layout_marginTop="20dp"
+                android:layout_weight="1"
                 >
 
                 <LinearLayout
@@ -164,7 +166,7 @@
                     android:textSize="15dp"
                     />
 
-                <RadioGroup
+                <LinearLayout
                     android:id="@+id/radio_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -174,27 +176,36 @@
                     android:layout_marginBottom="10dp"
                     android:paddingLeft="10dp">
 
-                    <RadioButton
-                        android:id="@+id/radiobtn_offline"
+                    <CheckBox
+                        android:id="@+id/check_offline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="오프라인"/>
 
-                    <RadioButton
-                        android:id="@+id/radiobtn_online"
+                    <CheckBox
+                        android:id="@+id/check_online"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:text="온라인"/>
 
-                </RadioGroup>
+                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/map_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지도를 움직여서 원하는위치에 마커를 찍으세요."
+                    android:textSize="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginBottom="10dp"
                     />
 

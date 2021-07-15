@@ -144,4 +144,12 @@ interface InfoService {
         @Part("request") requestBody: RequestBody
     ): Call<Void>
 
+    //부모카테고리
+    @GET("/study-service/categories/parent")
+    abstract fun requesCategoryParent():Call<Array<CategoryParent>>
+
+    //자식카테고리
+    @GET("/study-service//categories/1/child")
+    abstract fun requesCategoryChild():Call<Array<CategoryChild>>
+
 }

@@ -196,10 +196,6 @@ class MapActivity : AppCompatActivity() {
                             findLocationId(code_zero.toString())
                             Log.d( "회원 지역CODE",code_zero.toString())
                         }
-
-
-
-
                     }
                 }
                 override fun onFailure(call: Call<MapCode>, t: Throwable) {
