@@ -34,10 +34,4 @@ data class Profile(
 )
 
 
-data class Image (
-    @SerializedName("profileImage")
-    var profileImage: String = "",
 
-    @SerializedName("thumbnailImage")
-    var thumbnailImage: String = ""
-)

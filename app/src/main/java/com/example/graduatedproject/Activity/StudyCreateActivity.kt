@@ -13,15 +13,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.example.graduatedproject.Model.Category
 import com.example.graduatedproject.Model.MapCode
-import com.example.graduatedproject.Model.MyLocation
+import com.example.graduatedproject.Model.Study
+import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -29,6 +31,7 @@ import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_liketopic.*
 import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.activity_study_create.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapReverseGeoCoder
@@ -48,19 +51,26 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
     private val TAG = StudyCreateActivity::class.java.simpleName
     val PERMISSIONS_REQUEST_CODE = 100
     var REQUIRED_PERMISSIONS = arrayOf<String>( Manifest.permission.ACCESS_FINE_LOCATION)
-    lateinit var reverseGeoCoder : MapReverseGeoCoder
     var new_imageUrl : Uri? = null
     var new_imageUrlPath : String? = null
     var imageFile : File? = null
     var current_marker = MapPOIItem()
+    lateinit var reverseGeoCoder : MapReverseGeoCoder
     var people_num : Int = 0
-    //태그 넣을 리스트
     var tagArray = arrayListOf<String>()
-    var offline : Boolean = true
-    var online : Boolean = true
+    var offline : Boolean = false
+    var online : Boolean = false
     var uLatitude : Double? = null
     var uLongitude : Double? = null
     var locationCode : String? = null
+    private lateinit var spinnerAdapterparent : SpinnerAdapter
+    private lateinit var spinnerAdapterchild : SpinnerAdapter
+    var categoryListParent : ArrayList<Category>? = null
+    var categoryListChild : ArrayList<Category>? = null
+    var categoryParent: MutableList<String> = mutableListOf("큰 카테고리")
+    var categoryChild : MutableList<String> =  mutableListOf("작은 카테고리")
+    var categoryparentSeletedItem : String? = null
+    var categorychildSeletedItem : String? = null
 
 
     private val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -120,7 +130,6 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 //지도에서 원하는 곳 클릭하면
                 //기존의 마커 삭제하고 새로운 마커 추가하기
                 //새로운 마커의 경도, 위도 가져오기
-
                 mapView.setMapViewEventListener(this)
 
                 //이미지 갤러리에서 받아오기 -> 붙이기
@@ -146,7 +155,31 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     addTag(chipGroup,inflater)
                 }
 
-                //Todo 스피너설정
+                getCategoryList()
+                setCategoryParent()
+                setCategoryChild()
+                big_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        if(big_category.getItemAtPosition(position).equals("큰 카테고리")){
+                            categoryparentSeletedItem = categoryParent!![position]
+                        }
+                        Log.d("categoryparentSeletedItem", categoryparentSeletedItem!!.toString())
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
+
+                }
+                small_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        if(small_category.getItemAtPosition(position).equals("작은 카테고리")) {
+                            categorychildSeletedItem = categoryChild!![position]
+                        }
+                        Log.d("categorychildSeletedItem", categorychildSeletedItem!!.toString())
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
+                }
+
 
                 check_offline.setOnCheckedChangeListener { buttonView, isChecked ->
                     if(isChecked){
@@ -159,7 +192,6 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 check_online.setOnCheckedChangeListener { buttonView, isChecked ->
                     if(isChecked){
                         online = true
-
                     }
                     else{
                         online = false
@@ -198,7 +230,128 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
             )
         }
     }
+    //서버통신
+    private fun sendStudyInfo(){
+        var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
+        var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
+        var categorychildSeletedId : Int? = null
 
+
+        //스터디이름,참여인원, 해시태그 리스트, 카테고리2개, 소개내용, 온/오프라인 여부, locationId 정보 가져오기
+        var studyName = edit_study_name.text.toString()
+        var numberOfPeople = people_number.text.toString()
+        var content = create_introduce_text.text.toString()
+        var tags = tagArray.toString()
+        for(i in 0..categoryListChild!!.size-1){
+            if(categoryListChild!!.get(i).name == categorychildSeletedItem){
+                categorychildSeletedId = categoryListChild!!.get(i).id
+            }
+        }
+
+
+//        Log.d("스터디생성정보", studyName.toString())
+//        Log.d("스터디생성정보", numberOfPeople.toString())
+//        Log.d("스터디생성정보", content.toString())
+//        Log.d("스터디생성정보", tags.toString())
+//        Log.d("스터디생성정보", online.toString())
+//        Log.d("스터디생성정보", offline.toString())
+//        Log.d("스터디생성정보", categoryId.toString())
+        Log.d("스터디생성정보 -> 지역코드", locationCode.toString())
+        Log.d("스터디생성정보 -> 지역코드", categorychildSeletedId.toString())
+
+        lateinit var requestImg: RequestBody
+        var imageBitmap : MultipartBody.Part? = null
+        if(imageFile != null){
+            requestImg= RequestBody.create(MediaType.parse("image/*"),imageFile)
+            imageBitmap = MultipartBody.Part.createFormData("image", imageFile?.getName(), requestImg)
+
+        }else{}
+
+        val paramObject = JsonObject()
+        paramObject.addProperty("name", studyName)
+        paramObject.addProperty("numberOfPeople", numberOfPeople)
+        paramObject.addProperty("content", content)
+        paramObject.addProperty("tags", tags)
+        paramObject.addProperty("online", online)
+        paramObject.addProperty("offline", offline)
+        paramObject.addProperty("locationCode", locationCode)
+        paramObject.addProperty("categoryId", categorychildSeletedId)
+        val request = RequestBody.create(MediaType.parse("application/json"),paramObject.toString())
+
+        ServerUtil.retrofitService.SendCreateStudyInfo(accessToken, imageBitmap, request)
+            .enqueue(object : Callback<Study> {
+                override fun onResponse(call: Call<Study>, response: Response<Study>) {
+                    if (response.isSuccessful) {
+                        var studyId : Int = response.body()!!.id
+
+                        Log.d(TAG, "스터디생성정보 전송 성공")
+
+
+                        val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
+                        intent.putExtra("studyId",studyId)
+                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                    }
+                }
+                override fun onFailure(call: Call<Study>, t: Throwable) {
+                    Log.d(TAG, "스터디생성정보 전송 실패")
+                    Toast.makeText(this@StudyCreateActivity, "스터디생성정보 전송 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+
+    }
+    //카테고리 리스트 가져오기
+    fun getCategoryList(){
+        ServerUtil.retrofitService.requestCategoryParent()
+            .enqueue(object : Callback<ArrayList<Category>> {
+                override fun onResponse(call: Call<ArrayList<Category>>, response: Response<ArrayList<Category>>) {
+                    if (response.isSuccessful) {
+                        categoryListParent = response.body()
+                        for(i in 0 .. categoryListParent!!.size-1){
+                            categoryParent?.add(categoryListParent!!.get(i).name)
+
+                        }
+                        Log.d(TAG, "카테고리 부모아이템리스트 받기 성공")
+                    }
+                }
+                override fun onFailure(call: Call<ArrayList<Category>>, t: Throwable) {
+                    Log.d(TAG, "카테고리 부모아이템리스트 받기 실패")
+                    Toast.makeText(this@StudyCreateActivity, "카테고리 부모아이템리스트 받기 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+        ServerUtil.retrofitService.requestCategoryChild()
+            .enqueue(object : Callback<ArrayList<Category>> {
+                override fun onResponse(call: Call<ArrayList<Category>>, response: Response<ArrayList<Category>>) {
+                    if (response.isSuccessful) {
+                        categoryListChild = response.body()!!
+                        for(i in 0..categoryListChild!!.size-1){
+                            categoryChild?.add(categoryListChild!!.get(i).name)
+                        }
+                        Log.d(TAG, "카테고리 자식아이템리스트 받기 성공")
+
+                    }
+                }
+                override fun onFailure(call: Call<ArrayList<Category>>, t: Throwable) {
+                    Log.d(TAG, "카테고리 자식아이템리스트 받기 실패")
+                    Toast.makeText(this@StudyCreateActivity, "카테고리 자식아이템리스트 받기 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+    }
+    //큰카테고리 셋팅
+    private fun setCategoryParent(){
+        Log.d("카테고리 부모", categoryParent.toString())
+        spinnerAdapterparent = ArrayAdapter(this,R.layout.item_spinner, categoryParent)
+        big_category.adapter = spinnerAdapterparent
+    }
+    //작은카테고리 셋팅
+    private fun setCategoryChild(){
+        Log.d("카테고리 자식 ", categoryChild.toString())
+        spinnerAdapterchild = ArrayAdapter(this,R.layout.item_spinner, categoryChild)
+        small_category.adapter = spinnerAdapterchild
+    }
+    private fun categoryEvent(){
+
+    }
+    //태그 추가
     fun addTag(chipGroup : ChipGroup, inflater: LayoutInflater): ArrayList<String> {
         var chip : Chip = inflater.inflate(com.example.graduatedproject.R.layout.item_liketopic, chipGroup, false) as Chip
 
@@ -215,73 +368,6 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
             }
         }
         return tagArray
-    }
-    private fun sendStudyInfo(){
-        var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
-        var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
-
-
-
-        //스터디이름,참여인원, 해시태그 리스트, 카테고리2개, 소개내용, 온/오프라인 여부, locationId 정보 가져오기
-        var studyName = edit_study_name.text.toString()
-        var numberOfPeople = people_number.text.toString()
-        var content = create_introduce_text.text.toString()
-        var tags = tagArray.toString()
-        var categoryId = 2
-        locationCode
-
-
-        lateinit var requestImg: RequestBody
-        var imageBitmap : MultipartBody.Part? = null
-
-//        Log.d("스터디생성정보", studyName.toString())
-//        Log.d("스터디생성정보", numberOfPeople.toString())
-//        Log.d("스터디생성정보", content.toString())
-//        Log.d("스터디생성정보", tags.toString())
-//        Log.d("스터디생성정보", online.toString())
-//        Log.d("스터디생성정보", offline.toString())
-//        Log.d("스터디생성정보", categoryId.toString())
-        Log.d("스터디생성정보 -> 지역코드", locationCode.toString())
-
-        if(imageFile != null){
-            requestImg= RequestBody.create(MediaType.parse("image/*"),imageFile)
-            imageBitmap = MultipartBody.Part.createFormData("image", imageFile?.getName(), requestImg)
-
-        }else{}
-
-        val paramObject = JsonObject()
-        paramObject.addProperty("name", studyName)
-        paramObject.addProperty("nickName", numberOfPeople)
-        paramObject.addProperty("nickName", content)
-        paramObject.addProperty("nickName", tags)
-        paramObject.addProperty("nickName", online)
-        paramObject.addProperty("nickName", offline)
-        //paramObject.addProperty("nickName", newNickname)
-        paramObject.addProperty("nickName", categoryId)
-
-
-        val request = RequestBody.create(MediaType.parse("application/json"),paramObject.toString())
-
-        //locationCode 가져오기
-//        ServerUtil.retrofitService.SendCreateStudyInfo(accessToken, imageBitmap, request)
-//            .enqueue(object : Callback<Study> {
-//                override fun onResponse(call: Call<Study>, response: Response<Study>) {
-//                    if (response.isSuccessful) {
-//
-//                        Log.d(TAG, "스터디생성정보 전송 성공")
-//
-//
-//                        val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
-//                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-//
-//                    }
-//                }
-//                override fun onFailure(call: Call<Study>, t: Throwable) {
-//                    Log.d(TAG, "스터디생성정보 전송 실패")
-//                    Toast.makeText(this@StudyCreateActivity, "스터디생성정보 전송 실패", Toast.LENGTH_LONG).show()
-//                }
-//            })
-
     }
     //앱갤러리 열기
     private fun openGalley() {
@@ -315,33 +401,6 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
         }
         val result = file.absolutePath
         return result
-    }
-    //LocationId 찾기
-    fun findLocationId(code : String){
-        var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
-        var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
-        val paramObject = JsonObject()
-        paramObject.addProperty("code",code)
-
-        ServerUtil.retrofitService.requestLocationId(accessToken, paramObject.get("code").asString)
-            .enqueue(object : Callback<MyLocation> {
-                override fun onResponse(call: Call<MyLocation>, response: Response<MyLocation>) {
-                    if (response.isSuccessful) {
-                        //행정동&법정동 코드를 통해 서버의 지역정보Id를 받아옴
-                        val myLocation  = response.body()!!
-                        val locationId = myLocation.id
-
-                    }
-                }
-                override fun onFailure(call: Call<MyLocation>, t: Throwable) {
-                    Log.d(TAG, "회원 지역정보ID 조회 실패")
-                    Toast.makeText(this@StudyCreateActivity, "회원 지역정보ID 조회 실패", Toast.LENGTH_LONG).show()
-                }
-            })
-    }
-    //카테고리 리스트 가져오기
-    fun getCategoryList(){
-
     }
 
     override fun onMapViewInitialized(p0: MapView?) {}
@@ -377,6 +436,7 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
             Log.d("마커 찍은 주소", p1.toString())
 
+            //LocationCode 가져오기
             ServerUtil.kakaoService.requestCode(kakaoToken, uLongitude!!, uLatitude!!)
                 .enqueue(object : Callback<MapCode> {
                     override fun onResponse(call: Call<MapCode>, response: Response<MapCode>) {
@@ -404,5 +464,4 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
     override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {}
     override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {}
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {}
-
 }

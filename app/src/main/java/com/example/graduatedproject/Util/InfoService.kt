@@ -1,7 +1,6 @@
 package com.example.graduatedproject.Util
 
 import com.example.graduatedproject.Model.*
-import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -142,14 +141,20 @@ interface InfoService {
         //name,numberOfPeople,content,tags
         //online,offline,locationCode,categoryId
         @Part("request") requestBody: RequestBody
-    ): Call<Void>
+    ): Call<Study>
 
     //부모카테고리
     @GET("/study-service/categories/parent")
-    abstract fun requesCategoryParent():Call<Array<CategoryParent>>
+    abstract fun requestCategoryParent():Call<ArrayList<Category>>
 
     //자식카테고리
-    @GET("/study-service//categories/1/child")
-    abstract fun requesCategoryChild():Call<Array<CategoryChild>>
+    @GET("/study-service/categories/1/child")
+    abstract fun requestCategoryChild():Call<ArrayList<Category>>
+
+    //스터디상세조회
+    @GET("/study-service//studies/{studyId}")
+    abstract fun requestStudy(
+        @Path("studyId") studyId : Int
+    ):Call<Study>
 
 }
