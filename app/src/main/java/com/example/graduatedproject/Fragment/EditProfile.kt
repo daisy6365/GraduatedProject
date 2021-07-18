@@ -13,6 +13,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Glide.with
@@ -91,10 +92,19 @@ class EditProfile() : DialogFragment() {
 
         //그 사용자한테 저장된 이미지, 닉네임 불러옴
         // 변경전 사진 화면에 붙이기
-        Glide.with(requireContext())
-            .load(imageUrl)
-            .centerCrop()
-            .into(edit_profile_img)
+        if(imageUrl.equals("null")){
+            Glide.with(this)
+                .load("https://project-lambda-bucket.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Image_2021-07-19-03-04-43.png")
+                .centerCrop()
+                .into(edit_profile_img)
+        }
+        else{
+            Glide.with(view)
+                .load(imageUrl.toUri())
+                .centerCrop()
+                .into(edit_profile_img)
+        }
+
         // 변경전 닉네임 화면에 붙이기
         edit_profile_name.setText(nickname)
 
@@ -104,15 +114,15 @@ class EditProfile() : DialogFragment() {
         }
         //원하는 사진 누르면 edit_profile_img에 갖다 붙임
         //원하는 사진의 url 받아 놓기
-        Glide.with(requireContext())
-            .load(new_imageUrlPath)
+        Glide.with(view)
+            .load(new_imageUrlPath?.toUri())
             .centerCrop()
             .error(imageUrl)
             .into(edit_profile_img)
 
         //기본이미지로 변경
         change_default.setOnClickListener {
-            Glide.with(requireActivity())
+            Glide.with(this)
                 .load(R.drawable.profile_init)
                 .centerCrop()
                 .error(imageUrl)
@@ -155,7 +165,7 @@ class EditProfile() : DialogFragment() {
                     override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
                         if (response.isSuccessful) {
                             Log.d("EditProfile", "프로필변경 성공")
-                            Toast.makeText(getActivity(), "프로필변경 되었습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "프로필변경 되었습니다.", Toast.LENGTH_SHORT).show()
                             dismiss()
                         }
                     }

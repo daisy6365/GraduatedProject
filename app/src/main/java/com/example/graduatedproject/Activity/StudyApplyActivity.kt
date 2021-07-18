@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class StudyApplyActivity : AppCompatActivity() {
     private val TAG = StudyApplyActivity::class.java.simpleName
     var studyInfo = Study()
@@ -34,14 +35,17 @@ class StudyApplyActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<Study>, response: Response<Study>) {
                     if (response.isSuccessful) {
                         studyInfo  = response.body()!!
-                        Log.d("location 회원 지역정보 조회", response.body().toString())
 
-                        Glide.with(view)
-                            .load(studyInfo!!.image.profileImage)
-                            .into(created_study_cover_img)
+                        if(studyInfo!!.image.profileImage != null){
+                            Glide.with(this@StudyApplyActivity)
+                                .load(studyInfo!!.image.profileImage)
+                                .centerCrop()
+                                .into(created_study_cover_img)
+
+                        } else{}
 
                         study_name.setText(studyInfo!!.name)
-                        people_number.setText(studyInfo!!.currentNumberOfPeople)
+                        people_number.setText(studyInfo!!.numberOfPeople.toString())
                         big_category.setText(studyInfo!!.parentCategory.name)
                         small_category.setText(studyInfo!!.childCategory.name)
                         created_introduce_text.setText(studyInfo.content)

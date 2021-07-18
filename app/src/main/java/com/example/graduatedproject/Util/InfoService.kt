@@ -133,6 +133,7 @@ interface InfoService {
 
 
     //스터디생성
+    @Multipart
     @POST("/study-service/studies")
     abstract fun SendCreateStudyInfo(
         @Header("Authorization") accessToken: String,
@@ -152,7 +153,7 @@ interface InfoService {
     abstract fun requestCategoryChild():Call<ArrayList<Category>>
 
     //스터디상세조회
-    @GET("/study-service//studies/{studyId}")
+    @GET("/study-service/studies/{studyId}")
     abstract fun requestStudy(
         @Path("studyId") studyId : Int
     ):Call<Study>

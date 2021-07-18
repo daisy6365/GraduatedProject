@@ -27,6 +27,7 @@ import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_liketopic.*
 import kotlinx.android.synthetic.main.activity_map.*
@@ -39,6 +40,8 @@ import net.daum.mf.map.api.MapView
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -161,9 +164,13 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 big_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         if(big_category.getItemAtPosition(position).equals("큰 카테고리")){
-                            categoryparentSeletedItem = categoryParent!![position]
+
                         }
-                        Log.d("categoryparentSeletedItem", categoryparentSeletedItem!!.toString())
+                        else{
+                            categoryparentSeletedItem = categoryParent!![position]
+                            Log.d("categoryparentSeletedItem", categoryparentSeletedItem!!.toString())
+                        }
+
                     }
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
@@ -172,9 +179,13 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 small_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         if(small_category.getItemAtPosition(position).equals("작은 카테고리")) {
-                            categorychildSeletedItem = categoryChild!![position]
+
                         }
-                        Log.d("categorychildSeletedItem", categorychildSeletedItem!!.toString())
+                        else{
+                            categorychildSeletedItem = categoryChild!![position]
+                            Log.d("categorychildSeletedItem", categorychildSeletedItem!!.toString())
+                        }
+
                     }
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
@@ -241,7 +252,6 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
         var studyName = edit_study_name.text.toString()
         var numberOfPeople = people_number.text.toString()
         var content = create_introduce_text.text.toString()
-        var tags = tagArray.toString()
         for(i in 0..categoryListChild!!.size-1){
             if(categoryListChild!!.get(i).name == categorychildSeletedItem){
                 categorychildSeletedId = categoryListChild!!.get(i).id
@@ -267,15 +277,16 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
         }else{}
 
-        val paramObject = JsonObject()
-        paramObject.addProperty("name", studyName)
-        paramObject.addProperty("numberOfPeople", numberOfPeople)
-        paramObject.addProperty("content", content)
-        paramObject.addProperty("tags", tags)
-        paramObject.addProperty("online", online)
-        paramObject.addProperty("offline", offline)
-        paramObject.addProperty("locationCode", locationCode)
-        paramObject.addProperty("categoryId", categorychildSeletedId)
+        var jsonArray = JSONArray(tagArray)
+        val paramObject = JSONObject()
+        paramObject.put("name", studyName)
+        paramObject.put("numberOfPeople", numberOfPeople.toInt())
+        paramObject.put("content", content)
+        paramObject.put("tags",jsonArray)
+        paramObject.put("online", online)
+        paramObject.put("offline", offline)
+        paramObject.put("locationCode", locationCode)
+        paramObject.put("categoryId", categorychildSeletedId!!.toInt())
         val request = RequestBody.create(MediaType.parse("application/json"),paramObject.toString())
 
         ServerUtil.retrofitService.SendCreateStudyInfo(accessToken, imageBitmap, request)
@@ -287,6 +298,7 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                         Log.d(TAG, "스터디생성정보 전송 성공")
 
 
+                        finish()
                         val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
                         intent.putExtra("studyId",studyId)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))

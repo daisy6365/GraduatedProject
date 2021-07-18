@@ -75,9 +75,9 @@ class MyPage : Fragment() {
 
                         //사진 화면에 붙이기
                         if(profile?.image?.profileImage == null){
-                            imageUrl = R.drawable.profile_init.toString()
+                            imageUrl = null
                             Glide.with(view)
-                                .load(imageUrl!!.toInt())
+                                .load(R.drawable.profile_init)
                                 .into(my_page_profile)
                         }
                         else {
