@@ -45,10 +45,20 @@ class StudyApplyActivity : AppCompatActivity() {
                         } else{}
 
                         study_name.setText(studyInfo!!.name)
+                        current_people_number.setText(studyInfo.currentNumberOfPeople.toString())
                         people_number.setText(studyInfo!!.numberOfPeople.toString())
                         big_category.setText(studyInfo!!.parentCategory.name)
                         small_category.setText(studyInfo!!.childCategory.name)
                         created_introduce_text.setText(studyInfo.content)
+                        location_Info.setText(studyInfo.location.city + " " + studyInfo.location.gu + " " + studyInfo.location.dong)
+
+                        if(studyInfo!!.online == true){
+                            checked_online.isChecked = true
+                        }else{checked_online.isChecked = false}
+
+                        if(studyInfo!!.offline == true){
+                            checked_offline.isChecked = true
+                        }else{checked_offline.isChecked = false}
 
 
                         Log.d(TAG, "회원 지역정보 조회 성공")
@@ -59,5 +69,6 @@ class StudyApplyActivity : AppCompatActivity() {
                     Toast.makeText(this@StudyApplyActivity, "회원 지역정보 조회 실패", Toast.LENGTH_LONG).show()
                 }
             })
+
     }
 }

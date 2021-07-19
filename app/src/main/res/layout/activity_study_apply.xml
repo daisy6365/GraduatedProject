@@ -13,137 +13,186 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
             android:layout_margin="20dp"
-            >
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/created_study_cover_img"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_weight="2"
-                android:src="@drawable/background_button"
-                />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
-                >
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_margin="10dp"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_margin="10dp"
                     android:gravity="center"
-                    >
-
-                    <TextView
-                        android:id="@+id/study_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="스터디 이름"
-                        android:textSize="15dp"
-                        android:layout_weight="1"
-                        />
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="50dp"
-                        android:layout_weight="2"
+                        android:layout_centerVertical="true"
                         android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="참여인원"/>
-
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="20dp"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/people_number"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:layout_gravity="center"
-                                android:textSize="20dp"/>
+                                android:layout_gravity="center_horizontal"
+                                android:text="참여인원" />
 
+
+                            <LinearLayout
+                                android:layout_width="55dp"
+                                android:layout_height="55dp"
+                                android:background="@drawable/background_peoplenum"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/current_people_number"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="1"
+                                    android:textSize="20dp" />
+
+                                <TextView
+                                    android:id="@+id/people_bar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="/"
+                                    android:textSize="20dp" />
+
+                                <TextView
+                                    android:id="@+id/people_number"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="10"
+                                    android:textSize="20dp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/study_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="스터디 이름"
+                            android:textSize="25dp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
+                    <ImageView
+                        android:id="@+id/created_study_cover_img"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/background_button" />
 
-                </LinearLayout>
+
+                </RelativeLayout>
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/created_chip_group"
-                    android:layout_margin="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
 
                 </com.google.android.material.chip.ChipGroup>
 
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/big_category"
+                        android:padding="5dp"
                         android:layout_width="120dp"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/textview_background"
-                        android:layout_height="wrap_content"/>
+                        android:gravity="center"
+                        android:textSize="20dp" />
 
                     <TextView
                         android:id="@+id/small_category"
-                        android:layout_marginLeft="10dp"
+                        android:padding="5dp"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/textview_background"/>
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/textview_background"
+                        android:gravity="center"
+                        android:textSize="20dp" />
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/created_introduce_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:maxLines="5"
+                    android:minLines="2"
+                    android:scrollbars="vertical"
                     android:text="스터디를 소개해주세요."
-                    android:textSize="15dp"
-                    />
+                    android:textSize="15dp" />
 
                 <LinearLayout
                     android:id="@+id/checkbox_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
                     android:paddingLeft="10dp">
 
                     <CheckBox
                         android:id="@+id/checked_offline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="오프라인"/>
+                        android:text="오프라인" />
 
                     <CheckBox
                         android:id="@+id/checked_online"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="온라인"/>
+                        android:text="온라인" />
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/location_Info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/textview_background"
+                    android:text="인천 연수구 송도동"
+                    android:padding="10dp"
+                    android:textSize="20dp" />
 
             </LinearLayout>
 
@@ -151,15 +200,15 @@
                 android:id="@+id/apply_study"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:layout_margin="20dp">
 
-                android:layout_margin="20dp"
-                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
                     android:background="@drawable/background_button"
-                    android:text="지원하기"/>
+                    android:padding="8dp"
+                    android:text="지원하기" />
 
             </LinearLayout>
 

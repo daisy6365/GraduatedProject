@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Fragment
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,9 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.example.graduatedproject.Activity.LiketopicActivity
+import androidx.fragment.app.DialogFragment
 import com.example.graduatedproject.Activity.StudyCreateActivity
-import com.example.graduatedproject.Activity.StudySearchActivity
 import com.example.graduatedproject.R
 
 
@@ -32,17 +32,17 @@ class Home : Fragment() {
 
         val home_search_btn : LinearLayout = view.findViewById(R.id.home_search_btn)
         home_search_btn.setOnClickListener {
-            activity?.let {
-                val intent = Intent(context, StudySearchActivity::class.java)
-                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-            }
+            var args : Bundle = Bundle()
+            val dialog = SearchStudy().getInstance()
+            dialog.setArguments(args)
+            dialog.show(requireActivity().getSupportFragmentManager(),"tag")
         }
 
         val home_create_study : LinearLayout = view.findViewById(R.id.home_create_study)
         home_create_study.setOnClickListener {
             activity?.let {
                 val intent = Intent(context, StudyCreateActivity::class.java)
-                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                startActivity(intent)
             }
         }
     }

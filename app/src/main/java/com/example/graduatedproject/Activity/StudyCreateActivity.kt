@@ -156,6 +156,8 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 add_tag_btn.setOnClickListener{
                     //배열에 관심태그 추가 하고 칩 만들기
                     addTag(chipGroup,inflater)
+                    edit_tag.setText(null)
+                    edit_tag.setHint("관련태그 입력")
                 }
 
                 getCategoryList()
@@ -298,10 +300,11 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                         Log.d(TAG, "스터디생성정보 전송 성공")
 
 
-                        finish()
+
                         val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
                         intent.putExtra("studyId",studyId)
-                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                        startActivity(intent)
+                        finish()
                     }
                 }
                 override fun onFailure(call: Call<Study>, t: Throwable) {
