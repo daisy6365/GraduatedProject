@@ -7,6 +7,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface InfoService {
+    var i : String
 
     //로그인
     @POST("/auth-service/auth")
@@ -149,8 +150,10 @@ interface InfoService {
     abstract fun requestCategoryParent():Call<ArrayList<Category>>
 
     //자식카테고리
-    @GET("/study-service/categories/1/child")
-    abstract fun requestCategoryChild():Call<ArrayList<Category>>
+    @GET("/study-service/categories/{i}/child")
+    abstract fun requestCategoryChild(
+        @Path("i") i : Int
+    ):Call<ArrayList<Category>>
 
     //스터디상세조회
     @GET("/study-service/studies/{studyId}")

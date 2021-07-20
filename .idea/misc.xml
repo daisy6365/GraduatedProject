@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/layout/activity_map_search.xml" value="0.13095238095238096" />
         <entry key="app/src/main/res/layout/activity_study_apply.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_study_create.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_study_search.xml" value="0.2223731884057971" />
         <entry key="app/src/main/res/layout/fragment_apply_study.xml" value="0.19972826086956522" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.13095238095238096" />
         <entry key="app/src/main/res/layout/fragment_home_item_view.xml" value="0.165" />

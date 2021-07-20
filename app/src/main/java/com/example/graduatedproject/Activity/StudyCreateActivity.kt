@@ -161,17 +161,42 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 }
 
                 getCategoryList()
-                setCategoryParent()
-                setCategoryChild()
                 big_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        if(big_category.getItemAtPosition(position).equals("큰 카테고리")){
+                        if(big_category.getItemAtPosition(position).equals("큰 카테고리")){ }
+                        for(i in 1..categoryParent.size-1){
+                            categoryChild =  mutableListOf("작은 카테고리")
 
+                            Log.d("카테고리 자식 ", categoryChild.toString())
+
+                            setCategoryChild()
+
+                            if(big_category.getItemAtPosition(position).equals(categoryParent[i])){
+                                ServerUtil.retrofitService.requestCategoryChild(i)
+                                    .enqueue(object : Callback<ArrayList<Category>> {
+                                        override fun onResponse(call: Call<ArrayList<Category>>, response: Response<ArrayList<Category>>) {
+                                            if (response.isSuccessful) {
+                                                categoryListChild = response.body()!!
+                                                for(i in 0..categoryListChild!!.size-1){
+                                                    categoryChild?.add(categoryListChild!!.get(i).name)
+                                                }
+                                                Log.d(TAG, "카테고리 자식아이템리스트 받기 성공")
+
+                                                setCategoryChild()
+
+                                            }
+                                        }
+                                        override fun onFailure(call: Call<ArrayList<Category>>, t: Throwable) {
+                                            Log.d(TAG, "카테고리 자식아이템리스트 받기 실패")
+                                            Toast.makeText(this@StudyCreateActivity, "카테고리 자식아이템리스트 받기 실패", Toast.LENGTH_LONG).show()
+                                        }
+                                    })
+
+                            }
                         }
-                        else{
-                            categoryparentSeletedItem = categoryParent!![position]
-                            Log.d("categoryparentSeletedItem", categoryparentSeletedItem!!.toString())
-                        }
+
+//                        categoryparentSeletedItem = categoryParent!![position]
+//                        Log.d("categoryparentSeletedItem", categoryparentSeletedItem!!.toString())
 
                     }
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -326,6 +351,7 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
                         }
                         Log.d(TAG, "카테고리 부모아이템리스트 받기 성공")
+
                     }
                 }
                 override fun onFailure(call: Call<ArrayList<Category>>, t: Throwable) {
@@ -333,29 +359,10 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     Toast.makeText(this@StudyCreateActivity, "카테고리 부모아이템리스트 받기 실패", Toast.LENGTH_LONG).show()
                 }
             })
-        ServerUtil.retrofitService.requestCategoryChild()
-            .enqueue(object : Callback<ArrayList<Category>> {
-                override fun onResponse(call: Call<ArrayList<Category>>, response: Response<ArrayList<Category>>) {
-                    if (response.isSuccessful) {
-                        categoryListChild = response.body()!!
-                        for(i in 0..categoryListChild!!.size-1){
-                            categoryChild?.add(categoryListChild!!.get(i).name)
-                        }
-                        Log.d(TAG, "카테고리 자식아이템리스트 받기 성공")
 
-                    }
-                }
-                override fun onFailure(call: Call<ArrayList<Category>>, t: Throwable) {
-                    Log.d(TAG, "카테고리 자식아이템리스트 받기 실패")
-                    Toast.makeText(this@StudyCreateActivity, "카테고리 자식아이템리스트 받기 실패", Toast.LENGTH_LONG).show()
-                }
-            })
-    }
-    //큰카테고리 셋팅
-    private fun setCategoryParent(){
-        Log.d("카테고리 부모", categoryParent.toString())
         spinnerAdapterparent = ArrayAdapter(this,R.layout.item_spinner, categoryParent)
         big_category.adapter = spinnerAdapterparent
+
     }
     //작은카테고리 셋팅
     private fun setCategoryChild(){
@@ -363,12 +370,9 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
         spinnerAdapterchild = ArrayAdapter(this,R.layout.item_spinner, categoryChild)
         small_category.adapter = spinnerAdapterchild
     }
-    private fun categoryEvent(){
-
-    }
     //태그 추가
     fun addTag(chipGroup : ChipGroup, inflater: LayoutInflater): ArrayList<String> {
-        var chip : Chip = inflater.inflate(com.example.graduatedproject.R.layout.item_liketopic, chipGroup, false) as Chip
+        var chip : Chip = inflater.inflate(R.layout.item_liketopic, chipGroup, false) as Chip
 
         tagArray.add(edit_tag.text.toString())
         chip.text = edit_tag.text.toString()
