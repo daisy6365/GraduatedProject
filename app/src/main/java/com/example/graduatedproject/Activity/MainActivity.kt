@@ -14,12 +14,8 @@ import com.example.graduatedproject.Adapter.BeforeLoginAdpater
 import com.example.graduatedproject.R
 import com.example.graduatedproject.R.id.btn_bottom_navi_mypage_tab
 import com.example.graduatedproject.Util.ServerUtil
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.AuthErrorCause
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.user.UserApiClient
-import com.kakao.auth.api.AuthApi
-import com.kakao.sdk.auth.AuthApiClient
+import com.google.firebase.FirebaseApp
+import com.google.firebase.iid.FirebaseInstanceId
 import com.kakao.util.helper.Utility
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -38,6 +34,11 @@ class MainActivity : AppCompatActivity() {
 //        editor.remove("refresh_token")
 //        editor.commit()
         var token = pref.getString("access_token", "").toString()
+
+        FirebaseApp.initializeApp(this);
+        System.out.println("token : "+ FirebaseInstanceId.getInstance().getToken()); // 토큰을 확인할 수 있는 코드
+        var fcmToken = FirebaseInstanceId.getInstance().getToken()!!
+
 
         configureBottomNavigation(token)
 

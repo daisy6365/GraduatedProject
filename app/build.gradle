@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android-extensions'
     //id 'com.google.gms.google-services'
 }
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -33,7 +34,7 @@ android {
         test.java.srcDirs += 'src/test/kotlin'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility "1.8"
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
@@ -147,6 +148,15 @@ dependencies {
 //
 
 //    파이어베이스
+
+//    implementation 'com.google.firebase:firebase-messaging-ktx:22.0.0'
+//    implementation 'com.google.firebase:firebase-analytics-ktx:19.0.0'
+
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
 //    implementation "com.google.firebase:firebase-messaging:$firebase_messaging_version"
 //    implementation "com.google.firebase:firebase-core:$firebase_core_version"
 
