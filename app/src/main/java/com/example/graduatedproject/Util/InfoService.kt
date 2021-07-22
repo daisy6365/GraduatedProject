@@ -161,4 +161,16 @@ interface InfoService {
         @Path("studyId") studyId : Int
     ):Call<Study>
 
+    @GET("/study-service/studies")
+    abstract fun requestStudySearch(
+        @Header("Authorization") accessToken: String,
+        @Query("page") page : Int,
+        @Query("size") size : Int,
+        @Query("offline") offline : Boolean,
+        @Query("online") online : Boolean,
+        @Query("searchKeyword") searchKeyword : String,
+        @Query("categoryId") categoryId : Int,
+    ):Call<StudySearch>
+
+
 }

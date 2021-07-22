@@ -1,29 +1,26 @@
 package com.example.graduatedproject.Activity
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.graduatedproject.Adapter.AfterLoginAdapter
 import com.example.graduatedproject.Adapter.BeforeLoginAdpater
 import com.example.graduatedproject.R
 import com.example.graduatedproject.R.id.btn_bottom_navi_mypage_tab
-import com.example.graduatedproject.Util.ServerUtil
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.util.helper.Utility
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 class MainActivity : AppCompatActivity() {
-
+    private val TAG = MainActivity::class.java.simpleName
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,10 +31,24 @@ class MainActivity : AppCompatActivity() {
 //        editor.remove("refresh_token")
 //        editor.commit()
         var token = pref.getString("access_token", "").toString()
+        var fcmToken : String
 
         FirebaseApp.initializeApp(this);
-        System.out.println("token : "+ FirebaseInstanceId.getInstance().getToken()); // 토큰을 확인할 수 있는 코드
-        var fcmToken = FirebaseInstanceId.getInstance().getToken()!!
+//        System.out.println("token : "+ FirebaseInstanceId.getInstance().getToken()); // 토큰을 확인할 수 있는 코드
+//        var fcmToken = FirebaseInstanceId.getInstance().getToken()!!
+
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                fcmToken = task.result
+                Log.d("FCM토큰",fcmToken)
+
+            })
 
 
         configureBottomNavigation(token)
