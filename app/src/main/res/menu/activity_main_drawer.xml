@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="HOME" />
+
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_baseline_radio_button_unchecked_24"
+            android:title="채팅방" >
+            <menu
+                tools:showIn="navigation_view">
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_chat1"
+                        android:title="공지사항"/>
+                    <item
+                        android:id="@+id/nav_chat2"
+                        android:title="채팅방"/>
+                    <item
+                        android:id="@+id/nav_chat_plus"
+                        android:title="+  추가"/>
+                </group>
+            </menu>
+        </item>
+
+
+        <item
+            android:id="@+id/nav_group"
+            android:title="모임" />
+        <item
+            android:id="@+id/nav_setting"
+            android:title="관리" >
+            <menu
+                tools:showIn="navigation_view">
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_setting1"
+                        android:title="멤버관리"/>
+                    <item
+                        android:id="@+id/nav_setting2"
+                        android:title="스터디관리"/>
+                </group>
+            </menu>
+        </item>
+    </group>
+</menu>

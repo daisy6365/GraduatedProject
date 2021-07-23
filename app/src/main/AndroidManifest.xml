@@ -19,6 +19,11 @@
         android:theme="@style/Theme.GraduatedProject"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.StudyRoomActivity"
+            android:exported="true"
+            android:label="@string/title_activity_study_room"
+            android:theme="@style/Theme.GraduatedProject.NoActionBar" />
+        <activity
             android:name=".Activity.StudySearchActivity"
             android:exported="true" />
         <activity

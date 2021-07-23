@@ -28,17 +28,17 @@ data class Study (
     var status: String? = null,
 
     @SerializedName("image")
-    var image: Image = Image(),
+    var image: Image? = Image(),
 
     @SerializedName("location")
-    var location: ContentLocation = ContentLocation(),
+    var location: ContentLocation? = ContentLocation(),
 
     @SerializedName("parentCategory")
-    var parentCategory: Category = Category(),
+    var parentCategory: Category? = Category(),
 
     @SerializedName("childCategory")
-    var childCategory: Category = Category(),
+    var childCategory: Category? = Category(),
 
     @SerializedName("studyTags")
-    var studyTags: ArrayList<String> = arrayListOf()
+    var studyTags: ArrayList<String>? = arrayListOf()
 )
