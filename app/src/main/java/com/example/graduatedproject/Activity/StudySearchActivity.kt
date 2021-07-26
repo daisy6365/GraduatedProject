@@ -3,6 +3,7 @@ package com.example.graduatedproject.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.TextKeyListener.clear
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_study_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Collections.addAll
 
 class StudySearchActivity : AppCompatActivity() {
     private val TAG = StudySearchActivity::class.java.simpleName
@@ -34,54 +36,53 @@ class StudySearchActivity : AppCompatActivity() {
 
         val paramObject = JsonObject()
 
-        studysearch_recycler.apply {
+
+        val offline = intent.getBooleanExtra("offline", false)
+        val online = intent.getBooleanExtra("online", false)
+        val searchKeyword = intent.getStringExtra("searchKeyword")
+        val categoryId = intent.getIntExtra("categoryId", 0)
+
+        Log.d("인텐트 가져온값", offline.toString())
+        Log.d("인텐트 가져온값", online.toString())
+        Log.d("인텐트 가져온값", searchKeyword!!)
+        Log.d("인텐트 가져온값", categoryId.toString())
+
+        paramObject.addProperty("page", PAGE_NUM)
+        paramObject.addProperty("size", LIST_LENGTH)
+        paramObject.addProperty("offline", offline)
+        paramObject.addProperty("online", online)
+        paramObject.addProperty("searchKeyword", searchKeyword)
+        paramObject.addProperty("categoryId", categoryId)
+
+        applicationContext.apply {
             studysearch_recycler.layoutManager = LinearLayoutManager(applicationContext)
-            adapter = StudySearchRecyclerAdapter(context)
+            adapter = StudySearchRecyclerAdapter(applicationContext)
             studysearch_recycler.adapter = adapter
         }
 
-        if (intent.hasExtra("searchKeyword")) {
-            val offline = intent.getBooleanExtra("offline",false)
-            val online = intent.getBooleanExtra("online",false)
-            val searchKeyword = intent.getStringExtra("searchKeyword")
-            val categoryId = intent.getIntExtra("categoryId",0)
+        loadList(paramObject)
 
-            Log.d("인텐트 가져온값", offline.toString())
-            Log.d("인텐트 가져온값", online.toString())
-            Log.d("인텐트 가져온값", searchKeyword!!)
-            Log.d("인텐트 가져온값", categoryId.toString())
+        studysearch_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
-            paramObject.addProperty("page", PAGE_NUM)
-            paramObject.addProperty("size", LIST_LENGTH)
-            paramObject.addProperty("offline", offline)
-            paramObject.addProperty("online", online)
-            paramObject.addProperty("searchKeyword", searchKeyword)
-            paramObject.addProperty("categoryId", categoryId)
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                val itemTotalCount = recyclerView.adapter!!.itemCount-1
 
-
-            studysearch_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-
-                    val lastVisibleItemPosition =
-                        (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
-                    val itemTotalCount = recyclerView.adapter!!.itemCount-1
-
-                    // 스크롤이 끝에 도달했는지 확인
-                    if (!studysearch_recycler.canScrollVertically(1)) {
-                        adapter.deleteLoading()
-                        if(lastVisibleItemPosition == itemTotalCount){
-                            if(StudySearch!!.last == false){
-                                paramObject.addProperty("page",PAGE_NUM)
-                                loadList(paramObject)
-                            }
+                // 스크롤이 끝에 도달했는지 확인
+                if (!studysearch_recycler.canScrollVertically(1)) {
+                    adapter.deleteLoading()
+                    if(lastVisibleItemPosition == itemTotalCount){
+                        if(StudySearch!!.last == false){
+                            paramObject.addProperty("page",PAGE_NUM)
+                            loadList(paramObject)
                         }
+                        else{}
                     }
                 }
-            })
-        }
-        else{
-        }
+            }
+        })
 
         study_searchview.setOnClickListener {
             //Activity 변경
@@ -109,15 +110,17 @@ class StudySearchActivity : AppCompatActivity() {
                         StudySearch = response!!.body()
 
                         if(StudySearch!!.last == false){
-                            adapter.setList(StudySearch!!.content)
-                            adapter.notifyDataSetChanged()
-                            PAGE_NUM++
+                            studysearch_recycler.getRecycledViewPool().clear()
+                            adapter!!.setList(StudySearch!!.content)
+                            adapter!!.notifyDataSetChanged()
+                            ++PAGE_NUM
                         }
                         else{
-                            adapter.setList(StudySearch!!.content)
-                            adapter.notifyDataSetChanged()
+                            studysearch_recycler.getRecycledViewPool().clear()
+                            adapter!!.setList(StudySearch!!.content)
+                            adapter!!.notifyDataSetChanged()
                             Toast.makeText(this@StudySearchActivity, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
-                            adapter.deleteLoading()
+                            adapter!!.deleteLoading()
                         }
 
                         Log.d(TAG, "검색결과리스트 받기 성공")

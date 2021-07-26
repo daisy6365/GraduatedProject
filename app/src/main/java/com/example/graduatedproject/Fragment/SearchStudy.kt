@@ -173,6 +173,7 @@ class SearchStudy : DialogFragment() {
                     this.putExtra("searchKeyword",searchKeyword) // 데이터 넣기
                     this.putExtra("offline",offline) // 데이터 넣기
                     this.putExtra("online",online) // 데이터 넣기
+                    dismiss()
                     startActivity(intent)
                 }
             }

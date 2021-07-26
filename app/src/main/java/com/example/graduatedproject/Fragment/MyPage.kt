@@ -16,10 +16,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.example.graduatedproject.Activity.LiketopicActivity
-import com.example.graduatedproject.Activity.LoginActivity
-import com.example.graduatedproject.Activity.MainActivity
-import com.example.graduatedproject.Activity.MapActivity
+import com.example.graduatedproject.Activity.*
 import com.example.graduatedproject.Model.Image
 import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
@@ -114,7 +111,7 @@ class MyPage : Fragment() {
         val my_page_friends_btn: Button = view.findViewById(R.id.my_page_friends_btn)
         my_page_friends_btn.setOnClickListener {
             activity?.let {
-                val intent = Intent(context, LiketopicActivity::class.java)
+                val intent = Intent(context, StudyRoomActivity::class.java)
                 startActivity(intent)
 //                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
             }

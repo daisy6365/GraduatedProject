@@ -82,8 +82,10 @@ class StudySearchRecyclerAdapter(private val context: Context): RecyclerView.Ada
     }
 
     override fun getItemCount(): Int {
+        if(items == null){ //Replace "messages" with whatever array you are passing
+            return 0
+        }
         return items.size!!
-
     }
 
     // 뷰의 타입을 정해주는 곳이다.
@@ -108,37 +110,50 @@ class StudySearchRecyclerAdapter(private val context: Context): RecyclerView.Ada
                 holder.home_on_off.setText("OFFLINE")
             }
 
-            Glide.with(holder.itemView.getContext())
-                .load(items[position].image!!.profileImage)
-                .override(140, 140)
-                .centerCrop()
-                .into( holder.search_study_cover)
-
-            if(items[position].studyTags!![0] != null){
-                holder.study_tag1.text = items[position].studyTags!![0]
-                holder.study_tag1.visibility = View.VISIBLE
+            if(items[position].image == null){
+                Glide.with(holder.itemView.getContext())
+                    .load(R.drawable.background_button)
+                    .override(140, 140)
+                    .centerCrop()
+                    .into( holder.search_study_cover)
             }
-            else if (items[position].studyTags!![1] != null){
-                holder.study_tag2.text = items[position].studyTags!![1]
-                holder.study_tag2.visibility = View.VISIBLE
-            }
-            else if(items[position].studyTags!![2] != null){
-                holder.study_tag3.text = items[position].studyTags!![2]
-                holder.study_tag3.visibility = View.VISIBLE
-            }
-            else if(items[position].studyTags!![3] != null){
-                holder.study_tag4.text = items[position].studyTags!![3]
-                holder.study_tag4.visibility = View.VISIBLE
-            }
-            else if(items[position].studyTags!![4] != null){
-                holder.study_tag5.text = items[position].studyTags!![4]
-                holder.study_tag5.visibility = View.VISIBLE
-            }
-            else if(items[position].studyTags!![5] != null){
-                holder.study_tag6.text = items[position].studyTags!![5]
-                holder.study_tag6.visibility = View.VISIBLE
+            else{
+                Glide.with(holder.itemView.getContext())
+                    .load(items[position].image!!.thumbnailImage)
+                    .override(140, 140)
+                    .centerCrop()
+                    .into( holder.search_study_cover)
             }
 
+            for(i in 0..items[position].studyTags!!.size-1){
+                when(i){
+                    0 ->{
+                        holder.study_tag1.text = items[position].studyTags!![0]
+                        holder.study_tag1.visibility = View.VISIBLE
+                    }
+                    1 ->{
+                        holder.study_tag2.text = items[position].studyTags!![1]
+                        holder.study_tag2.visibility = View.VISIBLE
+                    }
+                    2 ->{
+                        holder.study_tag3.text = items[position].studyTags!![2]
+                        holder.study_tag3.visibility = View.VISIBLE
+                    }
+                    3 ->{
+                        holder.study_tag4.text = items[position].studyTags!![3]
+                        holder.study_tag4.visibility = View.VISIBLE
+                    }
+                    4 -> {
+                        holder.study_tag5.text = items[position].studyTags!![4]
+                        holder.study_tag5.visibility = View.VISIBLE
+                    }
+                    5 ->{
+                        holder.study_tag6.text = items[position].studyTags!![5]
+                        holder.study_tag6.visibility = View.VISIBLE
+                    }
+                }
+
+            }
 
             holder.home_study_name.setOnClickListener {
                 for(i in 0 .. items.size-1){
@@ -151,6 +166,7 @@ class StudySearchRecyclerAdapter(private val context: Context): RecyclerView.Ada
                     }
                 }
             }
+
         }
         else{}
 

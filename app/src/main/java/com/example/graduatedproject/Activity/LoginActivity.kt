@@ -27,12 +27,6 @@ class LoginActivity : AppCompatActivity() {
         //val keyHash = Utility.getKeyHash(this)
         //Log.d("Hash", keyHash)
 
-        lateinit var accessToken : String
-        lateinit var refreshToken : String
-        var kakaoToken : String = ""
-        val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-        val editor = sp.edit()
-
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 when {
@@ -67,19 +61,23 @@ class LoginActivity : AppCompatActivity() {
             } //각종 로그인 오류 토스트 메시지 호출
 
             else if (token != null) {
+                var kakaoToken : String = ""
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show() //로그인 성공시 activity2로 이동
                 kakaoToken = token.accessToken
+                Log.d("kakaoToken",kakaoToken)
 
                 ServerUtil.retrofitService.requestLogin(kakaoToken)
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
                                 //서버에서 받은 AccessToken과 RefreshToken을 받아옴
+                                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+                                val editor = sp.edit()
 
-                                accessToken = response.headers().get("accessToken").toString()
+                                var accessToken = response.headers().get("accessToken").toString()
                                 Log.d("",accessToken)
                                 //headers()!!.accessToken
-                                refreshToken = response.headers()!!.get("refreshToken").toString()
+                                var refreshToken = response.headers()!!.get("refreshToken").toString()
                                 Log.d("",refreshToken)
 
                                 //토큰들을 SharedPreference에 저장

@@ -1,57 +1,34 @@
 package com.example.graduatedproject.Activity
 
 import android.os.Bundle
-import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
+import android.view.View
+import android.widget.RelativeLayout
+
 import androidx.appcompat.app.AppCompatActivity
-import com.example.graduatedproject.Activity.databinding.ActivityStudyRoomBinding
+import com.example.graduatedproject.Adapter.StudyRoomAdapter
+import com.example.graduatedproject.R
+import kotlinx.android.synthetic.main.activity_study_room.*
+
 
 class StudyRoomActivity : AppCompatActivity() {
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityStudyRoomBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_study_room)
 
-        binding = ActivityStudyRoomBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.appBarStudyRoom.toolbar)
-
-        binding.appBarStudyRoom.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_study_room)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        setTopNavigation()
     }
+    private fun setTopNavigation(){
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.study_room, menu)
-        return true
-    }
+        val bottomNaviLayout: View = this.layoutInflater.inflate(R.layout.top_navigation_tab, null, false)
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_study_room)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+
+        study_frag_pager.adapter = StudyRoomAdapter(supportFragmentManager, 4)
+        study_top_menu.setupWithViewPager(study_frag_pager)
+
+        study_top_menu.getTabAt(0)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_home_tab) as RelativeLayout
+        study_top_menu.getTabAt(1)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_chat_tab) as RelativeLayout
+        study_top_menu.getTabAt(2)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_group_tab) as RelativeLayout
+        study_top_menu.getTabAt(3)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_build_tab) as RelativeLayout
+
     }
 }

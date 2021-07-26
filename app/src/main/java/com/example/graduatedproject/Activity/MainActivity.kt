@@ -32,29 +32,28 @@ class MainActivity : AppCompatActivity() {
 //        editor.commit()
         var token = pref.getString("access_token", "").toString()
         var fcmToken : String
+        val keyHash = Utility.getKeyHash(this)
+        Log.d("Hash", keyHash)
 
-        FirebaseApp.initializeApp(this);
-//        System.out.println("token : "+ FirebaseInstanceId.getInstance().getToken()); // 토큰을 확인할 수 있는 코드
-//        var fcmToken = FirebaseInstanceId.getInstance().getToken()!!
-
-        FirebaseMessaging.getInstance().token
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                    return@OnCompleteListener
-                }
-
-                // Get new FCM registration token
-                fcmToken = task.result
-                Log.d("FCM토큰",fcmToken)
-
-            })
+//        FirebaseApp.initializeApp(this);
+////        System.out.println("token : "+ FirebaseInstanceId.getInstance().getToken()); // 토큰을 확인할 수 있는 코드
+////        var fcmToken = FirebaseInstanceId.getInstance().getToken()!!
+//
+//        FirebaseMessaging.getInstance().token
+//            .addOnCompleteListener(OnCompleteListener { task ->
+//                if (!task.isSuccessful) {
+//                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+//                    return@OnCompleteListener
+//                }
+//
+//                // Get new FCM registration token
+//                fcmToken = task.result
+//                Log.d("FCM토큰",fcmToken)
+//
+//            })
 
 
         configureBottomNavigation(token)
-
-        val keyHash = Utility.getKeyHash(this)
-        Log.d("Hash", keyHash)
     }
 
     private fun configureBottomNavigation(token : String){

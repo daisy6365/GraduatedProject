@@ -101,10 +101,13 @@ class LiketopicSearchActivity : AppCompatActivity() {
                             PAGE_NUM++
                         }
                         else{
-                            adapter.setList(tagSearch!!.content)
-                            adapter.notifyDataSetChanged()
-                            Toast.makeText(this@LiketopicSearchActivity, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
-                            adapter.deleteLoading()
+                            if(tagSearch!!.content.size != 0){
+                                adapter.setList(tagSearch!!.content)
+                                adapter.notifyDataSetChanged()
+                                Toast.makeText(this@LiketopicSearchActivity, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
+                                adapter.deleteLoading()
+                            }
+                            else{}
                         }
                     }
                 }
