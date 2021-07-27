@@ -161,6 +161,7 @@ interface InfoService {
         @Path("studyId") studyId : Int
     ):Call<Study>
 
+    //스터디 검색(페이징)
     @GET("/study-service/studies")
     abstract fun requestStudySearch(
         @Header("Authorization") accessToken: String,
@@ -172,5 +173,17 @@ interface InfoService {
         @Query("categoryId") categoryId : Int,
     ):Call<StudySearch>
 
+    //스터디 탈퇴
+    @DELETE("/study-service/studies/{studyId}/users")
+    abstract fun requestStudyDelete(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int
+    ):Call<Void>
+
+    //멤버 삭제
+
+    //멤버 추가
+
+    //스터디방 수정
 
 }
