@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.example.graduatedproject.Fragment.StudyChat
 import com.example.graduatedproject.Fragment.StudyGroupList
 import com.example.graduatedproject.Fragment.StudyHome
-import com.example.graduatedproject.Fragment.StudyModify
+import com.example.graduatedproject.Fragment.StudyBuild
 
 class StudyRoomAdapter(fm : FragmentManager, val fragmentCount : Int) : FragmentStatePagerAdapter(fm)  {
     override fun getItem(position: Int) : Fragment {
@@ -14,7 +14,7 @@ class StudyRoomAdapter(fm : FragmentManager, val fragmentCount : Int) : Fragment
             0 -> return StudyHome()
             1 -> return StudyChat()
             2 -> return StudyGroupList()
-            3 -> return StudyModify()
+            3 -> return StudyBuild()
             else -> return StudyHome()
         }
     }
