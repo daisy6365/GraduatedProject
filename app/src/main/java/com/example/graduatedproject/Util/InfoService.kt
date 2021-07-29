@@ -180,7 +180,30 @@ interface InfoService {
         @Path("studyId") studyId : Int
     ):Call<Void>
 
+    //멤버 조회
+    @GET("/study-service/studies/{studyId}/users")
+    abstract fun requestStudyMember(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int
+    ):Call<ArrayList<Profile>>
+
+
     //멤버 삭제
+    @DELETE("/study-service/studies/{studyId}/users/{userId}")
+    abstract fun requestMemberDelete(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int,
+        @Path("userId") userId : Int
+    ):Call<Void>
+
+    //지원 멤버 조회
+    @GET("/study-service/studies/{studyId}/waitUsers")
+    abstract fun requestStudyAddMember(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int
+    ):Call<Profile>
+
+    //지원 멤버 삭제
 
     //멤버 추가
 

@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.StudyMemberActivity">
+    tools:context=".Activity.StudyMemberActivity"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/member_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            android:background="#FFFFFF"
+            app:layout_constraintVertical_weight="1"
+            tools:ignore="MissingConstraints"
+            >
+            <TextView
+                android:id="@+id/member_toolbar_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:text="멤버 관리"
+                android:layout_gravity="center"
+                />
+        </androidx.appcompat.widget.Toolbar>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/member_top_menu"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_alignParentBottom="true"
+            android:background="#ffffff"
+            android:elevation="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/main_frag_pager"
+            app:tabIndicatorColor="#A5C75C"
+            tools:ignore="MissingConstraints"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/member_frag_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/main_bottom_menu">
+    </androidx.viewpager.widget.ViewPager>
+
+</LinearLayout>

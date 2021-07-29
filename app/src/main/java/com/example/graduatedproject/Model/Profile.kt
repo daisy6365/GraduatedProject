@@ -14,6 +14,9 @@ data class Profile(
     @SerializedName("kakaoId")
     var kakaoId: Int = 0,
 
+    @SerializedName("userId")
+    var userId: Int = 0,
+
     @SerializedName("nickName")
     var nickName: String = "",
 
@@ -23,6 +26,9 @@ data class Profile(
     @SerializedName("ageRange")
     var ageRange: String = "",
 
+    @SerializedName("role")
+    var role: String = "",
+
     @SerializedName("numberOfStudyApply")
     var numberOfStudyApply: Int = 0,
 
@@ -31,6 +37,8 @@ data class Profile(
 
     @SerializedName("image")
     var image: Image = Image()
+
+
 )
 
 

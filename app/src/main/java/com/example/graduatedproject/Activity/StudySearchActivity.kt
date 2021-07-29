@@ -27,7 +27,6 @@ class StudySearchActivity : AppCompatActivity() {
     val LIST_LENGTH = 20 //리스트개수
     lateinit var adapter : StudySearchRecyclerAdapter
 
-    var contentStudy  =  ArrayList<Study>()
     var StudySearch : StudySearch? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

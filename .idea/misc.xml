@@ -8,6 +8,8 @@
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_drop_up_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_build_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_chat_24.xml" value="0.1365" />
+        <entry key="app/src/main/res/drawable/ic_baseline_group_24.xml" value="0.1365" />
+        <entry key="app/src/main/res/drawable/ic_baseline_group_add_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1075" />
         <entry key="app/src/main/res/drawable/ic_baseline_radio_button_unchecked_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_menu_camera.xml" value="0.1365" />
@@ -19,10 +21,12 @@
         <entry key="app/src/main/res/layout/activity_map_search.xml" value="0.13095238095238096" />
         <entry key="app/src/main/res/layout/activity_study_apply.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_study_create.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_study_member.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/activity_study_modify.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/activity_study_room.xml" value="0.12395833333333334" />
         <entry key="app/src/main/res/layout/activity_study_search.xml" value="0.2223731884057971" />
         <entry key="app/src/main/res/layout/app_bar_study_room.xml" value="0.2128623188405797" />
+        <entry key="app/src/main/res/layout/bottom_navi_member_tab.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/bottom_navigation_tab.xml" value="0.13095238095238096" />
         <entry key="app/src/main/res/layout/content_study_room.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_apply_study.xml" value="0.19972826086956522" />
@@ -32,13 +36,17 @@
         <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_search_study.xml" value="0.22871376811594202" />
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.2128623188405797" />
+        <entry key="app/src/main/res/layout/fragment_study_add_member.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_study_build.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_study_chat.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_study_create.xml" value="0.19972826086956522" />
         <entry key="app/src/main/res/layout/fragment_study_group_list.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_study_home.xml" value="0.2128623188405797" />
-        <entry key="app/src/main/res/layout/fragment_study_member.xml" value="0.2128623188405797" />
+        <entry key="app/src/main/res/layout/fragment_study_member.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_study_memberrrr.xml" value="0.2128623188405797" />
+        <entry key="app/src/main/res/layout/fragment_study_memberrrr_list.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_study_modify.xml" value="0.2128623188405797" />
+        <entry key="app/src/main/res/layout/item_add_member.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/item_liketopic.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_member.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/item_search.xml" value="0.13095238095238096" />
@@ -48,6 +56,7 @@
         <entry key="app/src/main/res/layout/menu_parent.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/nav_header_study_room.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/navi_header.xml" value="0.13095238095238096" />
+        <entry key="app/src/main/res/layout/top_navi_member_tab.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/top_navigation_tab.xml" value="0.25" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.335" />
         <entry key="app/src/main/res/menu/menu_parent.xml" value="0.26927083333333335" />
