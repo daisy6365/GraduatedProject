@@ -201,11 +201,23 @@ interface InfoService {
     abstract fun requestStudyAddMember(
         @Header("Authorization") accessToken: String,
         @Path("studyId") studyId : Int
-    ):Call<Profile>
+    ):Call<ArrayList<Profile>>
 
     //지원 멤버 삭제
+    @DELETE("/study-service/studies/{studyId}/waitUsers/{userId}")
+    abstract fun requestAddMemberDelete(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int,
+        @Path("userId") userId : Int
+    ):Call<Void>
 
     //멤버 추가
+    @POST("/study-service/studies/{studyId}/users/{userId}")
+    abstract fun requestAddMember(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int,
+        @Path("userId") userId : Int
+    ):Call<Void>
 
     //스터디방 수정
 

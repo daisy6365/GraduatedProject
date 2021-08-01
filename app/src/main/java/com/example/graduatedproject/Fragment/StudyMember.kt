@@ -3,19 +3,20 @@ package com.example.graduatedproject.Fragment
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.graduatedproject.R
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.ListView
+import androidx.fragment.app.Fragment
+import com.example.graduatedproject.Adapter.MemberListAdapter
 import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 /**
  * A fragment representing a list of Items.
@@ -23,13 +24,14 @@ import retrofit2.Response
 class StudyMember : Fragment() {
     private val TAG = StudyMember::class.java.simpleName
     var memberInfo =  ArrayList<Profile>()
+    lateinit var memberListView : ListView
+    lateinit var listAdapter : MemberListAdapter
     var studyId : Int = 0
-    private var columnCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+
         }
     }
 
@@ -47,39 +49,23 @@ class StudyMember : Fragment() {
                 override fun onResponse(call: Call<ArrayList<Profile>>, response: Response<ArrayList<Profile>>) {
                     if (response.isSuccessful) {
                         memberInfo = response.body()!!
+
+                        Log.d(TAG, "스터디멤버 조회 성공")
                     }
                 }
 
                 override fun onFailure(call: Call<ArrayList<Profile>>, t: Throwable) {
-                    Log.d(TAG, "스터디탈퇴 실패")
+                    Log.d(TAG, "스터디멤버 조회 실패")
                 }
             })
 
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = MemberRecyclerAdapter(accessToken,studyId,memberInfo!!)
-            }
-        }
+        memberListView = view.findViewById(R.id.member_list) as ListView
+        listAdapter = MemberListAdapter(context,memberInfo,accessToken,studyId)
+
+        memberListView.setAdapter(listAdapter)
+
         return view
     }
 
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            StudyMember().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
-    }
 }
