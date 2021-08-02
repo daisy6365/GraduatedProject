@@ -221,4 +221,11 @@ interface InfoService {
 
     //스터디방 수정
 
+    //스터디방 삭제
+    @DELETE("/study-service/studies/{studyId}")
+    abstract fun requestDeleteStudy(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int
+    ):Call<Void>
+
 }
