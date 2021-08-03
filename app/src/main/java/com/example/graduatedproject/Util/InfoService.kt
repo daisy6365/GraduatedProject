@@ -220,6 +220,17 @@ interface InfoService {
     ):Call<Void>
 
     //스터디방 수정
+    @PATCH("/study-service/studies/{studyId}")
+    abstract fun requestModifyStudy(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int,
+        @Part imageFile : MultipartBody.Part?,
+
+        //name,numberOfPeople,content,tags
+        //online,offline,locationCode,categoryId
+        //deleteImage,close
+        @Part("request") requestBody: RequestBody
+    )
 
     //스터디방 삭제
     @DELETE("/study-service/studies/{studyId}")

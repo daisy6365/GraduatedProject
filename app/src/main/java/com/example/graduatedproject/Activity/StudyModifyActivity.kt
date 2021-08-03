@@ -22,6 +22,7 @@ import androidx.activity.result.ActivityResult
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.graduatedproject.Model.Category
+import com.example.graduatedproject.Model.MapCode
 import com.example.graduatedproject.Model.Study
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
@@ -40,7 +41,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 
-class StudyModifyActivity : AppCompatActivity() {
+class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
     private val TAG = StudyModifyActivity::class.java.simpleName
     var studyInfo = Study()
     val PERMISSIONS_REQUEST_CODE = 100
@@ -52,6 +53,7 @@ class StudyModifyActivity : AppCompatActivity() {
     lateinit var reverseGeoCoder : MapReverseGeoCoder
     var people_num : Int = 0
     var tagArray = arrayListOf<String>()
+    var status : String = "OPEN"
     var offline : Boolean = false
     var online : Boolean = false
     var uLatitude : Double? = null
@@ -110,6 +112,21 @@ class StudyModifyActivity : AppCompatActivity() {
                 //정보 불러와서 화면에 정보들 붙이기
                 val studyId = intent.getIntExtra("studyId",0)
                 setStudyInfo(studyId)
+
+                //위치(경도, 위도)정보를 기반으로 마커 찍기
+
+                current_marker.itemName = "현재 위치로 스터디장소 설정"
+                current_marker.tag = 0
+                current_marker.mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
+                current_marker.isMoveToCenterOnSelect
+                current_marker.markerType = MapPOIItem.MarkerType.BluePin
+                current_marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+                mapView.addPOIItem(current_marker)
+
+                //지도에서 원하는 곳 클릭하면
+                //기존의 마커 삭제하고 새로운 마커 추가하기
+                //새로운 마커의 경도, 위도 가져오기
+                mapView.setMapViewEventListener(this)
 
                 for(i in 0 .. tagArray.size-1){
                     var oldchip : Chip = inflater.inflate(R.layout.item_liketopic, chipGroup, false) as Chip
@@ -202,9 +219,36 @@ class StudyModifyActivity : AppCompatActivity() {
                     }
                 }
 
+                study_close.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if(isChecked){
+                        status = "CLOSE"
+                    }
+                    else{
+                        status = "OPEN"
+                    }
+                }
+
+                modify_check_offline.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if(isChecked){
+                        offline = true
+                    }
+                    else{
+                        offline = false
+                    }
+                }
+                modify_check_online.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if(isChecked){
+                        online = true
+                    }
+                    else{
+                        online = false
+                    }
+                }
+
+
                 //수정완료 누르면 정보들 다 받아와서 서버에 보내기
                 modify_study_btn.setOnClickListener {
-                    sendModifiedInfo(studyId)
+                    sendModifiedInfo(accessToken, studyId)
                 }
                 //삭제하기 누르면 팝업창 -> 서버 통신
                 delete_study.setOnClickListener {
@@ -272,8 +316,12 @@ class StudyModifyActivity : AppCompatActivity() {
 
                         modify_introduce_text.setText(studyInfo.content)
 
-                        //지역정보 가져와서 지도에 뿌리고 마커 찍기
-
+                        if(studyInfo.status == "OPEN"){
+                            study_close.isChecked = false
+                        }
+                        else{
+                            study_close.isChecked = true
+                        }
 
                         if(studyInfo!!.online == true){
                             modify_check_online.isChecked = true
@@ -282,6 +330,11 @@ class StudyModifyActivity : AppCompatActivity() {
                         if(studyInfo!!.offline == true){
                             modify_check_offline.isChecked = true
                         }else{modify_check_offline.isChecked = false}
+
+                        //지역정보 가져와서 지도에 뿌리고 마커 찍기
+                        uLatitude = studyInfo.location!!.let
+                        uLongitude = studyInfo.location!!.len
+
 
 
                         Log.d(TAG, "회원 지역정보 조회 성공")
@@ -294,8 +347,21 @@ class StudyModifyActivity : AppCompatActivity() {
             })
     }
 
-    fun sendModifiedInfo(studyId : Int){
+    fun sendModifiedInfo(accessToken : String,studyId : Int){
+        ServerUtil.retrofitService.requestModifyStudy(accessToken,studyId)
+            .enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
 
+                        Log.d(TAG, "스터디 삭제 성공")
+
+                    }
+                }
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.d(TAG, "스터디 삭제 실패")
+                    Toast.makeText(this@StudyModifyActivity, "스터디 삭제 실패", Toast.LENGTH_LONG).show()
+                }
+            })
     }
 
     fun sendDeleteStudy(accessToken : String, studyId : Int){
@@ -409,5 +475,67 @@ class StudyModifyActivity : AppCompatActivity() {
         }
         return tagArray
     }
+
+    override fun onMapViewInitialized(p0: MapView?) {}
+    override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {}
+    override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {}
+    override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {}
+    override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {}
+    override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?){
+        if (p1 != null) {
+            p0?.removeAllPOIItems()           // 이전 마커 삭제하기
+            // 지도상 위경도 얻기
+            uLatitude = p1!!.mapPointGeoCoord.latitude
+            uLongitude = p1!!.mapPointGeoCoord.longitude
+            Log.d("마커 찍은 주소uLatitude", uLatitude.toString())
+            Log.d("마커 찍은 주소uLongitude", uLongitude.toString())
+            var kakaoToken = "KakaoAK 9a9a02eedbe752442e4a7550ec217f88"
+
+            // 클릭한 위치에 마커와 주소 보이기
+            reverseGeoCoder = MapReverseGeoCoder("35e1ae8dad57b1dfb6a8f38f6903c184", p1!!,
+                object : MapReverseGeoCoder.ReverseGeoCodingResultListener {
+                    override fun onReverseGeoCoderFoundAddress(mapReverseGeoCoder: MapReverseGeoCoder, s: String) {
+                        current_marker.itemName = s
+                    }
+
+                    override fun onReverseGeoCoderFailedToFindAddress(mapReverseGeoCoder: MapReverseGeoCoder) {
+                        Log.e("Err", "GeoCoding")
+                        Toast.makeText(this@StudyModifyActivity, "주소를 찾지 못하였습니다.", Toast.LENGTH_LONG).show()
+                    }
+                }, this
+            )
+            current_marker.mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
+            p0!!.addPOIItem(current_marker)
+
+            Log.d("마커 찍은 주소", p1.toString())
+
+            //LocationCode 가져오기
+            ServerUtil.kakaoService.requestCode(kakaoToken, uLongitude!!, uLatitude!!)
+                .enqueue(object : Callback<MapCode> {
+                    override fun onResponse(call: Call<MapCode>, response: Response<MapCode>) {
+                        if (response.isSuccessful) {
+                            //행정동
+                            if(response.body()?.documents?.size == 2){
+                                locationCode = response.body()?.documents?.get(1)?.code
+                                Log.d( "회원 지역CODE",locationCode.toString())
+                            }
+                            //법정동
+                            else{
+                                locationCode = response.body()?.documents?.get(0)?.code
+                                Log.d( "회원 지역CODE",locationCode.toString())
+                            }
+                        }
+                    }
+                    override fun onFailure(call: Call<MapCode>, t: Throwable) {
+                        Log.d(TAG, "회원 지역code 조회 실패")
+                        Toast.makeText(this@StudyModifyActivity, "회원 지역정보code 조회 실패", Toast.LENGTH_LONG).show()
+                    }
+                })
+
+        }
+    }
+    override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {}
+    override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {}
+    override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {}
 
 }
