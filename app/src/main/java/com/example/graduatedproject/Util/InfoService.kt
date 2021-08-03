@@ -230,7 +230,7 @@ interface InfoService {
         //online,offline,locationCode,categoryId
         //deleteImage,close
         @Part("request") requestBody: RequestBody
-    )
+    ):Call<Study>
 
     //스터디방 삭제
     @DELETE("/study-service/studies/{studyId}")

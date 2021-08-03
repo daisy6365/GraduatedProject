@@ -33,6 +33,11 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapReverseGeoCoder
 import net.daum.mf.map.api.MapView
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,6 +54,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
     var new_imageUrl : Uri? = null
     var new_imageUrlPath : String? = null
     var imageFile : File? = null
+    var deleteImage : Boolean = false
     var current_marker = MapPOIItem()
     lateinit var reverseGeoCoder : MapReverseGeoCoder
     var people_num : Int = 0
@@ -139,6 +145,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 modify_study_cover_btn.setOnClickListener {
                     //갤러리 열어서 사진url 받기 -> 절대경로로 변환
                     openGalley()
+                    deleteImage = true
                 }
 
                 modify_number_minus.setOnClickListener {
@@ -348,18 +355,75 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
     }
 
     fun sendModifiedInfo(accessToken : String,studyId : Int){
-        ServerUtil.retrofitService.requestModifyStudy(accessToken,studyId)
-            .enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+        var categorychildSeletedId : Int? = null
+        var close : Boolean = false
+
+        //스터디이름,참여인원, 해시태그 리스트, 카테고리2개, 소개내용, 온/오프라인 여부, locationId 정보 가져오기
+        var studyName = modify_study_name.text.toString()
+        var numberOfPeople = modify_people_number.text.toString()
+        var content = modify_introduce_text.text.toString()
+        for(i in 0..categoryListChild!!.size-1){
+            if(categoryListChild!!.get(i).name == categorychildSeletedItem){
+                categorychildSeletedId = categoryListChild!!.get(i).id
+            }
+        }
+        if(status == "CLOSE"){
+            close = true
+        }
+        else{
+            close = false
+        }
+
+
+//        Log.d("스터디생성정보", studyName.toString())
+//        Log.d("스터디생성정보", numberOfPeople.toString())
+//        Log.d("스터디생성정보", content.toString())
+//        Log.d("스터디생성정보", tags.toString())
+//        Log.d("스터디생성정보", online.toString())
+//        Log.d("스터디생성정보", offline.toString())
+//        Log.d("스터디생성정보", categoryId.toString())
+//        Log.d("스터디생성정보 -> 지역코드", locationCode.toString())
+//        Log.d("스터디생성정보 -> 지역코드", categorychildSeletedId.toString())
+
+        lateinit var requestImg: RequestBody
+        var imageBitmap : MultipartBody.Part? = null
+        if(imageFile != null){
+            requestImg= RequestBody.create(MediaType.parse("image/*"),imageFile)
+            imageBitmap = MultipartBody.Part.createFormData("image", imageFile?.getName(), requestImg)
+
+        }else{}
+
+        var jsonArray = JSONArray(tagArray)
+        val paramObject = JSONObject()
+        paramObject.put("name", studyName)
+        paramObject.put("numberOfPeople", numberOfPeople.toInt())
+        paramObject.put("content", content)
+        paramObject.put("tags",jsonArray)
+        paramObject.put("deleteImage", deleteImage)
+        paramObject.put("close",close)
+        paramObject.put("online", online)
+        paramObject.put("offline", offline)
+        paramObject.put("locationCode", locationCode)
+        paramObject.put("categoryId", categorychildSeletedId!!.toInt())
+        val request = RequestBody.create(MediaType.parse("application/json"),paramObject.toString())
+
+        ServerUtil.retrofitService.requestModifyStudy(accessToken,studyId,imageBitmap,request)
+            .enqueue(object : Callback<Study> {
+                override fun onResponse(call: Call<Study>, response: Response<Study>) {
                     if (response.isSuccessful) {
+                        var studyId : Int = response.body()!!.id
 
-                        Log.d(TAG, "스터디 삭제 성공")
+                        Log.d(TAG, "스터디생성정보 전송 성공")
 
+                        val intent = Intent(this@StudyModifyActivity, StudyRoomActivity::class.java)
+                        intent.putExtra("studyId",studyId)
+                        startActivity(intent)
+                        finish()
                     }
                 }
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d(TAG, "스터디 삭제 실패")
-                    Toast.makeText(this@StudyModifyActivity, "스터디 삭제 실패", Toast.LENGTH_LONG).show()
+                override fun onFailure(call: Call<Study>, t: Throwable) {
+                    Log.d(TAG, "스터디생성정보 전송 실패")
+                    Toast.makeText(this@StudyModifyActivity, "스터디생성정보 전송 실패", Toast.LENGTH_LONG).show()
                 }
             })
     }
