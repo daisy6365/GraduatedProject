@@ -158,6 +158,7 @@ interface InfoService {
     //스터디상세조회
     @GET("/study-service/studies/{studyId}")
     abstract fun requestStudy(
+        @Header("Authorization") accessToken: String,
         @Path("studyId") studyId : Int
     ):Call<Study>
 
@@ -172,6 +173,23 @@ interface InfoService {
         @Query("searchKeyword") searchKeyword : String,
         @Query("categoryId") categoryId : Int,
     ):Call<StudySearch>
+
+    //스터디 참가 신청
+    @POST("/study-service/studies/{studyId}/waitUsers")
+    abstract fun requestStudyApply(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int
+    ):Call<Void>
+
+    //스터디 참가신청 취소
+    @DELETE("/study-service/studies/{studyId}/waitUsers")
+    abstract fun requestStudyApplyCancle(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int
+    ):Call<Void>
+
+
+
 
     //스터디 탈퇴
     @DELETE("/study-service/studies/{studyId}/users")

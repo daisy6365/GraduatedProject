@@ -27,7 +27,7 @@ data class Profile(
     var ageRange: String = "",
 
     @SerializedName("role")
-    var role: String = "",
+    var role: String? = null,
 
     @SerializedName("numberOfStudyApply")
     var numberOfStudyApply: Int = 0,

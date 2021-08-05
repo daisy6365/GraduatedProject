@@ -107,14 +107,72 @@
 
                 </RelativeLayout>
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/created_chip_group"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                </com.google.android.material.chip.ChipGroup>
+                    <TextView
+                        android:id="@+id/study_tag1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/title_background"
+                        android:visibility="gone"
+                        android:text="관심주제"
+                        android:textSize="13dp" />
 
+                    <TextView
+                        android:id="@+id/study_tag2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/title_background"
+                        android:visibility="gone"
+                        android:text="관심주제"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/study_tag3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/title_background"
+                        android:visibility="gone"
+                        android:text="관심주제"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/study_tag4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/title_background"
+                        android:visibility="gone"
+                        android:text="관심주제"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/study_tag5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/title_background"
+                        android:visibility="gone"
+                        android:text="관심주제"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/study_tag6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/title_background"
+                        android:visibility="gone"
+                        android:text="관심주제"
+                        android:textSize="13dp" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -159,30 +217,17 @@
                     android:text="스터디를 소개해주세요."
                     android:textSize="15dp" />
 
-                <LinearLayout
-                    android:id="@+id/checkbox_group"
+                <TextView
+                    android:id="@+id/study_apply_on_off"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="ONLINE"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp">
-
-                    <CheckBox
-                        android:id="@+id/checked_offline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="오프라인" />
-
-                    <CheckBox
-                        android:id="@+id/checked_online"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="온라인" />
-
-                </LinearLayout>
+                    />
 
                 <TextView
                     android:id="@+id/location_Info"
@@ -196,21 +241,58 @@
 
             </LinearLayout>
 
-            <LinearLayout
+
+            <TextView
                 android:id="@+id/apply_study"
+                android:visibility="visible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:layout_margin="20dp">
+                android:background="@drawable/background_button"
+                android:padding="8dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="지원하기" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_button"
-                    android:padding="8dp"
-                    android:text="지원하기" />
+            <TextView
+                android:id="@+id/apply_study_cancle"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_button"
+                android:padding="8dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="지원취소" />
 
-            </LinearLayout>
+
+            <TextView
+                android:id="@+id/closed_study"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/background_button_closed"
+                android:padding="8dp"
+                android:text="지원하기"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                />
+
+
+            <TextView
+                android:id="@+id/closed_text"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorSelected"
+                android:padding="8dp"
+                android:text="현재 마감된 스터디방입니다." />
 
 
         </LinearLayout>

@@ -39,11 +39,14 @@ class StudyHome : Fragment() {
         val view : View = inflater.inflate(R.layout.fragment_study_home, container, false)
         //화면 구성
         var bundle : Bundle? = getArguments()
-        if(bundle != null){
-            studyId = bundle.getInt("")
+        if(bundle == null){
+            studyId = 218
 
             //스터디 정보 조회
-            ServerUtil.retrofitService.requestStudy(studyId)
+            val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+            var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
+
+            ServerUtil.retrofitService.requestStudy(accessToken, studyId)
                 .enqueue(object : Callback<Study> {
                     override fun onResponse(call: Call<Study>, response: Response<Study>) {
                         if (response.isSuccessful) {

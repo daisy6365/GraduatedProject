@@ -40,5 +40,8 @@ data class Study (
     var childCategory: Category? = Category(),
 
     @SerializedName("studyTags")
-    var studyTags: ArrayList<String>? = arrayListOf()
+    var studyTags: ArrayList<String>? = arrayListOf(),
+
+    @SerializedName("apply")
+    var apply: Boolean? = null
 )

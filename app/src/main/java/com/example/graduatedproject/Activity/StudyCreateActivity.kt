@@ -328,7 +328,7 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
                         val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
                         intent.putExtra("studyId",studyId)
-                        startActivity(intent)
+                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                         finish()
                     }
                 }

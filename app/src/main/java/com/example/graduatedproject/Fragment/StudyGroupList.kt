@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.graduatedproject.Adapter.StudyGroupListAdapter
 import com.example.graduatedproject.R
-import com.example.graduatedproject.Fragment.placeholder.PlaceholderContent
 
 /**
  * A fragment representing a list of Items.
@@ -33,16 +32,6 @@ class StudyGroupList : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_study_group_list, container, false)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = StudyGroupListAdapter(PlaceholderContent.ITEMS)
-            }
-        }
         return view
     }
 

@@ -83,7 +83,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
             Glide.with(this)
                 .load(new_imageUrl)
                 .centerCrop()
-                .error(com.example.graduatedproject.R.drawable.cover)
+                .error(R.drawable.cover)
                 .into(modify_study_cover_img)
             //절대경로변환 함수 호출
             new_imageUrlPath= absolutelyPath( this ,new_imageUrl!!)
@@ -116,8 +116,9 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 getSystemService(Context.LOCATION_SERVICE) as LocationManager
             try {
                 //정보 불러와서 화면에 정보들 붙이기
-                val studyId = intent.getIntExtra("studyId",0)
-                setStudyInfo(studyId)
+                val studyId = 218
+                    //intent.getIntExtra("studyId",0)
+                setStudyInfo(accessToken, studyId)
 
                 //위치(경도, 위도)정보를 기반으로 마커 찍기
 
@@ -294,8 +295,8 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
         }
     }
 
-    fun setStudyInfo(studyId : Int){
-        ServerUtil.retrofitService.requestStudy(studyId)
+    fun setStudyInfo(accessToken : String, studyId : Int){
+        ServerUtil.retrofitService.requestStudy(accessToken,studyId)
             .enqueue(object : Callback<Study> {
                 override fun onResponse(call: Call<Study>, response: Response<Study>) {
                     if (response.isSuccessful) {
@@ -595,7 +596,6 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                         Toast.makeText(this@StudyModifyActivity, "회원 지역정보code 조회 실패", Toast.LENGTH_LONG).show()
                     }
                 })
-
         }
     }
     override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {}

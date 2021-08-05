@@ -26,7 +26,7 @@ class StudyMember : Fragment() {
     var memberInfo =  ArrayList<Profile>()
     lateinit var memberListView : ListView
     lateinit var listAdapter : MemberListAdapter
-    var studyId : Int = 0
+    var studyId : Int = 218
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

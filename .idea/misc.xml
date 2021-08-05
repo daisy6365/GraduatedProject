@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/background_button.xml" value="0.1365" />
+        <entry key="app/src/main/res/drawable/background_button_closed.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/background_peoplenum.xml" value="0.2638888888888889" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_drop_up_24.xml" value="0.1365" />

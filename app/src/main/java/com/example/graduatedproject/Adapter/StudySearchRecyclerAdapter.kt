@@ -2,6 +2,7 @@ package com.example.graduatedproject.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -159,6 +160,7 @@ class StudySearchRecyclerAdapter(private val context: Context): RecyclerView.Ada
                 for(i in 0 .. items.size-1){
                     if(holder.home_study_name.text == items[i].name){
                         val studyId = items[i].id
+                        Log.d("studyId", studyId.toString())
 
                         moveDetail(studyId)
 
@@ -174,8 +176,8 @@ class StudySearchRecyclerAdapter(private val context: Context): RecyclerView.Ada
 
     private fun moveDetail(studyId: Int) {
         val intent : Intent = Intent(context, StudyApplyActivity::class.java)
-        intent.putExtra("studyId_item",studyId)
-        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        intent.putExtra("studyId",studyId)
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
     }
 

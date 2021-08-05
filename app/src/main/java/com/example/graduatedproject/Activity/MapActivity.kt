@@ -230,7 +230,7 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun getLatLng(): Location{
-        var currentLatLng: Location? = null
+        lateinit var currentLatLng: Location
         var hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
             Manifest.permission.ACCESS_FINE_LOCATION)
         var hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this,
@@ -239,7 +239,7 @@ class MapActivity : AppCompatActivity() {
         if(hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
             hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED){
             val locatioNProvider = LocationManager.GPS_PROVIDER
-            currentLatLng = locationManager?.getLastKnownLocation(locatioNProvider)
+            currentLatLng = locationManager?.getLastKnownLocation(locatioNProvider)!!
         }else{
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE)
             currentLatLng = getLatLng()
