@@ -131,6 +131,12 @@ interface InfoService {
     //친구목록
 
 
+    //마이스터디조회
+    @GET("/study-service/users/studies")
+    abstract fun requestMyStudy(
+        @Header("Authorization") accessToken: String
+    ): Call<ArrayList<Study>>
+
 
 
     //스터디생성

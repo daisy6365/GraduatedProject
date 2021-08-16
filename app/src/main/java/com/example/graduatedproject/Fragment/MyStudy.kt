@@ -1,60 +1,78 @@
 package com.example.graduatedproject.Fragment
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.ListView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.ListFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.graduatedproject.Adapter.MyStudyListAdapter
+import com.example.graduatedproject.Model.Study
 import com.example.graduatedproject.R
+import com.example.graduatedproject.Util.ServerUtil
+import kotlinx.android.synthetic.main.fragment_my_study.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MyStudy.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MyStudy : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val TAG = StudyHome::class.java.simpleName
+    var studyInfo : ArrayList<Study>? = null
+    var customListView: ListView? = null
+    private var myStudyListAdapter: MyStudyListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_study, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_my_study, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyStudy.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyStudy().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+        var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
+
+        ServerUtil.retrofitService.requestMyStudy(accessToken)
+            .enqueue(object : Callback<ArrayList<Study>> {
+                override fun onResponse(call: Call<ArrayList<Study>>, response: Response<ArrayList<Study>>) {
+                    if (response.isSuccessful) {
+                        studyInfo = response.body()!!
+
+                        Log.d(TAG, "회원 스터디 정보 받기 성공")
+                    }
                 }
-            }
+                override fun onFailure(call: Call<ArrayList<Study>>, t: Throwable) {
+                    Log.d(TAG, "회원 스터디 정보 받기 실패")
+                    Toast.makeText(getActivity(), "회원 스터디 정보 받기 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+
+        myStudyListAdapter = MyStudyListAdapter(context, studyInfo)
+        mystudy_list.layoutManager = LinearLayoutManager(context)
+        mystudy_list.adapter = myStudyListAdapter
+//        myStudyListAdapter.setOnItemClickListener(object : MyStudyListAdapter.OnItemClickListener {
+//            override fun onItemClick(view: View, data: Study, position: Int) {
+//                var title = data.name
+//                parentFragmentManager
+//                    .beginTransaction()
+//                    .replace(R.id.frame_main, PostListFragment(title))
+//                    .addToBackStack(null)
+//                    .commit()
+//            }
+//        })
+
+
+
+        return view
     }
 }
