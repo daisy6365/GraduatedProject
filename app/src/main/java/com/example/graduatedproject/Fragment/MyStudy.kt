@@ -6,12 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.ListFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.MyStudyListAdapter
 import com.example.graduatedproject.Model.Study
 import com.example.graduatedproject.R
@@ -23,10 +21,10 @@ import retrofit2.Response
 
 
 class MyStudy : Fragment() {
+    private var linearLayoutManager: RecyclerView.LayoutManager? = null
+    private var recyclerAdapter: MyStudyListAdapter? = null
     private val TAG = StudyHome::class.java.simpleName
     var studyInfo : ArrayList<Study>? = null
-    var customListView: ListView? = null
-    private var myStudyListAdapter: MyStudyListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +45,15 @@ class MyStudy : Fragment() {
                 override fun onResponse(call: Call<ArrayList<Study>>, response: Response<ArrayList<Study>>) {
                     if (response.isSuccessful) {
                         studyInfo = response.body()!!
+                        Log.d(TAG, studyInfo.toString())
+
+                        val recyclerView: RecyclerView = view.findViewById(R.id.mystudy_recycler)
+                        recyclerAdapter = MyStudyListAdapter(requireContext(),studyInfo)
+                        linearLayoutManager = LinearLayoutManager(activity)
+
+                        recyclerView.layoutManager = linearLayoutManager
+                        recyclerView.adapter = recyclerAdapter
+
 
                         Log.d(TAG, "회원 스터디 정보 받기 성공")
                     }
@@ -57,9 +64,7 @@ class MyStudy : Fragment() {
                 }
             })
 
-        myStudyListAdapter = MyStudyListAdapter(context, studyInfo)
-        mystudy_list.layoutManager = LinearLayoutManager(context)
-        mystudy_list.adapter = myStudyListAdapter
+
 //        myStudyListAdapter.setOnItemClickListener(object : MyStudyListAdapter.OnItemClickListener {
 //            override fun onItemClick(view: View, data: Study, position: Int) {
 //                var title = data.name
@@ -70,9 +75,6 @@ class MyStudy : Fragment() {
 //                    .commit()
 //            }
 //        })
-
-
-
         return view
     }
 }

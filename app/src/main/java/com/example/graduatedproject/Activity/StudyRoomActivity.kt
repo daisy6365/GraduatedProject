@@ -21,14 +21,16 @@ class StudyRoomActivity : AppCompatActivity() {
 
         val bottomNaviLayout: View = this.layoutInflater.inflate(R.layout.top_navigation_tab, null, false)
 
+        if (intent.hasExtra("studyRoomId")) {
+            val studyRoomId = intent.getIntExtra("studyRoomId",0)
+            study_frag_pager.adapter = StudyRoomAdapter(supportFragmentManager, 4,studyRoomId)
+            study_top_menu.setupWithViewPager(study_frag_pager)
 
-        study_frag_pager.adapter = StudyRoomAdapter(supportFragmentManager, 4)
-        study_top_menu.setupWithViewPager(study_frag_pager)
+            study_top_menu.getTabAt(0)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_home_tab) as RelativeLayout
+            study_top_menu.getTabAt(1)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_chat_tab) as RelativeLayout
+            study_top_menu.getTabAt(2)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_group_tab) as RelativeLayout
+            study_top_menu.getTabAt(3)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_build_tab) as RelativeLayout
 
-        study_top_menu.getTabAt(0)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_home_tab) as RelativeLayout
-        study_top_menu.getTabAt(1)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_chat_tab) as RelativeLayout
-        study_top_menu.getTabAt(2)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_group_tab) as RelativeLayout
-        study_top_menu.getTabAt(3)!!.customView = bottomNaviLayout.findViewById(R.id.top_navi_build_tab) as RelativeLayout
-
+        }
     }
 }

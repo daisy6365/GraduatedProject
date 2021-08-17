@@ -116,8 +116,8 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 getSystemService(Context.LOCATION_SERVICE) as LocationManager
             try {
                 //정보 불러와서 화면에 정보들 붙이기
-                val studyId = 218
-                    //intent.getIntExtra("studyId",0)
+                val studyRoomId = intent.getIntExtra("studyRoomId",0)
+                val studyId = studyRoomId
                 setStudyInfo(accessToken, studyId)
 
                 //위치(경도, 위도)정보를 기반으로 마커 찍기

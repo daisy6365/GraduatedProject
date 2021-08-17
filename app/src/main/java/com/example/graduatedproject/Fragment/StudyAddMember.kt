@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.MemberAddListAdapter
 import com.example.graduatedproject.Adapter.MemberListAdapter
 import com.example.graduatedproject.Model.Profile
@@ -17,12 +19,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StudyAddMember : Fragment() {
+class StudyAddMember(studyRoomId: Int) : Fragment() {
+    private var linearLayoutManager: RecyclerView.LayoutManager? = null
+    private var recyclerAdapter: MemberAddListAdapter? = null
     private val TAG = StudyAddMember::class.java.simpleName
     var memberAddInfo =  ArrayList<Profile>()
-    lateinit var memberAddListView : ListView
-    lateinit var listAdapter : MemberAddListAdapter
-    var studyId : Int = 218
+    var studyId : Int = studyRoomId
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,13 @@ class StudyAddMember : Fragment() {
                         memberAddInfo = response.body()!!
 
                         Log.d(TAG, "스터디멤버 조회 성공")
+                        val recyclerView: RecyclerView = view.findViewById(R.id.member_add_list)
+                        recyclerAdapter = MemberAddListAdapter(requireContext(),memberAddInfo,accessToken,studyId)
+                        linearLayoutManager = LinearLayoutManager(activity)
+
+                        recyclerView.layoutManager = linearLayoutManager
+                        recyclerView.adapter = recyclerAdapter
+
                     }
                 }
 
@@ -52,12 +61,6 @@ class StudyAddMember : Fragment() {
                     Log.d(TAG, "스터디멤버 조회 실패")
                 }
             })
-
-        // Set the adapter
-        memberAddListView = view.findViewById(R.id.member_add_list) as ListView
-        listAdapter = MemberAddListAdapter(context,memberAddInfo,accessToken,studyId)
-
-        memberAddListView.setAdapter(listAdapter)
 
         return view
     }

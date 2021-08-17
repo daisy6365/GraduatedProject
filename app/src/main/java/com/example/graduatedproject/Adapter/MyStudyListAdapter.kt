@@ -2,7 +2,9 @@ package com.example.graduatedproject.Adapter
 
 import com.example.graduatedproject.R
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.example.graduatedproject.Activity.StudyRoomActivity
 import com.example.graduatedproject.Model.Study
 
 
 class MyStudyListAdapter (
-    var context: Context?,
+    private var context : Context,
     var studyInfo: ArrayList<Study>?
 ) : RecyclerView.Adapter<MyStudyListAdapter.MyStudyListViewHolder>() {
 
@@ -31,6 +34,31 @@ class MyStudyListAdapter (
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
+    class MyStudyListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var home_study_name: TextView
+        var home_on_off : TextView
+        var search_study_cover: ImageView
+        var study_tag1 : TextView
+        var study_tag2 : TextView
+        var study_tag3 : TextView
+        var study_tag4 : TextView
+        var study_tag5 : TextView
+        var study_tag6 : TextView
+
+        init {
+            home_study_name = itemView.findViewById(R.id.home_study_name)
+            home_on_off = itemView.findViewById(R.id.home_on_off)
+            search_study_cover = itemView.findViewById(R.id.search_study_cover)
+            study_tag1 = itemView.findViewById(R.id.study_tag1)
+            study_tag2 = itemView.findViewById(R.id.study_tag2)
+            study_tag3 = itemView.findViewById(R.id.study_tag3)
+            study_tag4 = itemView.findViewById(R.id.study_tag4)
+            study_tag5 = itemView.findViewById(R.id.study_tag5)
+            study_tag6 = itemView.findViewById(R.id.study_tag6)
+
+        }
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyStudyListViewHolder {
         val view = LayoutInflater
@@ -41,8 +69,8 @@ class MyStudyListAdapter (
     }
 
     override fun onBindViewHolder(holder: MyStudyListViewHolder, position: Int) {
-
         holder.home_study_name.text = studyInfo!![position].name
+
         if(studyInfo!![position].online == true && studyInfo!![position].offline == true){
             holder.home_on_off.setText("OFFLINE/ONLINE")
         }
@@ -52,6 +80,7 @@ class MyStudyListAdapter (
         else{
             holder.home_on_off.setText("OFFLINE")
         }
+
         if(studyInfo!![position].image == null){
             Glide.with(holder.itemView.getContext())
                 .load(R.drawable.background_button)
@@ -66,6 +95,7 @@ class MyStudyListAdapter (
                 .centerCrop()
                 .into( holder.search_study_cover)
         }
+
         for(i in 0..studyInfo!![position].studyTags!!.size-1){
             when(i){
                 0 ->{
@@ -93,7 +123,18 @@ class MyStudyListAdapter (
                     holder.study_tag6.visibility = View.VISIBLE
                 }
             }
+        }
+        holder.home_study_name.setOnClickListener {
+            for(i in 0 .. studyInfo!!.size-1){
+                if(holder.home_study_name.text == studyInfo!![i].name){
+                    val studyId = studyInfo!![i].id
+                    Log.d("studyRoomId", studyId.toString())
 
+                    moveDetail(studyId)
+
+
+                }
+            }
         }
 
         if(position!= RecyclerView.NO_POSITION)
@@ -104,34 +145,18 @@ class MyStudyListAdapter (
         }
     }
 
+    private fun moveDetail(studyId: Int) {
+        val intent : Intent = Intent(context, StudyRoomActivity::class.java)
+        intent.putExtra("studyRoomId",studyId)
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    }
+
     override fun getItemCount(): Int {
+        if(studyInfo == null){ //Replace "messages" with whatever array you are passing
+            return 0
+        }
         return studyInfo!!.size
     }
 
-    class MyStudyListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var home_study_name: TextView
-        var home_on_off : TextView
-        var search_study_cover: ImageView
-        var study_tag1 : TextView
-        var study_tag2 : TextView
-        var study_tag3 : TextView
-        var study_tag4 : TextView
-        var study_tag5 : TextView
-        var study_tag6 : TextView
-
-        init {
-            home_study_name = itemView.findViewById(R.id.home_study_name)
-            home_on_off = itemView.findViewById(R.id.home_on_off)
-            search_study_cover = itemView.findViewById(R.id.search_study_cover)
-            study_tag1 = itemView.findViewById(R.id.study_tag1)
-            study_tag2 = itemView.findViewById(R.id.study_tag2)
-            study_tag3 = itemView.findViewById(R.id.study_tag3)
-            study_tag4 = itemView.findViewById(R.id.study_tag4)
-            study_tag5 = itemView.findViewById(R.id.study_tag5)
-            study_tag6 = itemView.findViewById(R.id.study_tag6)
-
-        }
-
-    }
 }

@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.MemberListAdapter
+import com.example.graduatedproject.Adapter.MyStudyListAdapter
 import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
@@ -21,12 +24,12 @@ import retrofit2.Response
 /**
  * A fragment representing a list of Items.
  */
-class StudyMember : Fragment() {
+class StudyMember(studyRoomId: Int) : Fragment() {
+    private var linearLayoutManager: RecyclerView.LayoutManager? = null
+    private var recyclerAdapter: MemberListAdapter? = null
     private val TAG = StudyMember::class.java.simpleName
     var memberInfo =  ArrayList<Profile>()
-    lateinit var memberListView : ListView
-    lateinit var listAdapter : MemberListAdapter
-    var studyId : Int = 218
+    var studyId : Int = studyRoomId
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,13 @@ class StudyMember : Fragment() {
                         memberInfo = response.body()!!
 
                         Log.d(TAG, "스터디멤버 조회 성공")
+                        val recyclerView: RecyclerView = view.findViewById(R.id.member_list)
+                        recyclerAdapter = MemberListAdapter(requireContext(),memberInfo,accessToken,studyId)
+                        linearLayoutManager = LinearLayoutManager(activity)
+
+                        recyclerView.layoutManager = linearLayoutManager
+                        recyclerView.adapter = recyclerAdapter
+
                     }
                 }
 
@@ -59,11 +69,6 @@ class StudyMember : Fragment() {
                 }
             })
 
-        // Set the adapter
-        memberListView = view.findViewById(R.id.member_list) as ListView
-        listAdapter = MemberListAdapter(context,memberInfo,accessToken,studyId)
-
-        memberListView.setAdapter(listAdapter)
 
         return view
     }

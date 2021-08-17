@@ -20,8 +20,9 @@ import retrofit2.Response
 import android.app.AlertDialog
 import android.content.DialogInterface
 
-class StudyBuild : Fragment() {
+class StudyBuild(studyRoomId: Int) : Fragment() {
     val TAG = StudyBuild::class.java.simpleName
+    var studyId : Int = studyRoomId
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,77 +48,18 @@ class StudyBuild : Fragment() {
 
         member_build.setOnClickListener {
             activity?.let {
-                    val intent = Intent(context, StudyMemberActivity::class.java)
-                    startActivity(intent)
-                }
-        //            var userInfo :Profile? = null
-//            ServerUtil.retrofitService.requestProfile(accessToken)
-//                .enqueue(object : Callback<Profile> {
-//                    override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
-//                        if (response.isSuccessful) {
-//                            userInfo = response.body()
-//                            Log.d(TAG, "프로필 받기 성공")
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<Profile>, t: Throwable) {
-//                        Log.d(TAG, "프로필 받기 실패")
-//                    }
-//                })
-//            if(userInfo!!.role == "ADMIN"){
-//                //스터디 호스트라면
-//                activity?.let {
-//                    val intent = Intent(context, StudyMemberActivity::class.java)
-//                    startActivity(intent)
-//                }
-//            }
-//            else if(userInfo!!.role == "USER"){
-//                var builder = AlertDialog.Builder(context)
-//                builder.setTitle("경고")
-//                builder.setMessage("관리자만 접근이 가능합니다.")
-//                builder.setNegativeButton("확인", DialogInterface.OnClickListener { dialog, which ->
-//                    Log.d(TAG, "확인")
-//                })
-//            }
+                val intent = Intent(context, StudyMemberActivity::class.java)
+                intent.putExtra("studyRoomId",studyId)
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
         }
 
         study_modify.setOnClickListener {
-
             activity?.let {
-                    val intent = Intent(context, StudyModifyActivity::class.java)
-                    startActivity(intent)
-                }
-
-        //            var userInfo :Profile? = null
-//
-//            ServerUtil.retrofitService.requestProfile(accessToken)
-//                .enqueue(object : Callback<Profile> {
-//                    override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
-//                        if (response.isSuccessful) {
-//                            userInfo = response.body()
-//                            Log.d(TAG, "프로필 받기 성공")
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<Profile>, t: Throwable) {
-//                        Log.d(TAG, "프로필 받기 실패")
-//                    }
-//                })
-//            if(userInfo!!.role == "ADMIN"){
-//                activity?.let {
-//                    val intent = Intent(context, StudyModifyActivity::class.java)
-//                    startActivity(intent)
-//                }
-//            }
-//            else if(userInfo!!.role == "USER"){
-//                var builder = AlertDialog.Builder(context)
-//                builder.setTitle("경고")
-//                builder.setMessage("관리자만 접근이 가능합니다.")
-//                builder.setNegativeButton("확인", DialogInterface.OnClickListener { dialog, which ->
-//                    Log.d(TAG, "확인")
-//                })
-//            }
-
+                val intent = Intent(context, StudyModifyActivity::class.java)
+                intent.putExtra("studyRoomId", studyId)
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
         }
     }
 }

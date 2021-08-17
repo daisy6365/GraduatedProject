@@ -8,14 +8,16 @@ import com.example.graduatedproject.Fragment.StudyGroupList
 import com.example.graduatedproject.Fragment.StudyHome
 import com.example.graduatedproject.Fragment.StudyBuild
 
-class StudyRoomAdapter(fm : FragmentManager, val fragmentCount : Int) : FragmentStatePagerAdapter(fm)  {
+class StudyRoomAdapter(fm : FragmentManager,
+                       val fragmentCount : Int,
+                       val studyRoomId : Int) : FragmentStatePagerAdapter(fm)  {
     override fun getItem(position: Int) : Fragment {
         when (position) {
-            0 -> return StudyHome()
-            1 -> return StudyChat()
-            2 -> return StudyGroupList()
-            3 -> return StudyBuild()
-            else -> return StudyHome()
+            0 -> return StudyHome(studyRoomId)
+            1 -> return StudyChat(studyRoomId)
+            2 -> return StudyGroupList(studyRoomId)
+            3 -> return StudyBuild(studyRoomId)
+            else -> return StudyHome(studyRoomId)
         }
     }
 

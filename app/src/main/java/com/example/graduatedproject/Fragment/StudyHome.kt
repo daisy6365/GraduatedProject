@@ -23,10 +23,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class StudyHome : Fragment() {
+class StudyHome(studyRoomId: Int) : Fragment() {
     private val TAG = StudyHome::class.java.simpleName
     var studyInfo = Study()
-    var studyId : Int = 0
+    var studyId : Int = studyRoomId
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,7 +40,6 @@ class StudyHome : Fragment() {
         //화면 구성
         var bundle : Bundle? = getArguments()
         if(bundle == null){
-            studyId = 218
 
             //스터디 정보 조회
             val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)

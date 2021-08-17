@@ -19,8 +19,9 @@ class StudyMemberActivity : AppCompatActivity() {
 
         val bottomNaviLayout: View = this.layoutInflater.inflate(R.layout.top_navi_member_tab, null, false)
 
+        val studyRoomId = intent.getIntExtra("studyRoomId",0)
 
-        member_frag_pager.adapter = StudyMemberAdapter(supportFragmentManager, 2)
+        member_frag_pager.adapter = StudyMemberAdapter(supportFragmentManager, 2,studyRoomId)
         member_top_menu.setupWithViewPager(member_frag_pager)
 
         member_top_menu.getTabAt(0)!!.customView = bottomNaviLayout.findViewById(R.id.btn_top_navi_member_tab) as RelativeLayout
