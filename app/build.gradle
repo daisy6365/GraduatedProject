@@ -150,20 +150,11 @@ dependencies {
 
     // 카카오톡 sdk를 사용하기 위해 필요.
     implementation group: 'com.kakao.sdk', name: 'kakaotalk', version: '1.27.0'
-//
+
+    //Stomp
+    implementation 'com.github.NaikSoftware:StompProtocolAndroid:1.6.4'
 
 //    파이어베이스
-
-//    implementation 'com.google.firebase:firebase-messaging-ktx:22.0.0'
-//    implementation 'com.google.firebase:firebase-analytics-ktx:19.0.0'
-
-//    implementation platform('com.google.firebase:firebase-bom:27.1.0')
-//    implementation 'com.google.firebase:firebase-analytics'
-//    implementation 'com.google.firebase:firebase-core:16.0.1'
-//    implementation 'com.google.firebase:firebase-messaging:17.3.4'
-
-//    implementation "com.google.firebase:firebase-messaging:$firebase_messaging_version"
-//    implementation "com.google.firebase:firebase-core:$firebase_core_version"
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:28.2.0')
