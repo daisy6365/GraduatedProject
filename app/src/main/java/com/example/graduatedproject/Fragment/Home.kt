@@ -1,19 +1,38 @@
 package com.example.graduatedproject.Fragment
 
-import android.app.Dialog
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.fragment.app.DialogFragment
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.StudyCreateActivity
+import com.example.graduatedproject.Adapter.HomeListAdapter
+import com.example.graduatedproject.Model.StudySearch
 import com.example.graduatedproject.R
+import com.example.graduatedproject.Util.ServerUtil
+import com.google.gson.JsonObject
+import kotlinx.android.synthetic.main.fragment_home.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class Home : Fragment() {
+    private var linearLayoutManager: RecyclerView.LayoutManager? = null
+    private var recyclerAdapter: HomeListAdapter? = null
+    private val TAG = Home::class.java.simpleName
+    var StudySearch : StudySearch? = null
+    private var PAGE_NUM = 0 //현재페이지
+    val LIST_LENGTH = 20 //리스트개수
+    val paramObject = JsonObject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +43,32 @@ class Home : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home,container,false)
+
+
+        val offline = true
+        val online = true
+        val searchKeyword : String = ""
+        val categoryId = 4
+
+        paramObject.addProperty("page", PAGE_NUM)
+        paramObject.addProperty("size", LIST_LENGTH)
+        paramObject.addProperty("offline", offline)
+        paramObject.addProperty("online", online)
+        paramObject.addProperty("searchKeyword", searchKeyword)
+        paramObject.addProperty("categoryId", categoryId)
+
+        val home_recycler_view: RecyclerView = view.findViewById(R.id.home_recycler_view)
+        val context = view.context
+        context.apply {
+            home_recycler_view.layoutManager = LinearLayoutManager(applicationContext)
+            recyclerAdapter = HomeListAdapter(applicationContext)
+            home_recycler_view.adapter = recyclerAdapter
+        }
+
+        loadList(paramObject)
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,5 +89,71 @@ class Home : Fragment() {
                 startActivity(intent)
             }
         }
+
+        val home_recycler_view: RecyclerView = view.findViewById(R.id.home_recycler_view)
+        home_recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                val itemTotalCount = recyclerView.adapter!!.itemCount-1
+
+                // 스크롤이 끝에 도달했는지 확인
+                if (!home_recycler_view.canScrollVertically(1)) {
+                    recyclerAdapter!!.deleteLoading()
+                    if(lastVisibleItemPosition == itemTotalCount){
+                        if(StudySearch!!.last == false){
+                            paramObject.addProperty("page",PAGE_NUM)
+                            loadList(paramObject)
+                        }
+                        else{}
+                    }
+                }
+            }
+        })
+    }
+
+    fun loadList(paramObject: JsonObject){
+        val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+        var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
+
+        ServerUtil.retrofitService.requestStudySearch(
+            accessToken,
+            paramObject.get("page").asInt,
+            paramObject.get("size").asInt,
+            paramObject.get("offline").asBoolean,
+            paramObject.get("online").asBoolean,
+            paramObject.get("searchKeyword").asString,
+            paramObject.get("categoryId").asInt)
+            .enqueue(object : Callback<StudySearch> {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(call: Call<StudySearch>, response: Response<StudySearch>) {
+                    if (response.isSuccessful) {
+                        //응답값 다 받기
+                        StudySearch = response!!.body()
+
+                        if(StudySearch!!.last == false){
+                            home_recycler_view.getRecycledViewPool().clear()
+                            recyclerAdapter!!.setList(StudySearch!!.content)
+                            recyclerAdapter!!.notifyDataSetChanged()
+                            ++PAGE_NUM
+                        }
+                        else{
+                            home_recycler_view.getRecycledViewPool().clear()
+                            recyclerAdapter!!.setList(StudySearch!!.content)
+                            recyclerAdapter!!.notifyDataSetChanged()
+                            recyclerAdapter!!.deleteLoading()
+                        }
+
+                        Log.d(TAG, "검색결과리스트 받기 성공")
+                    }
+                }
+
+                override fun onFailure(call: Call<StudySearch>, t: Throwable) {
+                    Log.d(TAG, "검색결과리스트 받기 실패")
+                    Toast.makeText(getActivity(), "검색결과리스트 받기 실패", Toast.LENGTH_LONG).show()
+                }
+            })
     }
 }

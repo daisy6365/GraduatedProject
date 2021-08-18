@@ -52,9 +52,9 @@ class StudyHome(studyRoomId: Int) : Fragment() {
                             studyInfo = response.body()!!
 
                             //받은 스터디 정보들 화면에 뿌리기
-                            if(studyInfo!!.image!!.profileImage != null){
+                            if(studyInfo!!.image != null){
                                 Glide.with(view)
-                                    .load(studyInfo!!.image!!.profileImage)
+                                    .load(studyInfo!!.image!!.thumbnailImage)
                                     .centerCrop()
                                     .into(study_cover_img)
 

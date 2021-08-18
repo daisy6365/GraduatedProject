@@ -126,35 +126,38 @@ class StudySearchRecyclerAdapter(private val context: Context): RecyclerView.Ada
                     .into( holder.search_study_cover)
             }
 
-            for(i in 0..items[position].studyTags!!.size-1){
-                when(i){
-                    0 ->{
-                        holder.study_tag1.text = items[position].studyTags!![0]
-                        holder.study_tag1.visibility = View.VISIBLE
-                    }
-                    1 ->{
-                        holder.study_tag2.text = items[position].studyTags!![1]
-                        holder.study_tag2.visibility = View.VISIBLE
-                    }
-                    2 ->{
-                        holder.study_tag3.text = items[position].studyTags!![2]
-                        holder.study_tag3.visibility = View.VISIBLE
-                    }
-                    3 ->{
-                        holder.study_tag4.text = items[position].studyTags!![3]
-                        holder.study_tag4.visibility = View.VISIBLE
-                    }
-                    4 -> {
-                        holder.study_tag5.text = items[position].studyTags!![4]
-                        holder.study_tag5.visibility = View.VISIBLE
-                    }
-                    5 ->{
-                        holder.study_tag6.text = items[position].studyTags!![5]
-                        holder.study_tag6.visibility = View.VISIBLE
+            if(items!![position].studyTags != null){
+                for(i in 0..items[position].studyTags!!.size-1){
+                    when(i){
+                        0 ->{
+                            holder.study_tag1.text = items[position].studyTags!![0]
+                            holder.study_tag1.visibility = View.VISIBLE
+                        }
+                        1 ->{
+                            holder.study_tag2.text = items[position].studyTags!![1]
+                            holder.study_tag2.visibility = View.VISIBLE
+                        }
+                        2 ->{
+                            holder.study_tag3.text = items[position].studyTags!![2]
+                            holder.study_tag3.visibility = View.VISIBLE
+                        }
+                        3 ->{
+                            holder.study_tag4.text = items[position].studyTags!![3]
+                            holder.study_tag4.visibility = View.VISIBLE
+                        }
+                        4 -> {
+                            holder.study_tag5.text = items[position].studyTags!![4]
+                            holder.study_tag5.visibility = View.VISIBLE
+                        }
+                        5 ->{
+                            holder.study_tag6.text = items[position].studyTags!![5]
+                            holder.study_tag6.visibility = View.VISIBLE
+                        }
                     }
                 }
-
             }
+            else{}
+
 
             holder.home_study_name.setOnClickListener {
                 for(i in 0 .. items.size-1){
