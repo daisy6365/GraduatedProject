@@ -263,4 +263,46 @@ interface InfoService {
         @Path("studyId") studyId : Int
     ):Call<Void>
 
+
+
+
+    //채팅방생성
+    @POST("/chat-service/studies/{studyId}/chatRooms")
+    abstract fun requestCreateChat(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int,
+        @Path("name") name : String
+    ):Call<ChatRoom>
+
+    //채팅방 수정
+    @PATCH("/chat-service/chatRooms/{chatRoomId}")
+    abstract fun requestModifyChat(
+        @Header("Authorization") accessToken: String,
+        @Path("chatRoomId") chatRoomId : Int,
+        @Path("name") name : String
+    ):Call<ChatRoom>
+
+    //채팅방 삭제
+    @DELETE("/chat-service/chatRooms/{chatRoomId}")
+    abstract fun requestDeleteChat(
+        @Header("Authorization") accessToken: String,
+        @Path("chatRoomId") chatRoomId : Int
+    ):Call<Void>
+
+    //채팅방 리스트 조회
+    @GET("/chat-service/studies/{studyId}/chatRooms")
+    abstract fun requestChatRoom(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int
+    ):Call<ArrayList<ChatRoom>>
+
+    //채팅 메세지 조회
+    @GET("/chat-service/chatRooms/{chatRoomId}/chatMessages")
+    abstract fun requestChat(
+        @Header("Authorization") accessToken: String,
+        @Query("page") page : Int,
+        @Query("size") size : Int,
+        @Query("chatRoomId") searchName : String
+    ):Call<Chat>
+
 }

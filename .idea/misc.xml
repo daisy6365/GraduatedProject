@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/background_button.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/background_button_closed.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/background_peoplenum.xml" value="0.2638888888888889" />
@@ -10,6 +11,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_drop_up_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_build_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_chat_24.xml" value="0.1365" />
+        <entry key="app/src/main/res/drawable/ic_baseline_exit_to_app_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_group_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_group_add_24.xml" value="0.1365" />
         <entry key="app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1075" />
@@ -50,6 +52,7 @@
         <entry key="app/src/main/res/layout/fragment_study_memberrrr_list.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_study_modify.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/item_add_member.xml" value="0.2128623188405797" />
+        <entry key="app/src/main/res/layout/item_chatroom.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/item_liketopic.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_member.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/item_search.xml" value="0.13095238095238096" />
