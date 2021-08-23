@@ -18,6 +18,8 @@ import com.example.graduatedproject.Adapter.StudyGroupListAdapter
 import com.example.graduatedproject.Model.GroupList
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
+import com.google.gson.JsonObject
+import kotlinx.android.synthetic.main.fragment_study_group.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,9 +30,14 @@ import retrofit2.Response
 class StudyGroupList(studyRoomId: Int) : Fragment() {
     private var linearLayoutManager: RecyclerView.LayoutManager? = null
     private var recyclerAdapter: StudyGroupListAdapter? = null
+    private var PAGE_NUM = 0 //현재페이지
+    val LIST_LENGTH = 20 //리스트개수
+    val paramObject = JsonObject()
+
     val TAG = StudyGroupList::class.java.simpleName
     var GroupListInfo : GroupList? = null
     var studyId : Int = studyRoomId
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,25 +49,25 @@ class StudyGroupList(studyRoomId: Int) : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_study_group_list, container, false)
 
-        val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-        var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
+        paramObject.addProperty("page", PAGE_NUM)
+        paramObject.addProperty("size", LIST_LENGTH)
 
-        val home_recycler_view: RecyclerView = view.findViewById(R.id.home_recycler_view)
+        val group_recycler: RecyclerView = view.findViewById(R.id.group_recycler)
         val context = view.context
         context.apply {
-            home_recycler_view.layoutManager = LinearLayoutManager(applicationContext)
-            recyclerAdapter = HomeListAdapter(applicationContext)
-            home_recycler_view.adapter = recyclerAdapter
+            group_recycler.layoutManager = LinearLayoutManager(applicationContext)
+            recyclerAdapter = StudyGroupListAdapter(applicationContext)
+            group_recycler.adapter = recyclerAdapter
         }
 
         loadList(paramObject)
-
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val group_add_btn : LinearLayout = view.findViewById(R.id.group_add_btn)
         group_add_btn.setOnClickListener {
             activity?.let {
@@ -83,7 +90,7 @@ class StudyGroupList(studyRoomId: Int) : Fragment() {
                 if (!group_recycler.canScrollVertically(1)) {
                     recyclerAdapter!!.deleteLoading()
                     if(lastVisibleItemPosition == itemTotalCount){
-                        if(StudySearch!!.last == false){
+                        if(GroupListInfo!!.last == false){
                             paramObject.addProperty("page",PAGE_NUM)
                             loadList(paramObject)
                         }
@@ -97,20 +104,28 @@ class StudyGroupList(studyRoomId: Int) : Fragment() {
         val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
-        ServerUtil.retrofitService.requestGroupList(accessToken,studyId)
-            .enqueue(object : Callback<GroupList> {
+        ServerUtil.retrofitService.requestGroupList(
+            accessToken,
+            studyId,
+            paramObject.get("page").asInt,
+            paramObject.get("size").asInt).enqueue(object : Callback<GroupList> {
                 override fun onResponse(call: Call<GroupList>, response: Response<GroupList>) {
                     if (response.isSuccessful) {
                         GroupListInfo = response.body()!!
                         Log.d(TAG, GroupListInfo.toString())
 
-                        val recyclerView: RecyclerView = view.findViewById(R.id.chat_recycler)
-                        recyclerAdapter = StudyGroupListAdapter(requireContext(),GroupListInfo!!.content)
-                        linearLayoutManager = LinearLayoutManager(activity)
-
-                        recyclerView.layoutManager = linearLayoutManager
-                        recyclerView.adapter = recyclerAdapter
-
+                        if(GroupListInfo!!.last == false){
+                            group_recycler.getRecycledViewPool().clear()
+                            recyclerAdapter!!.setList(GroupListInfo!!.content)
+                            recyclerAdapter!!.notifyDataSetChanged()
+                            ++PAGE_NUM
+                        }
+                        else{
+                            group_recycler.getRecycledViewPool().clear()
+                            recyclerAdapter!!.setList(GroupListInfo!!.content)
+                            recyclerAdapter!!.notifyDataSetChanged()
+                            recyclerAdapter!!.deleteLoading()
+                        }
 
                         Log.d(TAG, "회원 스터디 정보 받기 성공")
                     }

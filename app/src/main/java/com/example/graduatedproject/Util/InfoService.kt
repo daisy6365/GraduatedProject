@@ -312,7 +312,9 @@ interface InfoService {
     @GET("/gathering-service/studies/{studyId}/gatherings")
     abstract fun requestGroupList(
         @Header("Authorization") accessToken: String,
-        @Path("studyId") studyId : Int
+        @Path("studyId") studyId : Int,
+        @Query("page") page : Int,
+        @Query("size") size : Int
     ):Call<GroupList>
 
     //모임생성

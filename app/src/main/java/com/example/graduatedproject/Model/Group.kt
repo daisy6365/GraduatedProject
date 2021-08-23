@@ -22,7 +22,7 @@ data class Group (
     var content: String? = null,
 
     @SerializedName("place")
-    var place: Place = Place(),
+    var place: Place? = Place(),
 
     @SerializedName("apply")
     var apply: Boolean? = null
