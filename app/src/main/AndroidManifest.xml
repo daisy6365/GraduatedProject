@@ -19,6 +19,15 @@
         android:theme="@style/Theme.GraduatedProject"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.StudyGroupModifyActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.StudyGroupApplyActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.StudyGroupCreateActivity"
+            android:exported="true" />
+        <activity
             android:name=".Activity.StudyModifyActivity"
             android:exported="true" />
         <activity

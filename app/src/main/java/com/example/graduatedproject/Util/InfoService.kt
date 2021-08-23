@@ -303,6 +303,68 @@ interface InfoService {
         @Query("page") page : Int,
         @Query("size") size : Int,
         @Query("chatRoomId") searchName : String
-    ):Call<Chat>
+    ):Call<ChatList>
 
+
+
+
+    //모임리스트 조회
+    @GET("/gathering-service/studies/{studyId}/gatherings")
+    abstract fun requestGroupList(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int
+    ):Call<GroupList>
+
+    //모임생성
+    @POST("/gathering-service/studies/{studyId}/gatherings")
+    abstract fun requestCreateGroup(
+        @Header("Authorization") accessToken: String,
+        @Path("studyId") studyId : Int,
+        //gatheringTime, shape, content, placeName, let, len
+        @Body parameters: HashMap<String, Any>
+    ):Call<Group>
+
+    //모임수정
+    @PATCH("/gathering-service/gatherings/{gatheringId}")
+    abstract fun requestModifyGroup(
+        @Header("Authorization") accessToken: String,
+        @Path("gatheringId") gatheringId : Int,
+        //gatheringTime, shape, content, placeName, let, len
+        @Body parameters: HashMap<String, Any>
+    ):Call<Group>
+
+    //모임삭제
+    @DELETE("/gathering-service/gatherings/{gatheringId}")
+    abstract fun requestDeleteGroup(
+        @Header("Authorization") accessToken: String,
+        @Path("gatheringId") gatheringId : Int
+    ):Call<Void>
+
+    //모임상세 조회
+    @GET("/gathering-service/gatherings/{gatheringId}")
+    abstract fun requestGroup(
+        @Header("Authorization") accessToken: String,
+        @Path("gatheringId") gatheringId : Int
+    ):Call<Group>
+
+    //모임 참가
+    @POST("/gathering-service/gatherings/{gatheringId}/users")
+    abstract fun requestGroupApply(
+        @Header("Authorization") accessToken: String,
+        @Path("gatheringId") gatheringId : Int
+    ):Call<Void>
+
+    //모임 참가취소
+    @DELETE("/gathering-service/gatherings/{gatheringId}/users")
+    abstract fun requestGroupApplyCancel(
+        @Header("Authorization") accessToken: String,
+        @Path("gatheringId") gatheringId : Int
+    ):Call<Void>
+
+    //모임 참가자 조회
+    @GET("/gathering-service/gatherings/{gatheringId}/users")
+    abstract fun requestGroupUsers(
+        @Header("Authorization") accessToken: String,
+        @Path("gatheringId") gatheringId : Int
+    ):Call<ArrayList<Profile>>
 }

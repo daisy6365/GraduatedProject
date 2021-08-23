@@ -2,9 +2,7 @@ package com.example.graduatedproject.Adapter
 
 import android.content.Context
 import android.content.Intent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,21 +10,20 @@ import com.example.graduatedproject.Activity.StudyChatActivity
 import com.example.graduatedproject.Model.ChatRoom
 import com.example.graduatedproject.R
 
+
 class StudyChatListAdapter (
     private var context : Context,
     var chatRoomInfo: ArrayList<ChatRoom>?
 ) : RecyclerView.Adapter<StudyChatListAdapter.StudyChatListViewHolder>() {
 
     class StudyChatListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var home_study_name: TextView
-        var search_study_cover: ImageView
+        var chatroom_name: TextView
+        var chatroom_menu: ImageView
 
         init {
-            home_study_name = itemView.findViewById(R.id.home_study_name)
-            search_study_cover = itemView.findViewById(R.id.search_study_cover)
-
+            chatroom_name = itemView.findViewById(R.id.chatroom_name)
+            chatroom_menu = itemView.findViewById(R.id.chatroom_menu)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyChatListViewHolder {
@@ -38,7 +35,9 @@ class StudyChatListAdapter (
     }
 
     override fun onBindViewHolder(holder: StudyChatListViewHolder, position: Int) {
-
+        holder.chatroom_menu.setOnClickListener {
+            holder.itemView.showContextMenu();
+        }
     }
 
     private fun moveDetail(studyId: Int) {
@@ -54,4 +53,6 @@ class StudyChatListAdapter (
         }
         return chatRoomInfo!!.size
     }
+
+
 }

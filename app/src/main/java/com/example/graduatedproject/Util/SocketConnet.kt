@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Util
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +25,7 @@ class SocketConnet {
     val message: LiveData<Message>
         get() = _message
 
+    @SuppressLint("CheckResult")
     fun connectStomp(room: String) {
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, SOCKET_URL)
         mStompClient.lifecycle().subscribe { lifecycleEvent: LifecycleEvent ->

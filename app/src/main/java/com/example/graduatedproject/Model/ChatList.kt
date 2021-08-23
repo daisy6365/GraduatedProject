@@ -3,7 +3,7 @@ package com.example.graduatedproject.Model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Chat (
+data class ChatList (
     @SerializedName("content")
     @Expose
     var content: ArrayList<Message>,
@@ -39,4 +39,4 @@ data class Chat (
     //값이 비 었는지 여부
     @SerializedName("empty")
     var empty: Boolean = true
-    )
+)
