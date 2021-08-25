@@ -23,6 +23,14 @@ class StudyGroupListAdapter (
     private val groupInfo =  ArrayList<Group>()
     var groupId : Int = 0
 
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyGroupListAdapter.StudyGroupListViewHolder  {
+        val view = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.item_grouplist, parent, false)
+
+        return StudyGroupListViewHolder(view)
+    }
     class StudyGroupListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var item_group : RelativeLayout
         var group_date: TextView
@@ -37,15 +45,7 @@ class StudyGroupListAdapter (
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyGroupListViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.item_grouplist, parent, false)
-
-        return StudyGroupListViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: StudyGroupListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: StudyGroupListAdapter.StudyGroupListViewHolder, position: Int) {
         holder.group_date.text = groupInfo[position].gatheringTime
         holder.group_on_off.text = groupInfo[position].shape
         holder.group_place.text = groupInfo[position].place?.name

@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/radio_group"
+                android:id="@+id/check_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -53,51 +53,94 @@
 
             </LinearLayout>
 
+
+        </RelativeLayout>
+
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <EditText
+                    android:id="@+id/edit_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="4"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="참여인원"/>
+                    android:layout_marginLeft="5dp"
+                    android:text="년"/>
 
-                <LinearLayout
+                <EditText
+                    android:id="@+id/edit_month"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:id="@+id/number_minus"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"/>
+                    android:ems="4"
+                    />
 
-                    <TextView
-                        android:id="@+id/people_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="25dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="월"/>
 
-                    <ImageView
-                        android:id="@+id/number_plus"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"/>
+                <EditText
+                    android:id="@+id/edit_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="4"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="일"/>
+            </LinearLayout>
 
-                </LinearLayout>
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <EditText
+                    android:id="@+id/edit_hour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="4"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="시"/>
+                <EditText
+                    android:id="@+id/edit_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="4"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="분"/>
 
             </LinearLayout>
 
-        </RelativeLayout>
-
 
             <EditText
-                android:id="@+id/create_introduce_text"
+                android:id="@+id/create_todo_edit"
                 android:inputType="textMultiLine"
                 android:lines="4"
                 android:minLines="2"
@@ -109,7 +152,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="스터디를 소개해주세요."
+                android:hint="해야할 일을 작성하세요."
                 android:textSize="15dp"
                 />
 
@@ -144,19 +187,20 @@
                 android:layout_height="wrap_content"
                 android:text="원하는 위치를 길게눌러서 마커를 찍으세요."
                 android:textSize="13dp"
+                android:layout_gravity="left"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="10dp"
                 />
             <Button
-                android:id="@+id/register_study"
+                android:id="@+id/register_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="생성하기"
                 android:layout_margin="20dp"
                 />
 
-
         </LinearLayout>
+
     </ScrollView>
 
 

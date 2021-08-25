@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +20,7 @@ import com.example.graduatedproject.Model.GroupList
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.fragment_study_group.*
+import kotlinx.android.synthetic.main.fragment_study_group_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -109,6 +110,7 @@ class StudyGroupList(studyRoomId: Int) : Fragment() {
             studyId,
             paramObject.get("page").asInt,
             paramObject.get("size").asInt).enqueue(object : Callback<GroupList> {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(call: Call<GroupList>, response: Response<GroupList>) {
                     if (response.isSuccessful) {
                         GroupListInfo = response.body()!!
