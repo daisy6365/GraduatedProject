@@ -10,6 +10,8 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.RelativeLayout
 import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -42,7 +44,8 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
     var day : String? = null
     var hour : String? = null
     var min : String? = null
-
+    lateinit var mapView : MapView
+    lateinit var mapViewContainer : RelativeLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +54,8 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
 
         val studyRoomId = intent.getIntExtra("studyRoomId",0)
 
-        val mapView = MapView(this)
-        val mapViewContainer = map_view
+        mapView = MapView(this)
+        mapViewContainer = map_view
         mapViewContainer.addView(mapView)
 
         val permissionCheck =
@@ -87,6 +90,9 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
                 check_offline.setOnCheckedChangeListener { buttonView, isChecked ->
                     if(isChecked){
                         offline = true
+                        create_detail_place_edit.visibility = View.VISIBLE
+                        map_view.visibility = View.VISIBLE
+                        mapview_notice.visibility = View.VISIBLE
                     }
                     else{
                         offline = false
@@ -95,6 +101,9 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
                 check_online.setOnCheckedChangeListener { buttonView, isChecked ->
                     if(isChecked){
                         online = true
+                        create_detail_place_edit.visibility = View.GONE
+                        map_view.visibility = View.GONE
+                        mapview_notice.visibility = View.GONE
                     }
                     else{
                         online = false
@@ -131,7 +140,6 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
                 }
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-
                 System.exit(0)
 
             }
@@ -155,34 +163,21 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
             state = "OFFLINE"
         }else{ }
 
-
-        //스터디이름,참여인원, 해시태그 리스트, 카테고리2개, 소개내용, 온/오프라인 여부, locationId 정보 가져오기
         var todoContent = create_todo_edit.text.toString()
         var placeContent = create_detail_place_edit.text.toString()
-        if(month!!.toInt() <= 10){
+        if(month!!.length < 2){
             month = "0" + month
         }
-        if(day!!.toInt() <= 10){
+        if(day!!.length < 2){
             day = "0" + day
         }
-        if(hour!!.toInt() <= 10){
+        if(hour!!.length < 2){
             hour = "0" + hour
         }
-        if(min!!.toInt() <= 10){
+        if(min!!.length < 2){
             min = "0" + min
         }
         var gatheringTime = year+ "-" + month +"-"+ day + "T" + hour + ":" + min + ":00"
-
-
-
-//        Log.d("스터디생성정보", studyName.toString())
-//        Log.d("스터디생성정보", numberOfPeople.toString())
-//        Log.d("스터디생성정보", content.toString())
-//        Log.d("스터디생성정보", tags.toString())
-//        Log.d("스터디생성정보", online.toString())
-//        Log.d("스터디생성정보", offline.toString())
-//        Log.d("스터디생성정보", categoryId.toString())
-
         var params:HashMap<String, Any> = HashMap<String, Any>()
         params.put("gatheringTime", gatheringTime)
         params.put("shape", state)
@@ -198,9 +193,9 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
                         var groupId : Int = response.body()!!.id
 
                         Log.d(TAG, "모임 생성정보 전송 성공")
-
+                        mapViewContainer.removeView(mapView)
                         val intent = Intent(this@StudyGroupCreateActivity, StudyGroupApplyActivity::class.java)
-                        intent.putExtra("groupId",groupId)
+                        intent.putExtra("gatheringId",groupId)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                         finish()
                     }
@@ -225,7 +220,6 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
             uLongitude = p1!!.mapPointGeoCoord.longitude
             Log.d("마커 찍은 주소uLatitude", uLatitude.toString())
             Log.d("마커 찍은 주소uLongitude", uLongitude.toString())
-            var kakaoToken = "KakaoAK 9a9a02eedbe752442e4a7550ec217f88"
 
             // 클릭한 위치에 마커와 주소 보이기
             reverseGeoCoder = MapReverseGeoCoder("35e1ae8dad57b1dfb6a8f38f6903c184", p1!!,

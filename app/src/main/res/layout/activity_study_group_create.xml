@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center"
+                android:gravity="left"
                 >
                 <EditText
                     android:id="@+id/edit_year"
@@ -82,7 +82,7 @@
                     android:id="@+id/edit_month"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="4"
+                    android:ems="2"
                     />
 
                 <TextView
@@ -95,7 +95,7 @@
                     android:id="@+id/edit_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="4"
+                    android:ems="2"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,13 +111,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
-                android:gravity="center"
+                android:gravity="left"
                 >
                 <EditText
                     android:id="@+id/edit_hour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="4"
+                    android:ems="2"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
                     android:id="@+id/edit_min"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="4"
+                    android:ems="2"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -183,6 +183,7 @@
                 />
 
             <TextView
+                android:id="@+id/mapview_notice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="원하는 위치를 길게눌러서 마커를 찍으세요."

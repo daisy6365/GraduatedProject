@@ -41,4 +41,15 @@
         android:layout_alignParentBottom="true"
         />
 
+    <TextView
+        android:id="@+id/group_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="id"
+        android:textColor="@color/colorWhite"
+        android:textSize="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        />
+
 </RelativeLayout>

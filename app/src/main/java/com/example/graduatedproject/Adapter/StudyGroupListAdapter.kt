@@ -21,7 +21,6 @@ class StudyGroupListAdapter (
     private var context : Context
 ) : RecyclerView.Adapter<StudyGroupListAdapter.StudyGroupListViewHolder>() {
     private val groupInfo =  ArrayList<Group>()
-    var groupId : Int = 0
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyGroupListAdapter.StudyGroupListViewHolder  {
@@ -36,26 +35,39 @@ class StudyGroupListAdapter (
         var group_date: TextView
         var group_on_off : TextView
         var group_place : TextView
+        var group_id : TextView
 
         init {
             group_date = itemView.findViewById(R.id.group_date)
             group_on_off = itemView.findViewById(R.id.group_on_off)
             group_place = itemView.findViewById(R.id.group_place)
             item_group = itemView.findViewById(R.id.item_group)
+            group_id = itemView.findViewById(R.id.group_id)
         }
     }
 
     override fun onBindViewHolder(holder: StudyGroupListAdapter.StudyGroupListViewHolder, position: Int) {
-        holder.group_date.text = groupInfo[position].gatheringTime
+        val str = groupInfo[position].gatheringTime
+        val idT: Int = str!!.indexOf("T")
+        val date = str.substring(0,idT)
+        val time = str.substring(idT+1)
+
+        val dateList = date.split("-")
+        val date_group = dateList[0] + "년 " + dateList[1] + "월 " + dateList[2] + "일 "
+        val timeList = time.split(":")
+        val time_group = timeList[0] + "시 " + timeList[1] + "분"
+
+        holder.group_date.text = date_group + time_group
+
         holder.group_on_off.text = groupInfo[position].shape
         holder.group_place.text = groupInfo[position].place?.name
-        groupId = groupInfo[position].id
+        holder.group_id.text = groupInfo[position].id.toString()
 
 
         holder.item_group.setOnClickListener {
             for(i in 0 .. groupInfo!!.size-1){
-                if(groupId == groupInfo!![i].id){
-                    val gatheringId = groupInfo!![i].id
+                if(holder.group_id.text == groupInfo!![i].id.toString()){
+                    val gatheringId = groupInfo[i].id
                     Log.d("studyId", gatheringId.toString())
 
                     moveDetail(gatheringId)
