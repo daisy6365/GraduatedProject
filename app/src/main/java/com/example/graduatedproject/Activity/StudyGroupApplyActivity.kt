@@ -1,40 +1,47 @@
 package com.example.graduatedproject.Activity
 
 import android.Manifest
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
-import android.app.AlertDialog
-import android.content.DialogInterface
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.graduatedproject.Fragment.GroupMember
 import com.example.graduatedproject.Model.Group
+import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import kotlinx.android.synthetic.main.activity_study_group_apply.*
-import kotlinx.android.synthetic.main.activity_study_group_apply.map_view
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapReverseGeoCoder
 import net.daum.mf.map.api.MapView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class StudyGroupApplyActivity : AppCompatActivity() {
     private val TAG = StudyGroupApplyActivity::class.java.simpleName
     val PERMISSIONS_REQUEST_CODE = 100
     var REQUIRED_PERMISSIONS = arrayOf<String>( Manifest.permission.ACCESS_FINE_LOCATION)
     var groupInfo = Group()
+    var groupMember: MutableList<String>? = null
     var current_marker = MapPOIItem()
     var uLatitude : Double? = null
     var uLongitude : Double? = null
@@ -128,7 +135,27 @@ class StudyGroupApplyActivity : AppCompatActivity() {
                             }
                         })
                     current_people_number.setOnClickListener {
+                        //모임 참가자 멤버 조회
+                        ServerUtil.retrofitService.requestGroupUsers(accessToken,groupId)
+                            .enqueue(object : Callback<ArrayList<Profile>> {
+                                override fun onResponse(call: Call<ArrayList<Profile>>, response: Response<ArrayList<Profile>>) {
+                                    if (response.isSuccessful) {
+                                        val groupMemberInfo = response.body()!!
 
+                                        for(i in 0 .. groupMemberInfo!!.size-1){
+                                            groupMember!!.add(groupMemberInfo!!.get(i).nickName)
+                                        }
+                                        Log.d(TAG, "모임참가자 조회 성공")
+                                        val dialog = GroupMember(groupMember!!)
+                                        dialog.show(supportFragmentManager, "GroupMember")
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<ArrayList<Profile>>, t: Throwable) {
+                                    Log.d(TAG, "모임참가자 조회 실패")
+                                    Toast.makeText(this@StudyGroupApplyActivity, "모임참가 신청 실패", Toast.LENGTH_LONG).show()
+                                }
+                            })
                     }
 
                     apply_group_btn.setOnClickListener {
@@ -240,5 +267,4 @@ class StudyGroupApplyActivity : AppCompatActivity() {
         }
 
     }
-
 }

@@ -106,6 +106,13 @@ class MyPage : Fragment() {
             dialog.show(requireActivity().getSupportFragmentManager(),"tag")
         }
 
+        val my_page_apply_btn : Button = view.findViewById(R.id.my_page_apply_btn)
+        my_page_apply_btn.setOnClickListener {
+            val dialog = StudyApplyStatus().getInstance()!!
+            dialog.show(requireActivity().getSupportFragmentManager(), "StudyApplyStatus")
+
+        }
+
 
         //친구목록
         val my_page_friends_btn: Button = view.findViewById(R.id.my_page_friends_btn)
