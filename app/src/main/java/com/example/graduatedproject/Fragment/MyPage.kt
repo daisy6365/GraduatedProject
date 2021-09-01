@@ -28,12 +28,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MyPage : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -108,9 +102,8 @@ class MyPage : Fragment() {
 
         val my_page_apply_btn : Button = view.findViewById(R.id.my_page_apply_btn)
         my_page_apply_btn.setOnClickListener {
-            val dialog = StudyApplyStatus().getInstance()!!
+            val dialog = StudyApplyStatus().getInstance()
             dialog.show(requireActivity().getSupportFragmentManager(), "StudyApplyStatus")
-
         }
 
 

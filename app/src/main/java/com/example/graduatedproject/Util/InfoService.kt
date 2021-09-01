@@ -69,6 +69,7 @@ interface InfoService {
 
 
 
+
     //지역정보 검색
     @GET("/location-service/locations/search")
     abstract fun requestLocationsearch(
@@ -128,7 +129,11 @@ interface InfoService {
         @Part("request") requestBody: RequestBody
     ): Call<Void>
 
-    //친구목록
+    //지원한 스터디 현황 조회
+    @GET("/user-service/users/studyApply")
+    abstract fun requestApplyStudy(
+        @Header("Authorization") accessToken: String
+    ):Call <ArrayList<ApplyStudy>>
 
 
     //마이스터디조회

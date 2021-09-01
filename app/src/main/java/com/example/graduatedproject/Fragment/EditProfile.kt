@@ -86,8 +86,6 @@ class EditProfile() : DialogFragment() {
 
         lateinit var requestImg: RequestBody
         var imageBitmap : MultipartBody.Part? = null
-        lateinit var requestdelete : RequestBody
-        lateinit var reqestnickname : RequestBody
 
 
         //그 사용자한테 저장된 이미지, 닉네임 불러옴

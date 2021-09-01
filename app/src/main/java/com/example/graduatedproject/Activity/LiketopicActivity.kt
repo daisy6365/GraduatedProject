@@ -29,20 +29,14 @@ class LiketopicActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_liketopic)
 
-
         //서버에 보내야 할것 : 액세스토큰, 입력값
         //받아야 할것 : 관심주제검색어, 관심주제리스트
         //저장된 엑세스 토큰을 가져옴
         var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
-        if (intent.hasExtra("add_item")) {
-            addLikeTag(accessToken)
-        }
-        else{
-            myTag(accessToken)
-        }
-
+        if (intent.hasExtra("add_item")) { addLikeTag(accessToken) }
+        else{ myTag(accessToken) }
 
         // 관심주제 추가 -> 검색
         liketopicplus_chip.setOnClickListener {
@@ -51,7 +45,6 @@ class LiketopicActivity : AppCompatActivity() {
 
         }
     }
-
 
     fun myTag(accessToken : String){
         //칩 그룹 지정

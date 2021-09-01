@@ -20,7 +20,6 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private val TAG = LoginActivity::class.java.simpleName
-    val PREFERENCE = "SharedPreference"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -75,10 +74,10 @@ class LoginActivity : AppCompatActivity() {
                                 val editor = sp.edit()
 
                                 var accessToken = response.headers().get("accessToken").toString()
-                                Log.d("",accessToken)
+                                Log.d(TAG,accessToken)
                                 //headers()!!.accessToken
                                 var refreshToken = response.headers()!!.get("refreshToken").toString()
-                                Log.d("",refreshToken)
+                                Log.d(TAG,refreshToken)
 
                                 //토큰들을 SharedPreference에 저장
                                 editor.putString("access_token", accessToken)

@@ -24,16 +24,12 @@ import android.view.MotionEvent
 
 import android.view.View.OnTouchListener
 
-
-
-
 class MapSearchActivity : AppCompatActivity() {
     private val TAG = MapSearchActivity::class.java.simpleName
     lateinit var adapter : MapSearchRecyclerAdapter
 
     private var PAGE_NUM = 0 //현재페이지
     val LIST_LENGTH = 20 //리스트개수
-    var contentLocation  =  ArrayList<ContentLocation>()
     var locationSearch : LocationSearch? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +37,6 @@ class MapSearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_map_search)
 
         val paramObject = JsonObject()
-
 
         place_searchview.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
             //쿼리텍스트가 제출됐을때 반응
@@ -67,9 +62,6 @@ class MapSearchActivity : AppCompatActivity() {
                 return false
             }
         })
-
-
-
 
         //스크롤
         placesearch_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){

@@ -27,10 +27,6 @@ class StudyHome(studyRoomId: Int) : Fragment() {
     private val TAG = StudyHome::class.java.simpleName
     var studyInfo = Study()
     var studyId : Int = studyRoomId
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -124,7 +120,6 @@ class StudyHome(studyRoomId: Int) : Fragment() {
         val exit_study : LinearLayout = view.findViewById(R.id.exit_study)
 
         exit_study.setOnClickListener {
-
             var builder = AlertDialog.Builder(context)
             builder.setTitle("알림")
             builder.setMessage("해당 스터디를 탈퇴하시겠습니까?")

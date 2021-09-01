@@ -25,9 +25,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-/**
- * A fragment representing a list of Items.
- */
 class StudyGroupList(studyRoomId: Int) : Fragment() {
     private var linearLayoutManager: RecyclerView.LayoutManager? = null
     private var recyclerAdapter: StudyGroupListAdapter? = null
@@ -38,11 +35,6 @@ class StudyGroupList(studyRoomId: Int) : Fragment() {
     val TAG = StudyGroupList::class.java.simpleName
     var GroupListInfo : GroupList? = null
     var studyId : Int = studyRoomId
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

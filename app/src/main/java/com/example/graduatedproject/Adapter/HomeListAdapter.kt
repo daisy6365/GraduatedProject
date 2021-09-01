@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,7 +23,7 @@ class HomeListAdapter (
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): HomeListAdapter.HomeListViewHolder {
+    ): HomeListViewHolder {
         val view = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.item_study, parent, false)
@@ -30,6 +31,7 @@ class HomeListAdapter (
         return HomeListViewHolder(view)
     }
     class HomeListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val search_study_item : LinearLayout
         var home_study_name: TextView
         var home_on_off : TextView
         var search_study_cover: ImageView
@@ -41,6 +43,7 @@ class HomeListAdapter (
         var study_tag6 : TextView
 
         init {
+            search_study_item = itemView.findViewById(R.id.search_study_item)
             home_study_name = itemView.findViewById(R.id.home_study_name)
             home_on_off = itemView.findViewById(R.id.home_on_off)
             search_study_cover = itemView.findViewById(R.id.search_study_cover)
@@ -54,7 +57,7 @@ class HomeListAdapter (
         }
 
     }
-    override fun onBindViewHolder(holder: HomeListAdapter.HomeListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HomeListViewHolder, position: Int) {
         holder.home_study_name.text = studyInfo!![position].name
 
         if(studyInfo!![position].online == true && studyInfo!![position].offline == true){
@@ -113,7 +116,7 @@ class HomeListAdapter (
             }
         }
         else{}
-        holder.home_study_name.setOnClickListener {
+        holder.search_study_item.setOnClickListener {
             for(i in 0 .. studyInfo!!.size-1){
                 if(holder.home_study_name.text == studyInfo!![i].name){
                     val studyId = studyInfo!![i].id

@@ -26,10 +26,6 @@ class StudyAddMember(studyRoomId: Int) : Fragment() {
     var memberAddInfo =  ArrayList<Profile>()
     var studyId : Int = studyRoomId
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

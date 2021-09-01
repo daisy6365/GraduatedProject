@@ -39,8 +39,6 @@ class MapActivity : AppCompatActivity() {
     var latitudeY : Double? = null
     var longitudeX : Double? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -51,7 +49,6 @@ class MapActivity : AppCompatActivity() {
         val permissionCheck =
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            val lm: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             try {
                 if (intent.hasExtra("modify_item")) {
                     val new_locationId = intent.getIntExtra("modify_item",0)
@@ -89,9 +86,7 @@ class MapActivity : AppCompatActivity() {
                 PERMISSIONS_REQUEST_CODE
             )
         }
-
     }
-
     fun Mylocation(accessToken : String){
         ServerUtil.retrofitService.requestProfile(accessToken)
             .enqueue(object : Callback<Profile> {

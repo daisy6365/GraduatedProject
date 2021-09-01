@@ -12,6 +12,8 @@
         android:id="@+id/group_member_list"
         android:layout_width="290dp"
         android:layout_height="300dp"
+        android:paddingTop="15dp"
+        android:layout_gravity="center"
         />
 
     <LinearLayout

@@ -159,7 +159,7 @@ class StudySearchRecyclerAdapter(private val context: Context): RecyclerView.Ada
             else{}
 
 
-            holder.home_study_name.setOnClickListener {
+            holder.search_study_item.setOnClickListener {
                 for(i in 0 .. items.size-1){
                     if(holder.home_study_name.text == items[i].name){
                         val studyId = items[i].id

@@ -16,7 +16,6 @@ class LikeSearchRecyclerAdapter(private val context: Context): RecyclerView.Adap
     private val items = ArrayList<ContentTag>()
 
     companion object {
-
         //아이템뷰의 타입을 두가지로 나눔
         private const val TYPE_POST = 0
         private const val TYPE_LOADING = 1

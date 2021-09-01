@@ -41,7 +41,6 @@ class StudyGroupApplyActivity : AppCompatActivity() {
     val PERMISSIONS_REQUEST_CODE = 100
     var REQUIRED_PERMISSIONS = arrayOf<String>( Manifest.permission.ACCESS_FINE_LOCATION)
     var groupInfo = Group()
-    var groupMember: MutableList<String>? = null
     var current_marker = MapPOIItem()
     var uLatitude : Double? = null
     var uLongitude : Double? = null
@@ -136,26 +135,8 @@ class StudyGroupApplyActivity : AppCompatActivity() {
                         })
                     current_people_number.setOnClickListener {
                         //모임 참가자 멤버 조회
-                        ServerUtil.retrofitService.requestGroupUsers(accessToken,groupId)
-                            .enqueue(object : Callback<ArrayList<Profile>> {
-                                override fun onResponse(call: Call<ArrayList<Profile>>, response: Response<ArrayList<Profile>>) {
-                                    if (response.isSuccessful) {
-                                        val groupMemberInfo = response.body()!!
-
-                                        for(i in 0 .. groupMemberInfo!!.size-1){
-                                            groupMember!!.add(groupMemberInfo!!.get(i).nickName)
-                                        }
-                                        Log.d(TAG, "모임참가자 조회 성공")
-                                        val dialog = GroupMember(groupMember!!)
-                                        dialog.show(supportFragmentManager, "GroupMember")
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<ArrayList<Profile>>, t: Throwable) {
-                                    Log.d(TAG, "모임참가자 조회 실패")
-                                    Toast.makeText(this@StudyGroupApplyActivity, "모임참가 신청 실패", Toast.LENGTH_LONG).show()
-                                }
-                            })
+                        val dialog = GroupMember(groupId!!)
+                        dialog.show(supportFragmentManager, "GroupMember")
                     }
 
                     apply_group_btn.setOnClickListener {

@@ -74,6 +74,8 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
     var seletedParent : String? = null
     var seletedChild : String? = null
     var categorychildSeletedItem : String? = null
+    lateinit var mapView : MapView
+    lateinit var mapViewContainer : RelativeLayout
 
 
     private val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -105,20 +107,72 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
         var chipGroup: ChipGroup = modify_chip_group
         var inflater: LayoutInflater = LayoutInflater.from(chipGroup.context)
 
-        val mapView = MapView(this)
-        val mapViewContainer = modify_map_view
+        mapView = MapView(this)
+        mapViewContainer = modify_map_view
         mapViewContainer.addView(mapView)
 
         val permissionCheck =
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            val lm: LocationManager =
-                getSystemService(Context.LOCATION_SERVICE) as LocationManager
             try {
                 //정보 불러와서 화면에 정보들 붙이기
                 val studyRoomId = intent.getIntExtra("studyRoomId",0)
                 val studyId = studyRoomId
-                setStudyInfo(accessToken, studyId)
+                ServerUtil.retrofitService.requestStudy(accessToken,studyId)
+                    .enqueue(object : Callback<Study> {
+                        override fun onResponse(call: Call<Study>, response: Response<Study>) {
+                            if (response.isSuccessful) {
+                                studyInfo  = response.body()!!
+
+
+                                if(studyInfo!!.image!!.profileImage != null){
+                                    Glide.with(this@StudyModifyActivity)
+                                        .load(studyInfo!!.image!!.thumbnailImage)
+                                        .centerCrop()
+                                        .into(modify_study_cover_img)
+
+                                } else{}
+
+
+                                modify_study_name.setText(studyInfo!!.name)
+                                people_num = studyInfo!!.numberOfPeople
+                                modify_people_number.setText(people_num.toString())
+
+                                tagArray = studyInfo!!.studyTags!!
+
+                                //카테고리 정보 가져와서 spinner에 달기
+                                seletedParent = studyInfo.parentCategory!!.name
+                                seletedChild = studyInfo.childCategory!!.name
+
+                                modify_introduce_text.setText(studyInfo.content)
+
+                                if(studyInfo.status == "OPEN"){
+                                    study_close.isChecked = false
+                                }
+                                else{
+                                    study_close.isChecked = true
+                                }
+
+                                if(studyInfo!!.online == true){
+                                    modify_check_online.isChecked = true
+                                }else{modify_check_online.isChecked = false}
+
+                                if(studyInfo!!.offline == true){
+                                    modify_check_offline.isChecked = true
+                                }else{modify_check_offline.isChecked = false}
+
+                                //지역정보 가져와서 지도에 뿌리고 마커 찍기
+                                uLatitude = studyInfo.location!!.let
+                                uLongitude = studyInfo.location!!.len
+
+                                Log.d(TAG, "스터디 정보 조회 성공")
+                            }
+                        }
+                        override fun onFailure(call: Call<Study>, t: Throwable) {
+                            Log.d(TAG, "스터디 정보 조회 실패")
+                            Toast.makeText(this@StudyModifyActivity, "스터디 정보 조회 실패", Toast.LENGTH_LONG).show()
+                        }
+                    })
 
                 //위치(경도, 위도)정보를 기반으로 마커 찍기
 
@@ -177,7 +231,6 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                             categoryChild =  mutableListOf("작은 카테고리")
 
                             Log.d("카테고리 자식 ", categoryChild.toString())
-
                             setCategoryChild()
 
                             if(big_category.getItemAtPosition(position).equals(categoryParent[i])){
@@ -203,9 +256,6 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
                             }
                         }
-
-//                        categoryparentSeletedItem = categoryParent!![position]
-//                        Log.d("categoryparentSeletedItem", categoryparentSeletedItem!!.toString())
 
                     }
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -263,7 +313,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     var builder = AlertDialog.Builder(this)
                     builder.setTitle("알림")
                     builder.setMessage("해당 스터디를 삭제하시겠습니까?")
-                    builder.setPositiveButton("탈퇴", DialogInterface.OnClickListener { dialog, which ->
+                    builder.setPositiveButton("삭제", DialogInterface.OnClickListener { dialog, which ->
                         sendDeleteStudy(accessToken,studyId)
                     })
                     builder.setNegativeButton("취소", DialogInterface.OnClickListener { dialog, which ->
@@ -295,66 +345,6 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
         }
     }
 
-    fun setStudyInfo(accessToken : String, studyId : Int){
-        ServerUtil.retrofitService.requestStudy(accessToken,studyId)
-            .enqueue(object : Callback<Study> {
-                override fun onResponse(call: Call<Study>, response: Response<Study>) {
-                    if (response.isSuccessful) {
-                        studyInfo  = response.body()!!
-
-
-                        if(studyInfo!!.image!!.profileImage != null){
-                            Glide.with(this@StudyModifyActivity)
-                                .load(studyInfo!!.image!!.profileImage)
-                                .centerCrop()
-                                .into(modify_study_cover_img)
-
-                        } else{}
-
-
-                        modify_study_name.setText(studyInfo!!.name)
-                        people_num = studyInfo!!.numberOfPeople
-                        modify_people_number.setText(people_num.toString())
-
-                        tagArray = studyInfo!!.studyTags!!
-
-                        //카테고리 정보 가져와서 spinner에 달기
-                        seletedParent = studyInfo.parentCategory!!.name
-                        seletedChild = studyInfo.childCategory!!.name
-
-                        modify_introduce_text.setText(studyInfo.content)
-
-                        if(studyInfo.status == "OPEN"){
-                            study_close.isChecked = false
-                        }
-                        else{
-                            study_close.isChecked = true
-                        }
-
-                        if(studyInfo!!.online == true){
-                            modify_check_online.isChecked = true
-                        }else{modify_check_online.isChecked = false}
-
-                        if(studyInfo!!.offline == true){
-                            modify_check_offline.isChecked = true
-                        }else{modify_check_offline.isChecked = false}
-
-                        //지역정보 가져와서 지도에 뿌리고 마커 찍기
-                        uLatitude = studyInfo.location!!.let
-                        uLongitude = studyInfo.location!!.len
-
-
-
-                        Log.d(TAG, "회원 지역정보 조회 성공")
-                    }
-                }
-                override fun onFailure(call: Call<Study>, t: Throwable) {
-                    Log.d(TAG, "회원 지역정보 조회 실패")
-                    Toast.makeText(this@StudyModifyActivity, "회원 지역정보 조회 실패", Toast.LENGTH_LONG).show()
-                }
-            })
-    }
-
     fun sendModifiedInfo(accessToken : String,studyId : Int){
         var categorychildSeletedId : Int? = null
         var close : Boolean = false
@@ -374,17 +364,6 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
         else{
             close = false
         }
-
-
-//        Log.d("스터디생성정보", studyName.toString())
-//        Log.d("스터디생성정보", numberOfPeople.toString())
-//        Log.d("스터디생성정보", content.toString())
-//        Log.d("스터디생성정보", tags.toString())
-//        Log.d("스터디생성정보", online.toString())
-//        Log.d("스터디생성정보", offline.toString())
-//        Log.d("스터디생성정보", categoryId.toString())
-//        Log.d("스터디생성정보 -> 지역코드", locationCode.toString())
-//        Log.d("스터디생성정보 -> 지역코드", categorychildSeletedId.toString())
 
         lateinit var requestImg: RequestBody
         var imageBitmap : MultipartBody.Part? = null
@@ -414,8 +393,9 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     if (response.isSuccessful) {
                         var studyId : Int = response.body()!!.id
 
-                        Log.d(TAG, "스터디생성정보 전송 성공")
+                        Log.d(TAG, "스터디수정정보 전송 성공")
 
+                        mapViewContainer.removeView(mapView)
                         val intent = Intent(this@StudyModifyActivity, StudyRoomActivity::class.java)
                         intent.putExtra("studyId",studyId)
                         startActivity(intent)
@@ -423,8 +403,8 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     }
                 }
                 override fun onFailure(call: Call<Study>, t: Throwable) {
-                    Log.d(TAG, "스터디생성정보 전송 실패")
-                    Toast.makeText(this@StudyModifyActivity, "스터디생성정보 전송 실패", Toast.LENGTH_LONG).show()
+                    Log.d(TAG, "스터디수정정보 전송 실패")
+                    Toast.makeText(this@StudyModifyActivity, "스터디수정정보 전송 실패", Toast.LENGTH_LONG).show()
                 }
             })
     }
@@ -489,7 +469,6 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                         categoryListParent = response.body()
                         for(i in 0 .. categoryListParent!!.size-1){
                             categoryParent?.add(categoryListParent!!.get(i).name)
-
                         }
                         Log.d(TAG, "카테고리 부모아이템리스트 받기 성공")
 

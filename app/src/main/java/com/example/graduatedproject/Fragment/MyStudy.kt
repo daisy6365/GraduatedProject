@@ -26,10 +26,6 @@ class MyStudy : Fragment() {
     private val TAG = StudyHome::class.java.simpleName
     var studyInfo : ArrayList<Study>? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,18 +59,6 @@ class MyStudy : Fragment() {
                     Toast.makeText(getActivity(), "회원 스터디 정보 받기 실패", Toast.LENGTH_LONG).show()
                 }
             })
-
-
-//        myStudyListAdapter.setOnItemClickListener(object : MyStudyListAdapter.OnItemClickListener {
-//            override fun onItemClick(view: View, data: Study, position: Int) {
-//                var title = data.name
-//                parentFragmentManager
-//                    .beginTransaction()
-//                    .replace(R.id.frame_main, PostListFragment(title))
-//                    .addToBackStack(null)
-//                    .commit()
-//            }
-//        })
         return view
     }
 }

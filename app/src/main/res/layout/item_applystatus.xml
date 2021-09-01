@@ -9,6 +9,7 @@
     >
 
     <TextView
+        android:id="@+id/applystudy_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="토익 800+ 모임"

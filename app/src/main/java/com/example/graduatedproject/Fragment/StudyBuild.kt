@@ -23,10 +23,6 @@ import android.content.DialogInterface
 class StudyBuild(studyRoomId: Int) : Fragment() {
     val TAG = StudyBuild::class.java.simpleName
     var studyId : Int = studyRoomId
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

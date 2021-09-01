@@ -72,8 +72,9 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
     var categoryListChild : ArrayList<Category>? = null
     var categoryParent: MutableList<String> = mutableListOf("큰 카테고리")
     var categoryChild : MutableList<String> =  mutableListOf("작은 카테고리")
-    var categoryparentSeletedItem : String? = null
     var categorychildSeletedItem : String? = null
+    lateinit var mapView : MapView
+    lateinit var mapViewContainer : RelativeLayout
 
 
     private val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -101,8 +102,8 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
         var chipGroup: ChipGroup = create_chip_group
         var inflater: LayoutInflater = LayoutInflater.from(chipGroup.context)
 
-        val mapView = MapView(this)
-        val mapViewContainer = map_view
+        mapView = MapView(this)
+        mapViewContainer = map_view
         mapViewContainer.addView(mapView)
 
         val permissionCheck =
@@ -285,17 +286,6 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
             }
         }
 
-
-//        Log.d("스터디생성정보", studyName.toString())
-//        Log.d("스터디생성정보", numberOfPeople.toString())
-//        Log.d("스터디생성정보", content.toString())
-//        Log.d("스터디생성정보", tags.toString())
-//        Log.d("스터디생성정보", online.toString())
-//        Log.d("스터디생성정보", offline.toString())
-//        Log.d("스터디생성정보", categoryId.toString())
-        Log.d("스터디생성정보 -> 지역코드", locationCode.toString())
-        Log.d("스터디생성정보 -> 지역코드", categorychildSeletedId.toString())
-
         lateinit var requestImg: RequestBody
         var imageBitmap : MultipartBody.Part? = null
         if(imageFile != null){
@@ -324,8 +314,7 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
                         Log.d(TAG, "스터디생성정보 전송 성공")
 
-
-
+                        mapViewContainer.removeView(mapView)
                         val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
                         intent.putExtra("studyId",studyId)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))

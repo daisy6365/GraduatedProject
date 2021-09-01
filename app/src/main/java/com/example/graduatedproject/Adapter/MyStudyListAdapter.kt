@@ -8,10 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -25,16 +22,8 @@ class MyStudyListAdapter (
     var studyInfo: ArrayList<Study>?
 ) : RecyclerView.Adapter<MyStudyListAdapter.MyStudyListViewHolder>() {
 
-
-    interface OnItemClickListener {
-        fun onItemClick(view: View, data: Study, position: Int)
-    }
-
-    private var listener: OnItemClickListener? = null
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
-    }
     class MyStudyListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val search_study_item : LinearLayout
         var home_study_name: TextView
         var home_on_off : TextView
         var search_study_cover: ImageView
@@ -46,6 +35,7 @@ class MyStudyListAdapter (
         var study_tag6 : TextView
 
         init {
+            search_study_item = itemView.findViewById(R.id.search_study_item)
             home_study_name = itemView.findViewById(R.id.home_study_name)
             home_on_off = itemView.findViewById(R.id.home_on_off)
             search_study_cover = itemView.findViewById(R.id.search_study_cover)
@@ -127,7 +117,7 @@ class MyStudyListAdapter (
             }
         }
         else{}
-        holder.home_study_name.setOnClickListener {
+        holder.search_study_item.setOnClickListener {
             for(i in 0 .. studyInfo!!.size-1){
                 if(holder.home_study_name.text == studyInfo!![i].name){
                     val studyId = studyInfo!![i].id
@@ -137,13 +127,6 @@ class MyStudyListAdapter (
 
 
                 }
-            }
-        }
-
-        if(position!= RecyclerView.NO_POSITION)
-        {
-            holder.itemView.setOnClickListener {
-                listener?.onItemClick(holder.itemView,studyInfo!![position],position)
             }
         }
     }

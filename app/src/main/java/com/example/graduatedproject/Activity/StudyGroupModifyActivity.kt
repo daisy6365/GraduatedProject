@@ -72,8 +72,6 @@ class StudyGroupModifyActivity : AppCompatActivity(), MapView.MapViewEventListen
         val permissionCheck =
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            val lm: LocationManager =
-                getSystemService(Context.LOCATION_SERVICE) as LocationManager
             try {
 
                 // 모임정보 화면에 셋팅

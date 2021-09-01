@@ -34,11 +34,6 @@ class Home : Fragment() {
     val LIST_LENGTH = 20 //리스트개수
     val paramObject = JsonObject()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
