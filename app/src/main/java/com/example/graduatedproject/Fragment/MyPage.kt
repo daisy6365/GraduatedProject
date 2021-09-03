@@ -1,6 +1,5 @@
 package com.example.graduatedproject.Fragment
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,11 +11,12 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.net.toUri
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.example.graduatedproject.Activity.*
+import com.example.graduatedproject.Activity.LiketopicActivity
+import com.example.graduatedproject.Activity.MainActivity
+import com.example.graduatedproject.Activity.MapActivity
+import com.example.graduatedproject.Activity.StudyRoomActivity
 import com.example.graduatedproject.Model.Image
 import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
@@ -34,7 +34,9 @@ class MyPage : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_page, container, false)
+        val view = inflater.inflate(R.layout.fragment_my_page, container, false)
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -223,5 +225,11 @@ class MyPage : Fragment() {
                 }
             }
         }
+    }
+    fun refresh(){
+        assert(fragmentManager != null)
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.detach(this)?.attach(this)?.commit()
+
     }
 }

@@ -35,13 +35,14 @@ data class Profile(
     @SerializedName("locationId")
     var locationId: Int = 0,
 
+    @SerializedName("searchDistance")
+    var searchDistance: Int = 0,
+
     @SerializedName("image")
     var image: Image = Image(),
 
     @SerializedName("register")
     var register: Boolean? = null
-
-
 )
 
 

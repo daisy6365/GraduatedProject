@@ -32,7 +32,7 @@ class MemberAddListAdapter(
         return MemberAddViewHolder(view)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "RecyclerView")
     override fun onBindViewHolder(holder: MemberAddViewHolder, position: Int) {
 
         if(memberAddInfo!![position].image == null){
@@ -55,49 +55,52 @@ class MemberAddListAdapter(
         //member_img.setImageResource(resourceId!!)
         holder.member_name.setText(memberAddInfo!![position].nickName)
         holder.member_add_btn.setOnClickListener {
-            if(position>0){
-                val userId = memberAddInfo!![position].userId
+            for(i in 0 .. memberAddInfo!!.size-1){
+                if(holder.member_name.text == memberAddInfo!![i].nickName){
+                    val userId = memberAddInfo!![i].userId
+                    Log.d("userId", userId.toString())
 
-                ServerUtil.retrofitService.requestAddMember(accessToken,studyId,userId)
-                    .enqueue(object : Callback<Void> {
-                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) {
-                                Log.d("MemberAddListAdapter", "지원멤버 추가 성공")
+                    ServerUtil.retrofitService.requestAddMember(accessToken,studyId,userId)
+                        .enqueue(object : Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.isSuccessful) {
+                                    Log.d("MemberAddListAdapter", "지원멤버 추가 성공")
+
+                                    memberAddInfo!!.removeAt(i)
+                                    notifyDataSetChanged()
+                                }
                             }
-                        }
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                Log.d("MemberAddListAdapter", "지원 멤버 추가 실패")
+                            }
+                        })
 
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.d("MemberAddListAdapter", "지원 멤버 추가 실패")
-                        }
-                    })
-
-                //adapter 리스트에서 삭제
-                //adapter 리스트 갱신
-                memberAddInfo!!.removeAt(position)
-                notifyDataSetChanged()
+                }
             }
         }
         holder.member_delete_btn.setOnClickListener {
-            if(position>0){
-                val userId = memberAddInfo!![position].userId
+            for(i in 0 .. memberAddInfo!!.size-1) {
+                if (holder.member_name.text == memberAddInfo!![i].nickName) {
+                    val userId = memberAddInfo!![i].userId
+                    Log.d("userId", userId.toString())
 
-                ServerUtil.retrofitService.requestAddMemberDelete(accessToken,studyId,userId)
-                    .enqueue(object : Callback<Void> {
-                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) {
-                                Log.d("MemberAddListAdapter", "지원멤버 거부 성공")
+                    ServerUtil.retrofitService.requestAddMemberDelete(accessToken, studyId, userId)
+                        .enqueue(object : Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.isSuccessful) {
+                                    Log.d("MemberAddListAdapter", "지원멤버 거부 성공")
+
+                                    //adapter 리스트에서 삭제
+                                    //adapter 리스트 갱신
+                                    memberAddInfo!!.removeAt(position)
+                                    notifyDataSetChanged()
+                                }
                             }
-                        }
-
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.d("MemberAddListAdapter", "지원 멤버 거부 실패")
-                        }
-                    })
-
-                //adapter 리스트에서 삭제
-                //adapter 리스트 갱신
-                memberAddInfo!!.removeAt(position)
-                notifyDataSetChanged()
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                Log.d("MemberAddListAdapter", "지원 멤버 거부 실패")
+                            }
+                        })
+                }
             }
         }
     }

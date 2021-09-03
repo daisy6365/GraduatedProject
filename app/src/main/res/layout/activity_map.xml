@@ -134,4 +134,30 @@
         app:layout_constraintTop_toBottomOf="@+id/currentplace_search_btn"
         app:layout_constraintVertical_bias="0.0" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="267dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/place_seekBar"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정거리 : "
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/user_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6km"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

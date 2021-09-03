@@ -33,7 +33,7 @@ class MemberListAdapter(
         return MemberViewHolder(view)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "RecyclerView")
     override fun onBindViewHolder(holder: MemberViewHolder, position: Int) {
 
         if(memberInfo!![position].image == null){
@@ -56,26 +56,30 @@ class MemberListAdapter(
         //member_img.setImageResource(resourceId!!)
         holder.member_name.setText(memberInfo!![position].nickName)
         holder.member_out.setOnClickListener {
-            if(position>0){
-                val userId = memberInfo!![position].userId
+            for(i in 0 .. memberInfo!!.size-1) {
+                if (holder.member_name.text == memberInfo!![i].nickName) {
+                    val userId = memberInfo!![i].userId
+                    Log.d("userId", userId.toString())
 
-                ServerUtil.retrofitService.requestMemberDelete(accessToken,studyId,userId)
-                    .enqueue(object : Callback<Void> {
-                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) {
-                                Log.d("MemberlistAdapter", "스터디멤버 삭제 성공")
+                    ServerUtil.retrofitService.requestMemberDelete(accessToken,studyId,userId)
+                        .enqueue(object : Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.isSuccessful) {
+                                    Log.d("MemberlistAdapter", "스터디멤버 삭제 성공")
+
+                                    //adapter 리스트에서 삭제
+                                    //adapter 리스트 갱신
+                                    memberInfo!!.removeAt(position)
+                                    notifyDataSetChanged()
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.d("MemberlistAdapter", "스터디멤버 삭제 실패")
-                        }
-                    })
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                Log.d("MemberlistAdapter", "스터디멤버 삭제 실패")
+                            }
+                        })
 
-                //adapter 리스트에서 삭제
-                //adapter 리스트 갱신
-                memberInfo!!.removeAt(position)
-                notifyDataSetChanged()
+                }
             }
         }
     }

@@ -18,11 +18,6 @@ object ServerUtil {
     init {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
-//        val request = Request
-//            .Builder()
-//            .addHeader("Authorization", "Bearer $token")
-//            .build()
-//        //Okhttp : 서버와 http,http/2 프로토콜 통신을 위한 client library
 
         val logger = OkHttpClient.Builder()
             .addInterceptor(interceptor)

@@ -108,6 +108,13 @@ interface InfoService {
         @Query("code") code : String
     ): Call<MyLocation>
 
+    //회원 오프라인 검색 거리 수정 API
+    @PATCH("/user-service/users/searchDistance/{searchDistance}")
+    abstract fun requestDistance(
+        @Header("Authorization") accessToken: String,
+        @Path("searchDistance") searchDistance : Int
+    ): Call<Profile>
+
 
 
     //사용자 정보 (이름, 프로필사진, 지역정보)

@@ -138,11 +138,13 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                                 people_num = studyInfo!!.numberOfPeople
                                 modify_people_number.setText(people_num.toString())
 
-                                tagArray = studyInfo!!.studyTags!!
 
-                                //카테고리 정보 가져와서 spinner에 달기
-                                seletedParent = studyInfo.parentCategory!!.name
-                                seletedChild = studyInfo.childCategory!!.name
+                                tagArray = studyInfo!!.studyTags!!
+                                for(i in 0 .. tagArray.size-1){
+                                    var oldchip : Chip = inflater.inflate(R.layout.item_liketopic, chipGroup, false) as Chip
+                                    oldchip.text = tagArray[i]
+                                    chipGroup.addView(oldchip)
+                                }
 
                                 modify_introduce_text.setText(studyInfo.content)
 
@@ -165,6 +167,18 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                                 uLatitude = studyInfo.location!!.let
                                 uLongitude = studyInfo.location!!.len
 
+                                val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
+                                mapView.setMapCenterPoint(uNowPosition, true)
+
+                                //현재위치(경도, 위도)를 기반으로 마커 찍기
+                                current_marker.itemName = "모임 장소"
+                                current_marker.tag = 0
+                                current_marker.mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
+                                current_marker.isMoveToCenterOnSelect
+                                current_marker.markerType = MapPOIItem.MarkerType.BluePin
+                                current_marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+                                mapView.addPOIItem(current_marker)
+
                                 Log.d(TAG, "스터디 정보 조회 성공")
                             }
                         }
@@ -173,27 +187,11 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                             Toast.makeText(this@StudyModifyActivity, "스터디 정보 조회 실패", Toast.LENGTH_LONG).show()
                         }
                     })
-
-                //위치(경도, 위도)정보를 기반으로 마커 찍기
-
-                current_marker.itemName = "현재 위치로 스터디장소 설정"
-                current_marker.tag = 0
-                current_marker.mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
-                current_marker.isMoveToCenterOnSelect
-                current_marker.markerType = MapPOIItem.MarkerType.BluePin
-                current_marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-                mapView.addPOIItem(current_marker)
-
                 //지도에서 원하는 곳 클릭하면
                 //기존의 마커 삭제하고 새로운 마커 추가하기
                 //새로운 마커의 경도, 위도 가져오기
                 mapView.setMapViewEventListener(this)
 
-                for(i in 0 .. tagArray.size-1){
-                    var oldchip : Chip = inflater.inflate(R.layout.item_liketopic, chipGroup, false) as Chip
-                    oldchip.text = tagArray[i]
-                    chipGroup.addView(oldchip)
-                }
 
 
                 //기능 수행
@@ -222,6 +220,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     modify_edit_tag.setText(null)
                     modify_edit_tag.setHint("관련태그 입력")
                 }
+
 
                 getCategoryList()
                 big_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -483,11 +482,10 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
         spinnerAdapterparent = ArrayAdapter(this,R.layout.item_spinner, categoryParent)
         big_category.adapter = spinnerAdapterparent
         for(i in 0..categoryParent!!.size-1){
-            if(seletedParent == categoryParent!![i]){
+            if(studyInfo.parentCategory!!.name == categoryParent!![i]){
                 big_category.setSelection(i)
             }
         }
-
     }
     //작은카테고리 셋팅
     private fun setCategoryChild(){
@@ -495,7 +493,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
         spinnerAdapterchild = ArrayAdapter(this,R.layout.item_spinner, categoryChild)
         small_category.adapter = spinnerAdapterchild
         for(i in 0..categoryChild!!.size-1){
-            if(seletedChild == categoryChild!![i]){
+            if(studyInfo.childCategory!!.name == categoryChild!![i]){
                 small_category.setSelection(i)
             }
         }

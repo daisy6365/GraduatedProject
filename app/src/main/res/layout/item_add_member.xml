@@ -33,10 +33,10 @@
         android:id="@+id/member_add_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_toLeftOf="@+id/member_delete_btn"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:src="@drawable/check"/>
+        android:layout_toLeftOf="@+id/member_delete_btn"
+        android:src="@drawable/check" />
 
     <ImageView
         android:id="@+id/member_delete_btn"

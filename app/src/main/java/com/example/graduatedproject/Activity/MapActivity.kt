@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -65,6 +66,33 @@ class MapActivity : AppCompatActivity() {
                     findMyGPS()
                 }
 
+                place_seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+                    //변경된 seekbar의 값을 서버로 보냄
+                    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                        var distance : Int = 0
+                        if(progress == 0){ distance = 0 }
+                        else if(progress == 1){ distance = 3 }
+                        else if(progress == 2){ distance = 6 }
+                        else { distance = 9 }
+
+                        ServerUtil.retrofitService.requestDistance(accessToken, distance)
+                            .enqueue(object : Callback<Profile> {
+                                override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
+                                    if (response.isSuccessful) {
+                                        Log.d(TAG, "회원 검색거리 수정 성공" + progress)
+                                        user_distance.text = response.body()?.searchDistance.toString() + "km"
+                                    }
+                                }
+                                override fun onFailure(call: Call<Profile>, t: Throwable) {
+                                    Log.d(TAG, "회원 검색거리 수정 실패"+ progress)
+                                    Toast.makeText(this@MapActivity, "회원 검색거리 수정 실패", Toast.LENGTH_LONG).show()
+                                }
+                            })
+                    }
+                    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+                })
+
             } catch (e: NullPointerException) {
                 Log.e("LOCATION_ERROR", e.toString())
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -109,6 +137,19 @@ class MapActivity : AppCompatActivity() {
                                         Log.d("location 회원 지역정보 조회", response.body().toString())
 
                                         my_place.setText(location!!.dong)
+                                        user_distance.text = profile.searchDistance.toString() + "km"
+                                        if(profile.searchDistance == 0){
+                                            place_seekBar.setProgress(0)
+                                        }
+                                        else if(profile.searchDistance == 3){
+                                            place_seekBar.setProgress(1)
+                                        }
+                                        else if(profile.searchDistance == 6){
+                                            place_seekBar.setProgress(2)
+                                        }
+                                        else{
+                                            place_seekBar.setProgress(3)
+                                        }
 
                                         Log.d(TAG, "회원 지역정보 조회 성공")
                                     }

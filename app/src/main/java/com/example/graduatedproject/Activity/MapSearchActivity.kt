@@ -1,28 +1,20 @@
 package com.example.graduatedproject.Activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.graduatedproject.Adapter.LikeSearchRecyclerAdapter
 import com.example.graduatedproject.Adapter.MapSearchRecyclerAdapter
-import com.example.graduatedproject.Model.ContentLocation
-import com.example.graduatedproject.Model.Likesearch
 import com.example.graduatedproject.Model.LocationSearch
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_liketopic_search.*
 import kotlinx.android.synthetic.main.activity_map_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.view.MotionEvent
-
-import android.view.View.OnTouchListener
 
 class MapSearchActivity : AppCompatActivity() {
     private val TAG = MapSearchActivity::class.java.simpleName
@@ -81,6 +73,7 @@ class MapSearchActivity : AppCompatActivity() {
                             paramObject.addProperty("page",PAGE_NUM)
                             loadList(paramObject)
                         }
+
                     }
                 }
             }

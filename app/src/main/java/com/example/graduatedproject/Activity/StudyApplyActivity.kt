@@ -93,7 +93,7 @@ class StudyApplyActivity : AppCompatActivity() {
 
                         } else{
                             Glide.with(this@StudyApplyActivity)
-                                .load(studyInfo!!.image!!.profileImage)
+                                .load(studyInfo!!.image!!.thumbnailImage)
                                 .centerCrop()
                                 .into(created_study_cover_img)
                         }

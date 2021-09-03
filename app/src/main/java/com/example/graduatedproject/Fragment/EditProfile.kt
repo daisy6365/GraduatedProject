@@ -1,13 +1,11 @@
 package com.example.graduatedproject.Fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -15,9 +13,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Glide.with
-import com.bumptech.glide.load.model.GlideUrl
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject
@@ -26,7 +23,6 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -160,10 +156,12 @@ class EditProfile() : DialogFragment() {
             //변경된이름을 EditText로부터 가져옴
             ServerUtil.retrofitService.requestModifyProfile(accessToken,imageBitmap,request)
                 .enqueue(object : retrofit2.Callback<Void> {
+                    @SuppressLint("ResourceType")
                     override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
                         if (response.isSuccessful) {
                             Log.d("EditProfile", "프로필변경 성공")
                             Toast.makeText(getActivity(), "프로필변경 되었습니다.", Toast.LENGTH_SHORT).show()
+
                             dismiss()
                         }
                     }
