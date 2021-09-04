@@ -9,6 +9,12 @@ import retrofit2.http.*
 interface InfoService {
     var i : String
 
+    //Access토큰 재발급
+    @POST("/auth-service/auth/refresh")
+    abstract fun requestToken(
+        @Header("Authorization") refreshToken: String
+    ): Call<Void>
+
     //로그인
     @POST("/auth-service/auth")
     abstract fun requestLogin(

@@ -1,10 +1,16 @@
 package com.example.graduatedproject.Util
 
+import android.content.Context
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.kakao.kakaotalk.StringSet.token
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -19,8 +25,9 @@ object ServerUtil {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
-        val logger = OkHttpClient.Builder()
+        val builder = OkHttpClient.Builder()
             .addInterceptor(interceptor)
+            .addInterceptor(AuthInterceptor())
             .connectTimeout(180, TimeUnit.SECONDS)
             .readTimeout(180, TimeUnit.SECONDS)
             .writeTimeout(180, TimeUnit.SECONDS)
@@ -34,7 +41,7 @@ object ServerUtil {
             .baseUrl("http://211.37.147.101:8000")
             //Gson은 Json문서를 받아서 자동으로 java class 형태로 만들어주는 역할
             .addConverterFactory(GsonConverterFactory.create())
-            .client(logger)
+            .client(builder)
             .build()
 
         val kakaoretrofit = Retrofit
@@ -42,7 +49,7 @@ object ServerUtil {
             .baseUrl("https://dapi.kakao.com")
             //Gson은 Json문서를 받아서 자동으로 java class 형태로 만들어주는 역할
             .addConverterFactory(GsonConverterFactory.create())
-            .client(logger)
+            .client(builder)
             .build()
 
         retrofitService = retrofit.create(InfoService::class.java)
@@ -50,5 +57,61 @@ object ServerUtil {
         Log.d(TAG, "서버 연결")
 
     }
+
+}
+class AuthInterceptor : Interceptor {
+    private val TAG = AuthInterceptor::class.java.simpleName
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request();
+        val response = chain.proceed(request);
+
+        when (response.code()) {
+            400 -> {
+                //Show Bad Request Error Message
+            }
+            401 -> {
+                //Show UnauthorizedError Message
+                val pref = getSharedPreferences("login_sp", AppCompatActivity.MODE_PRIVATE)
+                val refreshToken: String = "Bearer " + pref.getString("access_token", "").toString()
+
+                ServerUtil.retrofitService.requestToken(refreshToken)
+                    .enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+                            if (response.isSuccessful) {
+                                //서버에서 받은 AccessToken과 RefreshToken을 받아옴
+                                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+                                val editor = sp.edit()
+
+                                var accessToken = response.headers().get("accessToken").toString()
+                                Log.d(TAG,accessToken)
+
+                                //토큰들을 SharedPreference에 저장
+                                editor.putString("access_token", accessToken)
+                                editor.commit()
+
+                                Log.d(TAG, "로그인 성공")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.d(TAG, "로그인 실패")
+                        }
+                    })
+            }
+
+            403 -> {
+                //Show Forbidden Message
+            }
+
+            404 -> {
+                //Show NotFound Message
+            }
+
+            // ... and so on
+
+        }
+        return response
+    }
+
 
 }
