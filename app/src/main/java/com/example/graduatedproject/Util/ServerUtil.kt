@@ -1,12 +1,13 @@
 package com.example.graduatedproject.Util
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.kakao.kakaotalk.StringSet.token
+import com.example.graduatedproject.Activity.GlobalApplication
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -27,7 +28,7 @@ object ServerUtil {
 
         val builder = OkHttpClient.Builder()
             .addInterceptor(interceptor)
-            .addInterceptor(AuthInterceptor())
+            .addInterceptor(AuthInterceptor(GlobalApplication.ApplicationContext()))
             .connectTimeout(180, TimeUnit.SECONDS)
             .readTimeout(180, TimeUnit.SECONDS)
             .writeTimeout(180, TimeUnit.SECONDS)
@@ -59,7 +60,7 @@ object ServerUtil {
     }
 
 }
-class AuthInterceptor : Interceptor {
+class AuthInterceptor(private val context: Context) : Interceptor {
     private val TAG = AuthInterceptor::class.java.simpleName
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request();
@@ -71,15 +72,16 @@ class AuthInterceptor : Interceptor {
             }
             401 -> {
                 //Show UnauthorizedError Message
-                val pref = getSharedPreferences("login_sp", AppCompatActivity.MODE_PRIVATE)
-                val refreshToken: String = "Bearer " + pref.getString("access_token", "").toString()
+                val pref: SharedPreferences = context.getSharedPreferences("login_sp", AppCompatActivity.MODE_PRIVATE)
+                val refreshToken: String = "Bearer " + pref.getString("refresh_token", "").toString()
+                Log.d(TAG,refreshToken)
 
                 ServerUtil.retrofitService.requestToken(refreshToken)
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
                             if (response.isSuccessful) {
                                 //서버에서 받은 AccessToken과 RefreshToken을 받아옴
-                                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+                                val sp = context.getSharedPreferences("login_sp", Context.MODE_PRIVATE)
                                 val editor = sp.edit()
 
                                 var accessToken = response.headers().get("accessToken").toString()
