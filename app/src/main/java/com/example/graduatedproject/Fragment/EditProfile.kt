@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject
+import kotlinx.android.synthetic.main.activity_study_modify.*
+import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -62,6 +64,10 @@ class EditProfile() : DialogFragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             //결과값이 사진을 선택했을때
             new_imageUrl = result.data?.data!!
+            Glide.with(this)
+                .load(new_imageUrl)
+                .centerCrop()
+                .into(edit_profile_img)
             //절대경로변환 함수 호출
             new_imageUrlPath= absolutelyPath(new_imageUrl!!)
             imageFile = File(new_imageUrlPath)
@@ -108,11 +114,6 @@ class EditProfile() : DialogFragment() {
         }
         //원하는 사진 누르면 edit_profile_img에 갖다 붙임
         //원하는 사진의 url 받아 놓기
-        Glide.with(view)
-            .load(new_imageUrlPath?.toUri())
-            .centerCrop()
-            .error(imageUrl)
-            .into(edit_profile_img)
 
         //기본이미지로 변경
         change_default.setOnClickListener {

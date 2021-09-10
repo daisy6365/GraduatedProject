@@ -74,14 +74,12 @@ class MyStudyListAdapter (
         if(studyInfo!![position].image == null){
             Glide.with(holder.itemView.getContext())
                 .load(R.drawable.background_button)
-                .override(140, 140)
                 .centerCrop()
                 .into( holder.search_study_cover)
         }
         else{
             Glide.with(holder.itemView.getContext())
-                .load(studyInfo!![position].image!!.thumbnailImage)
-                .override(140, 140)
+                .load(studyInfo!![position].image!!.profileImage)
                 .centerCrop()
                 .into( holder.search_study_cover)
         }

@@ -26,13 +26,12 @@ import retrofit2.Response
 
 
 class Home : Fragment() {
-    private var linearLayoutManager: RecyclerView.LayoutManager? = null
-    private var recyclerAdapter: HomeListAdapter? = null
     private val TAG = Home::class.java.simpleName
-    var StudySearch : StudySearch? = null
+    lateinit var recyclerAdapter: HomeListAdapter
     private var PAGE_NUM = 0 //현재페이지
     val LIST_LENGTH = 20 //리스트개수
     val paramObject = JsonObject()
+    var StudySearch : StudySearch? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -95,15 +94,12 @@ class Home : Fragment() {
                 val itemTotalCount = recyclerView.adapter!!.itemCount-1
 
                 // 스크롤이 끝에 도달했는지 확인
-                if (!home_recycler_view.canScrollVertically(1)) {
-                    recyclerAdapter!!.deleteLoading()
-                    if(lastVisibleItemPosition == itemTotalCount){
-                        if(StudySearch!!.last == false){
-                            paramObject.addProperty("page",PAGE_NUM)
-                            loadList(paramObject)
-                        }
-                        else{}
+                if (!home_recycler_view.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
+                    if(StudySearch!!.numberOfElements == LIST_LENGTH){
+                        paramObject.addProperty("page",PAGE_NUM)
+                        loadList(paramObject)
                     }
+                    else{}
                 }
             }
         })
@@ -111,7 +107,10 @@ class Home : Fragment() {
 
     fun loadList(paramObject: JsonObject){
         val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-        var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
+        var accessToken : String? = pref.getString("access_token", "").toString()
+
+        if(accessToken.equals("")){ accessToken = null }
+        else { accessToken = "Bearer " + accessToken; }
 
         ServerUtil.retrofitService.requestStudySearch(
             accessToken,
@@ -126,19 +125,23 @@ class Home : Fragment() {
                 override fun onResponse(call: Call<StudySearch>, response: Response<StudySearch>) {
                     if (response.isSuccessful) {
                         //응답값 다 받기
-                        StudySearch = response!!.body()
+                        StudySearch = response.body()
 
                         if(StudySearch!!.last == false){
-                            home_recycler_view.getRecycledViewPool().clear()
-                            recyclerAdapter!!.setList(StudySearch!!.content)
-                            recyclerAdapter!!.notifyDataSetChanged()
-                            ++PAGE_NUM
+                            if(PAGE_NUM != 0){ recyclerAdapter.deleteLoading() }
+                            recyclerAdapter.setList(StudySearch!!.content)
+                            recyclerAdapter.notifyDataSetChanged()
+                            PAGE_NUM++
                         }
                         else{
-                            home_recycler_view.getRecycledViewPool().clear()
-                            recyclerAdapter!!.setList(StudySearch!!.content)
-                            recyclerAdapter!!.notifyDataSetChanged()
-                            recyclerAdapter!!.deleteLoading()
+                            if(StudySearch!!.numberOfElements != 0){
+                                if(PAGE_NUM != 0){ recyclerAdapter.deleteLoading() }
+                                recyclerAdapter.setList(StudySearch!!.content)
+                                recyclerAdapter.deleteLoading()
+                                recyclerAdapter.notifyDataSetChanged()
+                                Toast.makeText(getActivity(), "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
+                            }
+                            else{}
                         }
 
                         Log.d(TAG, "검색결과리스트 받기 성공")

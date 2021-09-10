@@ -114,14 +114,14 @@ class StudySearchRecyclerAdapter(private val context: Context): RecyclerView.Ada
             if(items[position].image == null){
                 Glide.with(holder.itemView.getContext())
                     .load(R.drawable.background_button)
-                    .override(140, 140)
                     .centerCrop()
                     .into( holder.search_study_cover)
             }
             else{
+                //val resourceId = context?.resources?.getIdentifier(items[position].image!!.thumbnailImage, "drawable", context!!.packageName)
+
                 Glide.with(holder.itemView.getContext())
-                    .load(items[position].image!!.thumbnailImage)
-                    .override(140, 140)
+                    .load(items[position].image!!.profileImage)
                     .centerCrop()
                     .into( holder.search_study_cover)
             }

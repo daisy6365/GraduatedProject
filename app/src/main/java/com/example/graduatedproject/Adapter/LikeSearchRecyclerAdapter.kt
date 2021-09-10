@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -98,11 +99,14 @@ class LikeSearchRecyclerAdapter(private val context: Context): RecyclerView.Adap
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setList(notice: MutableList<ContentTag>) {
         items.addAll(notice)
         items.add(ContentTag(0 ," ")) // progress bar 넣을 자리
+        notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun deleteLoading(){
         items.removeAt(items.lastIndex) // 로딩이 완료되면 프로그레스바를 지움
     }

@@ -189,7 +189,7 @@ interface InfoService {
     //스터디 검색(페이징)
     @GET("/study-service/studies")
     abstract fun requestStudySearch(
-        @Header("Authorization") accessToken: String,
+        @Header("Authorization") accessToken: String?,
         @Query("page") page : Int,
         @Query("size") size : Int,
         @Query("offline") offline : Boolean,

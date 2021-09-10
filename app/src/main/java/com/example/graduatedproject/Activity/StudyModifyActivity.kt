@@ -127,7 +127,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
                                 if(studyInfo!!.image!!.profileImage != null){
                                     Glide.with(this@StudyModifyActivity)
-                                        .load(studyInfo!!.image!!.thumbnailImage)
+                                        .load(studyInfo!!.image!!.profileImage)
                                         .centerCrop()
                                         .into(modify_study_cover_img)
 
@@ -413,6 +413,8 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
             .enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
+                        val intent = Intent(this@StudyModifyActivity, MainActivity::class.java)
+                        startActivity(intent)
 
                         Log.d(TAG, "스터디 삭제 성공")
 

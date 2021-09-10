@@ -55,14 +55,6 @@
         tools:ignore="MissingConstraints">
 
         <Button
-            android:id="@+id/my_page_friends_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="친구목록"
-            android:textSize="20dp" />
-
-        <Button
             android:id="@+id/my_page_likes_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

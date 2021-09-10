@@ -109,15 +109,6 @@ class MyPage : Fragment() {
         }
 
 
-        //친구목록
-        val my_page_friends_btn: Button = view.findViewById(R.id.my_page_friends_btn)
-        my_page_friends_btn.setOnClickListener {
-            activity?.let {
-                val intent = Intent(context, StudyRoomActivity::class.java)
-                startActivity(intent)
-//                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-            }
-        }
 
         //관심주제
         val my_page_likes_btn: Button = view.findViewById(R.id.my_page_likes_btn)

@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -20,11 +21,9 @@ import retrofit2.Response
 
 class LiketopicSearchActivity : AppCompatActivity() {
     private val TAG = LiketopicSearchActivity::class.java.simpleName
-    lateinit var adapter : LikeSearchRecyclerAdapter
-
-    var PAGE_NUM = 0 //현재페이지
-    val LIST_LENGTH = 20 //리스트개수
-    var contentTag  =  ArrayList<ContentTag>()
+    lateinit var likeadapter : LikeSearchRecyclerAdapter
+    private var PAGE_NUM = 0 //현재페이지
+    private var LIST_LENGTH = 20 //리스트개수
     var tagSearch : Likesearch? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +43,10 @@ class LiketopicSearchActivity : AppCompatActivity() {
                 paramObject.addProperty("page", PAGE_NUM)
                 paramObject.addProperty("size", LIST_LENGTH)
                 paramObject.addProperty("name", query.toString())
-                liketopic_searchview.apply{
+                applicationContext.apply{
+                    likeadapter = LikeSearchRecyclerAdapter(applicationContext)
+                    liketopicsearch_recycler.adapter = likeadapter
                     liketopicsearch_recycler.layoutManager = LinearLayoutManager(applicationContext)
-                    adapter = LikeSearchRecyclerAdapter(context)
-                    liketopicsearch_recycler.adapter = adapter
                 }
                 loadList(paramObject)
                 return true
@@ -64,18 +63,17 @@ class LiketopicSearchActivity : AppCompatActivity() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
+                // 스크롤을 내리는 순간순간마다 보이는 맨 마지막 아이템의 position
                 val lastVisibleItemPosition =
                     (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
                 val itemTotalCount = recyclerView.adapter!!.itemCount-1
 
                 // 스크롤이 끝에 도달했는지 확인
-                if (!liketopicsearch_recycler.canScrollVertically(1)) {
-                    adapter.deleteLoading()
-                    if(lastVisibleItemPosition == itemTotalCount){
-                        if(tagSearch!!.last == false){
-                            paramObject.addProperty("page",PAGE_NUM)
-                            loadList(paramObject)
-                        }
+                if (!liketopicsearch_recycler.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
+                    //맨끝에 도달함
+                    if(tagSearch!!.numberOfElements == LIST_LENGTH){
+                        paramObject.addProperty("page",PAGE_NUM)
+                        loadList(paramObject)
                     }
                 }
             }
@@ -87,6 +85,7 @@ class LiketopicSearchActivity : AppCompatActivity() {
 
         ServerUtil.retrofitService.requestLikesearch(paramObject.get("page").asInt,paramObject.get("size").asInt,paramObject.get("name").asString)
             .enqueue(object : Callback<Likesearch> {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(call: Call<Likesearch>, response: Response<Likesearch>) {
                     if (response.isSuccessful) {
                         Log.d(TAG, "검색결과리스트 받기 성공")
@@ -94,18 +93,20 @@ class LiketopicSearchActivity : AppCompatActivity() {
                         tagSearch = response.body()
 
                         if(tagSearch!!.last == false){
-                            adapter.setList(tagSearch!!.content)
+                            if(PAGE_NUM != 0){ likeadapter.deleteLoading() }
+                            likeadapter.setList(tagSearch!!.content)
                             // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
                             //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
-                            adapter.notifyDataSetChanged()
+                            likeadapter.notifyDataSetChanged()
                             PAGE_NUM++
                         }
                         else{
-                            if(tagSearch!!.content.size != 0){
-                                adapter.setList(tagSearch!!.content)
-                                adapter.notifyDataSetChanged()
+                            if(tagSearch!!.numberOfElements != 0){
+                                if(PAGE_NUM != 0){ likeadapter.deleteLoading() }
+                                likeadapter.setList(tagSearch!!.content)
+                                likeadapter.deleteLoading()
+                                likeadapter.notifyDataSetChanged()
                                 Toast.makeText(this@LiketopicSearchActivity, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
-                                adapter.deleteLoading()
                             }
                             else{}
                         }

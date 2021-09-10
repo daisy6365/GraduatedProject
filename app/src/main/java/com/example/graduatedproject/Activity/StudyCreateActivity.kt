@@ -286,6 +286,7 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
             }
         }
 
+
         lateinit var requestImg: RequestBody
         var imageBitmap : MultipartBody.Part? = null
         if(imageFile != null){
@@ -315,10 +316,11 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
                         Log.d(TAG, "스터디생성정보 전송 성공")
 
                         mapViewContainer.removeView(mapView)
+
                         val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
                         intent.putExtra("studyId",studyId)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                        finish()
+
                     }
                 }
                 override fun onFailure(call: Call<Study>, t: Throwable) {

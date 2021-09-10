@@ -1,5 +1,7 @@
 package com.example.graduatedproject.Fragment
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -157,24 +159,35 @@ class SearchStudy : DialogFragment() {
         study_search_btn.setOnClickListener {
             //자식카테고리 id, 검색어, 온오프라인 정보 가져오기
             var categorychildSeletedId : Int? = null
-            for(i in 0..categoryListChild!!.size-1){
-                if(categoryListChild!!.get(i).name == categorychildSeletedItem){
-                    categorychildSeletedId = categoryListChild!!.get(i).id
-                }
-            }
-            var searchKeyword = edit_search.text.toString()
 
-            //intent통해서 정보 전달 및 화면 전환
-            //dialogfragment 창은 닫기
-            activity?.let {
-                val intent = Intent(context, StudySearchActivity::class.java)
-                intent.apply {
-                    this.putExtra("categoryId",categorychildSeletedId) // 데이터 넣기
-                    this.putExtra("searchKeyword",searchKeyword) // 데이터 넣기
-                    this.putExtra("offline",offline) // 데이터 넣기
-                    this.putExtra("online",online) // 데이터 넣기
-                    dismiss()
-                    startActivity(intent)
+            if(categorychildSeletedItem == null){
+                var builder = AlertDialog.Builder(context)
+                builder.setTitle("알림")
+                builder.setMessage("검색할 카테고리를 정확히 입력해주세요.")
+                builder.setPositiveButton("확인", DialogInterface.OnClickListener { dialog, which -> })
+                builder.show()
+            }
+            else{
+                for(i in 0..categoryListChild!!.size-1){
+                    if(categoryListChild!!.get(i).name == categorychildSeletedItem){
+                        categorychildSeletedId = categoryListChild!!.get(i).id
+                    }
+                }
+
+                var searchKeyword = edit_search.text.toString()
+
+                //intent통해서 정보 전달 및 화면 전환
+                //dialogfragment 창은 닫기
+                activity?.let {
+                    val intent = Intent(context, StudySearchActivity::class.java)
+                    intent.apply {
+                        this.putExtra("categoryId",categorychildSeletedId) // 데이터 넣기
+                        this.putExtra("searchKeyword",searchKeyword) // 데이터 넣기
+                        this.putExtra("offline",offline) // 데이터 넣기
+                        this.putExtra("online",online) // 데이터 넣기
+                        dismiss()
+                        startActivity(intent)
+                    }
                 }
             }
 

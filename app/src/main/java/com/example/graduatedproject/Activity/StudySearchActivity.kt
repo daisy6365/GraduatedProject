@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -41,11 +42,6 @@ class StudySearchActivity : AppCompatActivity() {
         val searchKeyword = intent.getStringExtra("searchKeyword")
         val categoryId = intent.getIntExtra("categoryId", 0)
 
-        Log.d("인텐트 가져온값", offline.toString())
-        Log.d("인텐트 가져온값", online.toString())
-        Log.d("인텐트 가져온값", searchKeyword!!)
-        Log.d("인텐트 가져온값", categoryId.toString())
-
         paramObject.addProperty("page", PAGE_NUM)
         paramObject.addProperty("size", LIST_LENGTH)
         paramObject.addProperty("offline", offline)
@@ -70,15 +66,12 @@ class StudySearchActivity : AppCompatActivity() {
                 val itemTotalCount = recyclerView.adapter!!.itemCount-1
 
                 // 스크롤이 끝에 도달했는지 확인
-                if (!studysearch_recycler.canScrollVertically(1)) {
-                    adapter.deleteLoading()
-                    if(lastVisibleItemPosition == itemTotalCount){
-                        if(StudySearch!!.last == false){
-                            paramObject.addProperty("page",PAGE_NUM)
-                            loadList(paramObject)
-                        }
-                        else{}
+                if (!studysearch_recycler.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
+                    if(StudySearch!!.numberOfElements == LIST_LENGTH){
+                        paramObject.addProperty("page",PAGE_NUM)
+                        loadList(paramObject)
                     }
+                    else{}
                 }
             }
         })
@@ -103,23 +96,29 @@ class StudySearchActivity : AppCompatActivity() {
             paramObject.get("searchKeyword").asString,
             paramObject.get("categoryId").asInt)
             .enqueue(object : Callback<StudySearch> {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(call: Call<StudySearch>, response: Response<StudySearch>) {
                     if (response.isSuccessful) {
                         //응답값 다 받기
                         StudySearch = response!!.body()
 
                         if(StudySearch!!.last == false){
-                            studysearch_recycler.getRecycledViewPool().clear()
-                            adapter!!.setList(StudySearch!!.content)
-                            adapter!!.notifyDataSetChanged()
-                            ++PAGE_NUM
+                            if(PAGE_NUM != 0){ adapter.deleteLoading() }
+                            adapter.setList(StudySearch!!.content)
+                            // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
+                            //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
+                            adapter.notifyDataSetChanged()
+                            PAGE_NUM++
                         }
                         else{
-                            studysearch_recycler.getRecycledViewPool().clear()
-                            adapter!!.setList(StudySearch!!.content)
-                            adapter!!.notifyDataSetChanged()
-                            Toast.makeText(this@StudySearchActivity, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
-                            adapter!!.deleteLoading()
+                            if(StudySearch!!.numberOfElements != 0){
+                                if(PAGE_NUM != 0){ adapter.deleteLoading() }
+                                adapter.setList(StudySearch!!.content)
+                                adapter.deleteLoading()
+                                adapter.notifyDataSetChanged()
+                                Toast.makeText(this@StudySearchActivity, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
+                            }
+                            else{}
                         }
 
                         Log.d(TAG, "검색결과리스트 받기 성공")

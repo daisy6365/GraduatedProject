@@ -3,7 +3,7 @@ package com.example.graduatedproject.Model
 import com.google.gson.annotations.SerializedName
 
 data class Image (
-    @SerializedName("profileImage")
+    @SerializedName("studyImage", alternate = arrayOf("profileImage"))
     var profileImage: String = "",
 
     @SerializedName("thumbnailImage")

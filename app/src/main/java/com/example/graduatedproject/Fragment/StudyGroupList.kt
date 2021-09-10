@@ -26,13 +26,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class StudyGroupList(studyRoomId: Int) : Fragment() {
-    private var linearLayoutManager: RecyclerView.LayoutManager? = null
-    private var recyclerAdapter: StudyGroupListAdapter? = null
+    private val TAG = StudyGroupList::class.java.simpleName
+    lateinit var recyclerAdapter: StudyGroupListAdapter
     private var PAGE_NUM = 0 //현재페이지
     val LIST_LENGTH = 20 //리스트개수
     val paramObject = JsonObject()
 
-    val TAG = StudyGroupList::class.java.simpleName
     var GroupListInfo : GroupList? = null
     var studyId : Int = studyRoomId
 
@@ -80,15 +79,12 @@ class StudyGroupList(studyRoomId: Int) : Fragment() {
                 val itemTotalCount = recyclerView.adapter!!.itemCount-1
 
                 // 스크롤이 끝에 도달했는지 확인
-                if (!group_recycler.canScrollVertically(1)) {
-                    recyclerAdapter!!.deleteLoading()
-                    if(lastVisibleItemPosition == itemTotalCount){
-                        if(GroupListInfo!!.last == false){
-                            paramObject.addProperty("page",PAGE_NUM)
-                            loadList(paramObject)
-                        }
-                        else{}
+                if (!group_recycler.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
+                    if(GroupListInfo!!.numberOfElements == LIST_LENGTH){
+                        paramObject.addProperty("page",PAGE_NUM)
+                        loadList(paramObject)
                     }
+                    else{}
                 }
             }
         })
@@ -109,16 +105,22 @@ class StudyGroupList(studyRoomId: Int) : Fragment() {
                         Log.d(TAG, GroupListInfo.toString())
 
                         if(GroupListInfo!!.last == false){
-                            group_recycler.getRecycledViewPool().clear()
-                            recyclerAdapter!!.setList(GroupListInfo!!.content)
-                            recyclerAdapter!!.notifyDataSetChanged()
-                            ++PAGE_NUM
+                            if(PAGE_NUM != 0){ recyclerAdapter.deleteLoading() }
+                            recyclerAdapter.setList(GroupListInfo!!.content)
+                            // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
+                            //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
+                            recyclerAdapter.notifyDataSetChanged()
+                            PAGE_NUM++
                         }
                         else{
-                            group_recycler.getRecycledViewPool().clear()
-                            recyclerAdapter!!.setList(GroupListInfo!!.content)
-                            recyclerAdapter!!.notifyDataSetChanged()
-                            recyclerAdapter!!.deleteLoading()
+                            if(GroupListInfo!!.numberOfElements != 0){
+                                if(PAGE_NUM != 0){ recyclerAdapter.deleteLoading() }
+                                recyclerAdapter.setList(GroupListInfo!!.content)
+                                recyclerAdapter.deleteLoading()
+                                recyclerAdapter.notifyDataSetChanged()
+                                Toast.makeText(getActivity(), "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
+                            }
+                            else{}
                         }
 
                         Log.d(TAG, "회원 스터디 정보 받기 성공")

@@ -1,5 +1,6 @@
 package com.example.graduatedproject.Adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -8,13 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.graduatedproject.Activity.LiketopicActivity
 import com.example.graduatedproject.Activity.MapActivity
 import com.example.graduatedproject.Model.ContentLocation
-import com.example.graduatedproject.Model.LocationSearch
 import com.example.graduatedproject.R
 
 class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -65,7 +62,7 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
         }
 
         override fun getItemCount(): Int {
-            return items.size!!
+            return items.size
 
         }
 
@@ -80,7 +77,9 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if(holder is SearchViewHolder){
-                holder.search_item.setText(items[position].dong)
+                var safePosition = holder.adapterPosition
+
+                holder.search_item.setText(items[safePosition].dong)
 
                 holder.search_item.setOnClickListener {
                     for(i in 0 .. items.size-1){
@@ -88,8 +87,6 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
                             val locationId = items[i].id
 
                             moveDetail(locationId)
-
-
                         }
                     }
                 }
@@ -101,16 +98,24 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
     private fun moveDetail(addTag: Int) {
         val intent : Intent = Intent(context, MapActivity::class.java)
         intent.putExtra("modify_item",addTag)
-        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
     }
 
-    fun setList(notice: MutableList<ContentLocation>) {
-        items.addAll(notice)
-        items.add(ContentLocation(0, " ", " ", " ", " ", " ", 0.0, 0.0, " ")) // progress bar 넣을 자리
+    @SuppressLint("NotifyDataSetChanged")
+    fun setList(items: MutableList<ContentLocation>) {
+
+        this.items.apply {
+            addAll(items)
+        }
+//        notifyItemRangeRemoved(0, currentSize)
+//        notifyItemRangeInserted(0, notice.size)
+        this.items.add(ContentLocation(0, " ", " ", " ", " ", " ", 0.0, 0.0, " ")) // progress bar 넣을 자리
+        Log.d("MapSearchRecyclerAdapter",items.toString())
     }
 
     fun deleteLoading() {
-        items.removeAt(items.lastIndex) // 로딩이 완료되면 프로그레스바를 지움
+        this.items.removeAt(items.lastIndex) // 로딩이 완료되면 프로그레스바를 지움
+
     }
 }

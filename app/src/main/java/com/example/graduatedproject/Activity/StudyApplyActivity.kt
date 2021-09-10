@@ -93,7 +93,7 @@ class StudyApplyActivity : AppCompatActivity() {
 
                         } else{
                             Glide.with(this@StudyApplyActivity)
-                                .load(studyInfo!!.image!!.thumbnailImage)
+                                .load(studyInfo!!.image!!.profileImage)
                                 .centerCrop()
                                 .into(created_study_cover_img)
                         }
@@ -141,6 +141,7 @@ class StudyApplyActivity : AppCompatActivity() {
                         }
                         else if(studyInfo.online == true){
                             study_apply_on_off.setText("ONLINE")
+                            location_Info.visibility = View.GONE
                         }
                         else{
                             study_apply_on_off.setText("OFFLINE")
