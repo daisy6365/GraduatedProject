@@ -65,15 +65,6 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
     var uLatitude : Double? = null
     var uLongitude : Double? = null
     var locationCode : String? = null
-    private lateinit var spinnerAdapterparent : SpinnerAdapter
-    private lateinit var spinnerAdapterchild : SpinnerAdapter
-    var categoryListParent : ArrayList<Category>? = null
-    var categoryListChild : ArrayList<Category>? = null
-    var categoryParent: MutableList<String> = mutableListOf("큰 카테고리")
-    var categoryChild : MutableList<String> =  mutableListOf("작은 카테고리")
-    var seletedParent : String? = null
-    var seletedChild : String? = null
-    var categorychildSeletedItem : String? = null
     lateinit var mapView : MapView
     lateinit var mapViewContainer : RelativeLayout
 
@@ -123,37 +114,33 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                         override fun onResponse(call: Call<Study>, response: Response<Study>) {
                             if (response.isSuccessful) {
                                 studyInfo  = response.body()!!
-
-
                                 if(studyInfo!!.image!!.profileImage != null){
                                     Glide.with(this@StudyModifyActivity)
                                         .load(studyInfo!!.image!!.profileImage)
                                         .centerCrop()
                                         .into(modify_study_cover_img)
-
                                 } else{}
-
-
                                 modify_study_name.setText(studyInfo!!.name)
                                 people_num = studyInfo!!.numberOfPeople
                                 modify_people_number.setText(people_num.toString())
-
-
                                 tagArray = studyInfo!!.studyTags!!
                                 for(i in 0 .. tagArray.size-1){
                                     var oldchip : Chip = inflater.inflate(R.layout.item_liketopic, chipGroup, false) as Chip
                                     oldchip.text = tagArray[i]
                                     chipGroup.addView(oldchip)
+
+                                    oldchip.setOnCloseIconClickListener {
+                                        for(i in 0 .. 6) {
+                                            tagArray.remove((it as TextView).text.toString())
+                                            chipGroup.removeView(it)
+                                            Log.d("관심주제 리스트", tagArray.toString())
+                                        }
+                                    }
                                 }
 
                                 modify_introduce_text.setText(studyInfo.content)
-
-                                if(studyInfo.status == "OPEN"){
-                                    study_close.isChecked = false
-                                }
-                                else{
-                                    study_close.isChecked = true
-                                }
+                                if(studyInfo.status == "OPEN"){ study_close.isChecked = false }
+                                else{ study_close.isChecked = true }
 
                                 if(studyInfo!!.online == true){
                                     modify_check_online.isChecked = true
@@ -163,9 +150,13 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                                     modify_check_offline.isChecked = true
                                 }else{modify_check_offline.isChecked = false}
 
+                                big_category.setText(studyInfo.parentCategory!!.name)
+                                small_category.setText(studyInfo.childCategory!!.name)
+
                                 //지역정보 가져와서 지도에 뿌리고 마커 찍기
                                 uLatitude = studyInfo.location!!.let
                                 uLongitude = studyInfo.location!!.len
+                                locationCode = studyInfo.location!!.code
 
                                 val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
                                 mapView.setMapCenterPoint(uNowPosition, true)
@@ -178,6 +169,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                                 current_marker.markerType = MapPOIItem.MarkerType.BluePin
                                 current_marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
                                 mapView.addPOIItem(current_marker)
+
 
                                 Log.d(TAG, "스터디 정보 조회 성공")
                             }
@@ -192,13 +184,10 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 //새로운 마커의 경도, 위도 가져오기
                 mapView.setMapViewEventListener(this)
 
-
-
                 //기능 수행
                 modify_study_cover_btn.setOnClickListener {
                     //갤러리 열어서 사진url 받기 -> 절대경로로 변환
                     openGalley()
-                    deleteImage = true
                 }
 
                 modify_number_minus.setOnClickListener {
@@ -221,92 +210,24 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     modify_edit_tag.setHint("관련태그 입력")
                 }
 
-
-                getCategoryList()
-                big_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        if(big_category.getItemAtPosition(position).equals("큰 카테고리")){ }
-                        for(i in 1..categoryParent.size-1){
-                            categoryChild =  mutableListOf("작은 카테고리")
-
-                            Log.d("카테고리 자식 ", categoryChild.toString())
-                            setCategoryChild()
-
-                            if(big_category.getItemAtPosition(position).equals(categoryParent[i])){
-                                ServerUtil.retrofitService.requestCategoryChild(i)
-                                    .enqueue(object : Callback<ArrayList<Category>> {
-                                        override fun onResponse(call: Call<ArrayList<Category>>, response: Response<ArrayList<Category>>) {
-                                            if (response.isSuccessful) {
-                                                categoryListChild = response.body()!!
-                                                for(i in 0..categoryListChild!!.size-1){
-                                                    categoryChild?.add(categoryListChild!!.get(i).name)
-                                                }
-                                                Log.d(TAG, "카테고리 자식아이템리스트 받기 성공")
-
-                                                setCategoryChild()
-
-                                            }
-                                        }
-                                        override fun onFailure(call: Call<ArrayList<Category>>, t: Throwable) {
-                                            Log.d(TAG, "카테고리 자식아이템리스트 받기 실패")
-                                            Toast.makeText(this@StudyModifyActivity, "카테고리 자식아이템리스트 받기 실패", Toast.LENGTH_LONG).show()
-                                        }
-                                    })
-
-                            }
-                        }
-
-                    }
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                    }
-
-                }
-                small_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        if(small_category.getItemAtPosition(position).equals("작은 카테고리")) {
-
-                        }
-                        else{
-                            categorychildSeletedItem = categoryChild!![position]
-                            Log.d("categorychildSeletedItem", categorychildSeletedItem!!.toString())
-                        }
-
-                    }
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                    }
-                }
-
                 study_close.setOnCheckedChangeListener { buttonView, isChecked ->
-                    if(isChecked){
-                        status = "CLOSE"
-                    }
-                    else{
-                        status = "OPEN"
-                    }
+                    if(isChecked){ status = "CLOSE" }
+                    else{ status = "OPEN" }
                 }
-
                 modify_check_offline.setOnCheckedChangeListener { buttonView, isChecked ->
-                    if(isChecked){
-                        offline = true
-                    }
-                    else{
-                        offline = false
-                    }
+                    if(isChecked){ offline = true }
+                    else{ offline = false }
                 }
                 modify_check_online.setOnCheckedChangeListener { buttonView, isChecked ->
-                    if(isChecked){
-                        online = true
-                    }
-                    else{
-                        online = false
-                    }
+                    if(isChecked){ online = true }
+                    else{ online = false }
                 }
-
 
                 //수정완료 누르면 정보들 다 받아와서 서버에 보내기
                 modify_study_btn.setOnClickListener {
                     sendModifiedInfo(accessToken, studyId)
                 }
+
                 //삭제하기 누르면 팝업창 -> 서버 통신
                 delete_study.setOnClickListener {
                     var builder = AlertDialog.Builder(this)
@@ -345,32 +266,26 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
     }
 
     fun sendModifiedInfo(accessToken : String,studyId : Int){
-        var categorychildSeletedId : Int? = null
         var close : Boolean = false
 
         //스터디이름,참여인원, 해시태그 리스트, 카테고리2개, 소개내용, 온/오프라인 여부, locationId 정보 가져오기
         var studyName = modify_study_name.text.toString()
         var numberOfPeople = modify_people_number.text.toString()
         var content = modify_introduce_text.text.toString()
-        for(i in 0..categoryListChild!!.size-1){
-            if(categoryListChild!!.get(i).name == categorychildSeletedItem){
-                categorychildSeletedId = categoryListChild!!.get(i).id
-            }
-        }
         if(status == "CLOSE"){
             close = true
         }
         else{
             close = false
         }
-
         lateinit var requestImg: RequestBody
         var imageBitmap : MultipartBody.Part? = null
+        Log.d(TAG, imageFile.toString())
         if(imageFile != null){
             requestImg= RequestBody.create(MediaType.parse("image/*"),imageFile)
             imageBitmap = MultipartBody.Part.createFormData("image", imageFile?.getName(), requestImg)
 
-        }else{}
+        }else{deleteImage = true}
 
         var jsonArray = JSONArray(tagArray)
         val paramObject = JSONObject()
@@ -383,7 +298,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
         paramObject.put("online", online)
         paramObject.put("offline", offline)
         paramObject.put("locationCode", locationCode)
-        paramObject.put("categoryId", categorychildSeletedId!!.toInt())
+        paramObject.put("categoryId", studyInfo.childCategory!!.id)
         val request = RequestBody.create(MediaType.parse("application/json"),paramObject.toString())
 
         ServerUtil.retrofitService.requestModifyStudy(accessToken,studyId,imageBitmap,request)
@@ -395,10 +310,11 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                         Log.d(TAG, "스터디수정정보 전송 성공")
 
                         mapViewContainer.removeView(mapView)
-                        val intent = Intent(this@StudyModifyActivity, StudyRoomActivity::class.java)
-                        intent.putExtra("studyId",studyId)
-                        startActivity(intent)
                         finish()
+                        val intent = Intent(this@StudyModifyActivity, StudyRoomActivity::class.java)
+                        intent.putExtra("studyRoomId",studyId)
+                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+
                     }
                 }
                 override fun onFailure(call: Call<Study>, t: Throwable) {
@@ -414,10 +330,9 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         val intent = Intent(this@StudyModifyActivity, MainActivity::class.java)
-                        startActivity(intent)
+                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 
                         Log.d(TAG, "스터디 삭제 성공")
-
                     }
                 }
                 override fun onFailure(call: Call<Void>, t: Throwable) {
@@ -438,67 +353,19 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
     //저장한 선택사진의 경로를 절대경로로 바꿈
     fun absolutelyPath(context : Context, new_imageUrl: Uri): String {
         val contentResolver = context!!.contentResolver?: return null.toString()
-
-        val filePath = context!!.applicationInfo.dataDir + File.separator +
-                System.currentTimeMillis()
+        val filePath = context!!.applicationInfo.dataDir + File.separator + System.currentTimeMillis()
         val file = File(filePath)
-
         try {
             val inputStream = contentResolver.openInputStream(new_imageUrl) ?: return null.toString()
             val outputStream: OutputStream = FileOutputStream(file)
             val buf = ByteArray(1024)
             var len: Int
-
             while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
-
             outputStream.close()
             inputStream.close()
-
-        } catch (e: IOException) {
-            return null.toString()
-        }
+        } catch (e: IOException) { return null.toString() }
         val result = file.absolutePath
         return result
-    }
-
-    //카테고리 리스트 가져오기
-    fun getCategoryList(){
-        ServerUtil.retrofitService.requestCategoryParent()
-            .enqueue(object : Callback<ArrayList<Category>> {
-                override fun onResponse(call: Call<ArrayList<Category>>, response: Response<ArrayList<Category>>) {
-                    if (response.isSuccessful) {
-                        categoryListParent = response.body()
-                        for(i in 0 .. categoryListParent!!.size-1){
-                            categoryParent?.add(categoryListParent!!.get(i).name)
-                        }
-                        Log.d(TAG, "카테고리 부모아이템리스트 받기 성공")
-
-                    }
-                }
-                override fun onFailure(call: Call<ArrayList<Category>>, t: Throwable) {
-                    Log.d(TAG, "카테고리 부모아이템리스트 받기 실패")
-                    Toast.makeText(this@StudyModifyActivity, "카테고리 부모아이템리스트 받기 실패", Toast.LENGTH_LONG).show()
-                }
-            })
-
-        spinnerAdapterparent = ArrayAdapter(this,R.layout.item_spinner, categoryParent)
-        big_category.adapter = spinnerAdapterparent
-        for(i in 0..categoryParent!!.size-1){
-            if(studyInfo.parentCategory!!.name == categoryParent!![i]){
-                big_category.setSelection(i)
-            }
-        }
-    }
-    //작은카테고리 셋팅
-    private fun setCategoryChild(){
-        Log.d("카테고리 자식 ", categoryChild.toString())
-        spinnerAdapterchild = ArrayAdapter(this,R.layout.item_spinner, categoryChild)
-        small_category.adapter = spinnerAdapterchild
-        for(i in 0..categoryChild!!.size-1){
-            if(studyInfo.childCategory!!.name == categoryChild!![i]){
-                small_category.setSelection(i)
-            }
-        }
     }
 
     //태그 추가

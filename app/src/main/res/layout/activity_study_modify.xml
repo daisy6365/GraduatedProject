@@ -153,29 +153,39 @@
 
                 <LinearLayout
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center"
                     >
-                    <Spinner
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
                         android:id="@+id/big_category"
-                        android:spinnerMode="dropdown"
-                        android:padding="3dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:gravity="center"
+                        android:textSize="15dp"
+                        android:padding="8dp"
+                        android:layout_marginRight="10dp"
+                        android:text="큰 카테고리"
+                        android:background="@drawable/textview_background"/>
 
-                    <Spinner
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
                         android:id="@+id/small_category"
-                        android:layout_marginLeft="10dp"
-                        android:spinnerMode="dropdown"
-                        android:padding="3dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:gravity="center"
+                        android:textSize="15dp"
+                        android:padding="8dp"
+                        android:layout_marginRight="10dp"
+                        android:text="작은 카테고리"
+                        android:background="@drawable/textview_background"/>
                 </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:padding="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="* 스터디의 카테고리는 변경할 수 없습니다."/>
 
                 <EditText
                     android:id="@+id/modify_introduce_text"

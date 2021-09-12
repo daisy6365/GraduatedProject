@@ -262,6 +262,7 @@ interface InfoService {
     ):Call<Void>
 
     //스터디방 수정
+    @Multipart
     @PATCH("/study-service/studies/{studyId}")
     abstract fun requestModifyStudy(
         @Header("Authorization") accessToken: String,
