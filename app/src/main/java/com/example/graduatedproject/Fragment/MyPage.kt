@@ -9,96 +9,97 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.graduatedproject.Activity.LiketopicActivity
 import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.Activity.MapActivity
-import com.example.graduatedproject.Activity.StudyRoomActivity
 import com.example.graduatedproject.Model.Image
 import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
+import com.example.graduatedproject.viewmodel.UserViewModel
+import com.example.graduatedproject.databinding.FragmentMyPageBinding
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.user.UserApiClient
+import kotlinx.android.synthetic.main.fragment_my_page.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MyPage : Fragment() {
+    val TAG = MyPage::class.java.simpleName
+
+    private lateinit var binding: FragmentMyPageBinding
+    private lateinit var user : UserViewModel
+    var nickname : String? = null
+    var imageUrl : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_my_page, container, false)
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("Life_cycle", "onViewCreated")
-        super.onViewCreated(view, savedInstanceState)
-        val TAG = MyPage::class.java.simpleName
-
-//        //accessToken을 가져옴
+        binding = FragmentMyPageBinding.inflate(inflater, container, false)
+        //accessToken을 가져옴
         val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
         //프로필 정보 요청
         var profile = Profile()
-        var profileImage : Image = Image()
-        var my_page_name : TextView = view.findViewById(R.id.my_page_name)
-        var my_page_profile : ImageView = view.findViewById(R.id.my_page_profile)
-        var nickname : String? = null
-        var imageUrl : String? = null
         ServerUtil.retrofitService.requestProfile(accessToken)
             .enqueue(object : Callback<Profile> {
                 override fun onResponse(call: Call<Profile>, response: Response<Profile>) {
                     if (response.isSuccessful) {
                         profile = response.body()!!
-                        profileImage = profile.image
+                        user.setData(profile)
 
-                        //이름 화면에 붙이기
-                        nickname = profile!!.nickName
-                        my_page_name.setText(nickname)
-
-                        //사진 화면에 붙이기
-                        if(profile?.image?.profileImage == null){
-                            imageUrl = null
-                            Glide.with(view)
-                                .load(R.drawable.profile_init)
-                                .into(my_page_profile)
-                        }
-                        else {
-                            imageUrl = profile!!.image.profileImage
-                            Glide.with(view)
-                                .load(imageUrl)
-                                .into(my_page_profile)
-                        }
 
                         Log.d(TAG, "프로필 받기 성공")
                     }
                 }
-
                 override fun onFailure(call: Call<Profile>, t: Throwable) {
                     Log.d(TAG, "프로필 받기 실패")
                 }
             })
+        user = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        binding.viewModel = user
+
+        user.users.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                binding.myPageName.text = it.nickName
+                if(it.image == null){
+                    Glide.with(requireView().context)
+                        .load(R.drawable.profile_init)
+                        .into(my_page_profile)
+                }
+                else{
+                    bindImage(binding.myPageProfile,it.image.profileImage)
+                }
+            }
+        })
+
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d("Life_cycle", "onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
+
+
         var profile_modify_btn : ImageView = view.findViewById(R.id.profile_modify_btn)
         profile_modify_btn.setOnClickListener {
             //수정 버튼 누르면 새로운 프래그먼트 띄우기
             //EditProfile.kt 띄우기
             //Fragment에서 FragmentDialog를 호출하도록 코드 추가
 
-            var args : Bundle = Bundle()
-            args.putString("nickname", nickname)
-            args.putString("imageUrl", imageUrl)
             val dialog = EditProfile().getInstance()
-            dialog.setArguments(args)
             dialog.show(requireActivity().getSupportFragmentManager(),"tag")
         }
 
@@ -217,10 +218,14 @@ class MyPage : Fragment() {
             }
         }
     }
-    fun refresh(){
-        assert(fragmentManager != null)
-        val transaction = fragmentManager?.beginTransaction()
-        transaction?.detach(this)?.attach(this)?.commit()
 
+    companion object {
+        @JvmStatic
+        @BindingAdapter("bind:imageUrl")
+        fun bindImage(view:ImageView,url: String?) {
+            Glide.with(view.context)
+                .load(url)
+                .into(view)
+        }
     }
 }

@@ -140,7 +140,7 @@ interface InfoService {
 
         //deleteImage,nickName
         @Part("request") requestBody: RequestBody
-    ): Call<Void>
+    ): Call<Profile>
 
     //지원한 스터디 현황 조회
     @GET("/user-service/users/studyApply")
@@ -290,7 +290,7 @@ interface InfoService {
     abstract fun requestCreateChat(
         @Header("Authorization") accessToken: String,
         @Path("studyId") studyId : Int,
-        @Path("name") name : String
+        @Body parameters: HashMap<String, Any>
     ):Call<ChatRoom>
 
     //채팅방 수정

@@ -10,7 +10,7 @@ data class ChatRoom (
 
     @SerializedName("name")
     @Expose
-    var name : Int = 0,
+    var name : String = "",
 
     @SerializedName("studyId")
     @Expose

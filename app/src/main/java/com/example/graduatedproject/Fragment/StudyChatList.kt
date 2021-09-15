@@ -30,11 +30,6 @@ class StudyChat(studyRoomId: Int) : Fragment() {
     var chatRoomInfo : ArrayList<ChatRoom>? = null
     var studyId = studyRoomId
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,30 +39,30 @@ class StudyChat(studyRoomId: Int) : Fragment() {
         val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
-//        ServerUtil.retrofitService.requestChatRoom(accessToken,studyId)
-//            .enqueue(object : Callback<ArrayList<ChatRoom>> {
-//                override fun onResponse(call: Call<ArrayList<ChatRoom>>, response: Response<ArrayList<ChatRoom>>) {
-//                    if (response.isSuccessful) {
-//                        chatRoomInfo = response.body()!!
-//                        Log.d(TAG, chatRoomInfo.toString())
-//
-//                        val recyclerView: RecyclerView = view.findViewById(R.id.chat_recycler)
-//                        recyclerAdapter = StudyChatListAdapter(requireContext(),chatRoomInfo)
-//                        linearLayoutManager = LinearLayoutManager(activity)
-//
-//                        recyclerView.layoutManager = linearLayoutManager
-//                        recyclerView.adapter = recyclerAdapter
-//                        registerForContextMenu(recyclerView)
-//
-//
-//                        Log.d(TAG, "회원 스터디 정보 받기 성공")
-//                    }
-//                }
-//                override fun onFailure(call: Call<ArrayList<ChatRoom>>, t: Throwable) {
-//                    Log.d(TAG, "회원 스터디 정보 받기 실패")
-//                    Toast.makeText(getActivity(), "회원 스터디 정보 받기 실패", Toast.LENGTH_LONG).show()
-//                }
-//            })
+        ServerUtil.retrofitService.requestChatRoom(accessToken,studyId)
+            .enqueue(object : Callback<ArrayList<ChatRoom>> {
+                override fun onResponse(call: Call<ArrayList<ChatRoom>>, response: Response<ArrayList<ChatRoom>>) {
+                    if (response.isSuccessful) {
+                        chatRoomInfo = response.body()!!
+                        Log.d(TAG, chatRoomInfo.toString())
+
+                        val recyclerView: RecyclerView = view.findViewById(R.id.chat_recycler)
+                        recyclerAdapter = StudyChatListAdapter(requireContext(),chatRoomInfo)
+                        linearLayoutManager = LinearLayoutManager(activity)
+
+                        recyclerView.layoutManager = linearLayoutManager
+                        recyclerView.adapter = recyclerAdapter
+                        //registerForContextMenu(recyclerView)
+
+
+                        Log.d(TAG, "채팅방 리스트 정보 받기 성공")
+                    }
+                }
+                override fun onFailure(call: Call<ArrayList<ChatRoom>>, t: Throwable) {
+                    Log.d(TAG, "채팅방 리스트 정보 받기 실패")
+                    Toast.makeText(getActivity(), "채팅방 리스트 정보 받기 실패", Toast.LENGTH_LONG).show()
+                }
+            })
 
         return view
     }
@@ -87,28 +82,30 @@ class StudyChat(studyRoomId: Int) : Fragment() {
             builder.setPositiveButton("완료", DialogInterface.OnClickListener { dialog, which ->
                 val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
                 var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
-
                 var new_chatName = new_chatEdit.text.toString()
 
-//                ServerUtil.retrofitService.requestCreateChat(accessToken,studyId,new_chatName)
-//                    .enqueue(object : Callback<ChatRoom> {
-//                        override fun onResponse(call: Call<ChatRoom>, response: Response<ChatRoom>) {
-//                            if (response.isSuccessful) {
-//                                val new_chatInfo = response.body()
-//
-//                                Log.d(TAG, "채팅방 생성 성공")
-//
-//                                //새로운 채팅방으로 감
-//                                val intent = Intent(getActivity(), StudyChatActivity::class.java)
-//                                intent.putExtra("studyRoomId",new_chatInfo!!.id)
-//                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-//                            }
-//                        }
-//
-//                        override fun onFailure(call: Call<ChatRoom>, t: Throwable) {
-//                            Log.d(TAG, "스터디탈퇴 실패")
-//                        }
-//                    })
+                var params:HashMap<String, Any> = HashMap<String, Any>()
+                params.put("name", new_chatName)
+
+                ServerUtil.retrofitService.requestCreateChat(accessToken,studyId,params)
+                    .enqueue(object : Callback<ChatRoom> {
+                        override fun onResponse(call: Call<ChatRoom>, response: Response<ChatRoom>) {
+                            if (response.isSuccessful) {
+                                val new_chatInfo = response.body()
+
+                                Log.d(TAG, "채팅방 생성 성공")
+
+                                //새로운 채팅방으로 감
+                                val intent = Intent(getActivity(), StudyChatActivity::class.java)
+                                intent.putExtra("studyChatId",new_chatInfo!!.id)
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                            }
+                        }
+
+                        override fun onFailure(call: Call<ChatRoom>, t: Throwable) {
+                            Log.d(TAG, "채팅방 생성 실패")
+                        }
+                    })
             })
             builder.setNegativeButton("취소", DialogInterface.OnClickListener { dialog, which ->
                 Log.d(TAG, "취소")

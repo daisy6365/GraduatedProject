@@ -13,25 +13,28 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
+import com.example.graduatedproject.viewmodel.UserViewModel
+import com.example.graduatedproject.databinding.FragmentEditProfileBinding
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_study_modify.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
+import kotlinx.android.synthetic.main.fragment_my_page.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.*
-import java.util.*
 
 
 class EditProfile() : DialogFragment() {
+    private lateinit var binding: FragmentEditProfileBinding
+    private lateinit var user : UserViewModel
     //DialogFragment를 호출한 부모 Fragment에 결과를 반환
-    lateinit var imageUrl : String
-    lateinit var nickname : String
     var new_imageUrl : Uri? = null //맨처음! 넣어지는 이미지 경로
     var new_imageUrlPath: String? = null
     var imageFile : File? = null // 절대경로로 변환되어 파일형태의 이미지
@@ -44,20 +47,26 @@ class EditProfile() : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view : View = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        val args : Bundle? = getArguments()
-        nickname = args?.getString("nickname").toString()
-        imageUrl = args?.getString("imageUrl").toString()
+        binding = FragmentEditProfileBinding.inflate(inflater, container, false)
+        user = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        binding.viewModel = user
 
+        user.users.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                binding.editProfileName.setText(it.nickName)
+                if(it.image == null){
+                    Glide.with(requireView().context)
+                        .load(R.drawable.profile_init)
+                        .into(edit_profile_img)
+                }
+                else{
+                    MyPage.bindImage(binding.editProfileImg, it.image.profileImage)
+                }
+            }
+        })
 
-        //cancel 버튼 누르면 다시 MYPAGE로 돌아가도록 함
-        view.edit_profile_cancel.setOnClickListener {
-            dismiss()
-        }
-        //apply 버튼 누르면 받아온 imageUrl과 nickname 서버로 보내기
-        // 서버 통신
-        // 다시 MYPAGE로 돌아가도록 함
-        return view
+        return binding.root
+
     }
 
     private val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -67,7 +76,7 @@ class EditProfile() : DialogFragment() {
             Glide.with(this)
                 .load(new_imageUrl)
                 .centerCrop()
-                .into(edit_profile_img)
+                .into(binding.editProfileImg)
             //절대경로변환 함수 호출
             new_imageUrlPath= absolutelyPath(new_imageUrl!!)
             imageFile = File(new_imageUrlPath)
@@ -80,60 +89,58 @@ class EditProfile() : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var edit_profile_img : ImageView = view.findViewById(R.id.edit_profile_img)
-        var edit_profile_name : EditText = view.findViewById(R.id.edit_profile_name)
-        var change_img : Button= view.findViewById(R.id.change_img)
-        var change_default : Button= view.findViewById(R.id.change_default)
-        var edit_profile_apply : Button = view.findViewById(R.id.edit_profile_apply)
 
         lateinit var requestImg: RequestBody
         var imageBitmap : MultipartBody.Part? = null
 
 
-        //그 사용자한테 저장된 이미지, 닉네임 불러옴
-        // 변경전 사진 화면에 붙이기
-        if(imageUrl.equals("null")){
-            Glide.with(this)
-                .load("https://project-lambda-bucket.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Image_2021-07-19-03-04-43.png")
-                .centerCrop()
-                .into(edit_profile_img)
-        }
-        else{
-            Glide.with(view)
-                .load(imageUrl.toUri())
-                .centerCrop()
-                .into(edit_profile_img)
-        }
+//        //그 사용자한테 저장된 이미지, 닉네임 불러옴
+//        // 변경전 사진 화면에 붙이기
+//        if(imageUrl.equals("null")){
+//            Glide.with(this)
+//                .load("https://project-lambda-bucket.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Image_2021-07-19-03-04-43.png")
+//                .centerCrop()
+//                .into(binding.editProfileImg)
+//        }
+//        else{
+//            Glide.with(view)
+//                .load(imageUrl.toUri())
+//                .centerCrop()
+//                .into(binding.editProfileImg)
+//        }
+//
+//        // 변경전 닉네임 화면에 붙이기
+//        binding.editProfileName.setText(nickname)
 
-        // 변경전 닉네임 화면에 붙이기
-        edit_profile_name.setText(nickname)
 
-
-        change_img.setOnClickListener {
+        binding.changeImg.setOnClickListener {
             openGalley()
         }
         //원하는 사진 누르면 edit_profile_img에 갖다 붙임
         //원하는 사진의 url 받아 놓기
 
         //기본이미지로 변경
-        change_default.setOnClickListener {
+        binding.changeDefault.setOnClickListener {
             Glide.with(this)
                 .load(R.drawable.profile_init)
                 .centerCrop()
-                .error(imageUrl)
-                .into(edit_profile_img)
+                //.error(imageUrl)
+                .into(binding.editProfileImg)
             deleteImage = true
         }
 
-
+        //cancel 버튼 누르면 다시 MYPAGE로 돌아가도록 함
+        binding.editProfileCancel.setOnClickListener {
+            dismiss()
+        }
 
         //확인 버튼
-        edit_profile_apply.setOnClickListener {
+        binding.editProfileApply.setOnClickListener {
             //accessToken을 가져옴
             val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
             var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
-            newNickname = edit_profile_name.text.toString()
+            newNickname = binding.editProfileName.text.toString()
 
             // RequestBody로 변환 후 MultipartBody.Part로 파일 컨버전
             if(imageFile != null){
@@ -156,17 +163,20 @@ class EditProfile() : DialogFragment() {
 
             //변경된이름을 EditText로부터 가져옴
             ServerUtil.retrofitService.requestModifyProfile(accessToken,imageBitmap,request)
-                .enqueue(object : retrofit2.Callback<Void> {
+                .enqueue(object : retrofit2.Callback<Profile> {
                     @SuppressLint("ResourceType")
-                    override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
+                    override fun onResponse(call: retrofit2.Call<Profile>, response: retrofit2.Response<Profile>) {
                         if (response.isSuccessful) {
+                            val profileInfo = response.body()
+
+                            user.setData(profileInfo!!)
+
                             Log.d("EditProfile", "프로필변경 성공")
                             Toast.makeText(getActivity(), "프로필변경 되었습니다.", Toast.LENGTH_SHORT).show()
-
                             dismiss()
                         }
                     }
-                    override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                    override fun onFailure(call: retrofit2.Call<Profile>, t: Throwable) {
                         Log.d("EditProfile", "프로필변경 실패")
                     }
                 })

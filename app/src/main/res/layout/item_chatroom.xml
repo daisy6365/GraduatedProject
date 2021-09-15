@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_chatroom"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:orientation="horizontal"
@@ -15,16 +16,6 @@
         android:paddingRight="25dp"
         android:textSize="20dp"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="20dp"
-        />
-
-    <ImageView
-        android:id="@+id/chatroom_menu"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_baseline_more_horiz_24"
-        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_margin="20dp"
         />

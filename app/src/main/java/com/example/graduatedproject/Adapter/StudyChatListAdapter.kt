@@ -2,8 +2,10 @@ package com.example.graduatedproject.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.StudyChatActivity
@@ -18,11 +20,11 @@ class StudyChatListAdapter (
 
     class StudyChatListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var chatroom_name: TextView
-        var chatroom_menu: ImageView
+        var item_chatroom : RelativeLayout
 
         init {
             chatroom_name = itemView.findViewById(R.id.chatroom_name)
-            chatroom_menu = itemView.findViewById(R.id.chatroom_menu)
+            item_chatroom = itemView.findViewById(R.id.item_chatroom)
         }
     }
 
@@ -35,14 +37,22 @@ class StudyChatListAdapter (
     }
 
     override fun onBindViewHolder(holder: StudyChatListViewHolder, position: Int) {
-        holder.chatroom_menu.setOnClickListener {
-            holder.itemView.showContextMenu();
+        holder.chatroom_name.setText(chatRoomInfo!![position].name)
+        holder.item_chatroom.setOnClickListener {
+            for(i in 0 .. chatRoomInfo!!.size-1){
+                if(holder.chatroom_name.text == chatRoomInfo!![i].name){
+                    val chatId = chatRoomInfo!![i].id
+                    Log.d("userId", chatId.toString())
+
+                    moveDetail(chatId)
+                }
+            }
         }
     }
 
-    private fun moveDetail(studyId: Int) {
+    private fun moveDetail(chatId: Int) {
         val intent : Intent = Intent(context, StudyChatActivity::class.java)
-        intent.putExtra("studyRoomId",studyId)
+        intent.putExtra("studyChatId",chatId)
         context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
