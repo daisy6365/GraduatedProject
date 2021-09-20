@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
+import com.example.graduatedproject.viewmodel.MemberListViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,8 +23,10 @@ class MemberAddListAdapter(
     var context: Context?,
     var memberAddInfo: MutableList<Profile>?,
     var accessToken : String,
-    var studyId : Int
+    var studyId : Int,
+    private var viewmodel : MemberListViewModel
 ) : RecyclerView.Adapter<MemberAddListAdapter.MemberAddViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberAddViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -65,6 +68,7 @@ class MemberAddListAdapter(
                             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                 if (response.isSuccessful) {
                                     Log.d("MemberAddListAdapter", "지원멤버 추가 성공")
+                                    viewmodel.addData(memberAddInfo!![position])
 
                                     memberAddInfo!!.removeAt(i)
                                     notifyDataSetChanged()

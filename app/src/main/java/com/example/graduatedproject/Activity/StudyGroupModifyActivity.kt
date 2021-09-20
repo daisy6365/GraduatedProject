@@ -22,6 +22,8 @@ import net.daum.mf.map.api.MapReverseGeoCoder
 import net.daum.mf.map.api.MapView
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
+import com.example.graduatedproject.databinding.FragmentStudyGroupListBinding
+import com.example.graduatedproject.viewmodel.GroupListViewModel
 import kotlinx.android.synthetic.main.activity_study_group_apply.*
 import kotlinx.android.synthetic.main.activity_study_group_create.*
 import kotlinx.android.synthetic.main.activity_study_group_modify.*
@@ -39,6 +41,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class StudyGroupModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
+    private lateinit var binding: FragmentStudyGroupListBinding
+    private lateinit var viewmodel : GroupListViewModel
     private val TAG = StudyGroupModifyActivity::class.java.simpleName
     val PERMISSIONS_REQUEST_CODE = 100
     var REQUIRED_PERMISSIONS = arrayOf<String>( Manifest.permission.ACCESS_FINE_LOCATION)
@@ -246,13 +250,13 @@ class StudyGroupModifyActivity : AppCompatActivity(), MapView.MapViewEventListen
             .enqueue(object : Callback<Group> {
                 override fun onResponse(call: Call<Group>, response: Response<Group>) {
                     if (response.isSuccessful) {
-                        var groupId : Int = response.body()!!.id
-
+                        var groupInfo  = response.body()!!
+                        viewmodel.modifyData(groupInfo)
                         Log.d(TAG, "모임 생성정보 전송 성공")
 
                         mapViewContainer.removeView(mapView)
                         val intent = Intent(this@StudyGroupModifyActivity, StudyGroupApplyActivity::class.java)
-                        intent.putExtra("gatheringId",groupId)
+                        intent.putExtra("gatheringId",groupInfo.id)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                         finish()
                     }
