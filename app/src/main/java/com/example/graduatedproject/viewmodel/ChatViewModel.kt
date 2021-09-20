@@ -19,11 +19,13 @@ import java.util.*
 
 
 class ChatViewModel : ViewModel() {
+    //채팅 내용을 기록하는 뷰모델
+    //채팅 리스트를 기록하는 뷰모델 필요 -> 스터디룸id에 따른 채팅방id, 채팅방 이름
     private val TAG = ChatViewModel::class.java.simpleName
 
     private val SOCKET_URL = "ws://211.37.147.101:8000/chat-service/ws-stomp/websocket" // http = ws로 시작하며 https = wss로 시작
     private val MSSAGE_DESTINATION = "/sub/chat/room" // 소켓 주소
-    private val MSSAGE_DESTINATION1 = "/pub/chat/room" // 소켓 주소
+    private val MSSAGE_DESTINATION1 = "/pub/chat/message" // 소켓 주소
 
     private lateinit var mStompClient: StompClient
     private val gson = Gson()
@@ -76,14 +78,14 @@ class ChatViewModel : ViewModel() {
 
     }
 
-    fun sendMessage(sender: String, message: String, studyChatId:Int,accesstoken : String) {   // 구독 하는 방과 같은 주소로 메세지 전송
-        val messageVO = SendMessage(sender, message)
+    fun sendMessage(message: String, studyChatId:Int, accesstoken : String) {   // 구독 하는 방과 같은 주소로 메세지 전송
+        val messageVO = SendMessage(message, studyChatId)
         val messageJson: String = gson.toJson(messageVO)
 
         sendList = ArrayList()
         sendList.add(StompHeader("token", accesstoken))
-        sendList.add(StompHeader(StompHeader.DESTINATION, "/pub/chat/room" + "/" + studyChatId))
-
+        sendList.add(StompHeader(StompHeader.DESTINATION, MSSAGE_DESTINATION1))
+        //+ "/" + studyChatId
         mStompClient.send(StompMessage(StompCommand.SEND, sendList, messageJson)).subscribe()
         //mStompClient.send(MSSAGE_DESTINATION1 + "/" + studyChatId, Stomp).subscribe()
         Log.d(TAG, "send messageData : $messageJson")

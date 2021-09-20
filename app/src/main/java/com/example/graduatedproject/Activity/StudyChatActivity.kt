@@ -26,8 +26,10 @@ class StudyChatActivity : AppCompatActivity() {
 
         sleep(1000)
 
-        chatViewModel.sendMessage("얼음공주","이상함",3,accessToken)
-
-
+        chatViewModel.sendMessage("다빈이 최고 예쁨!!",1,accessToken)
+    }
+    override fun onBackPressed() {
+        chatViewModel.disconnectStomp()
+        super.onBackPressed()
     }
 }

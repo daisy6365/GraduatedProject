@@ -298,7 +298,7 @@ interface InfoService {
     abstract fun requestModifyChat(
         @Header("Authorization") accessToken: String,
         @Path("chatRoomId") chatRoomId : Int,
-        @Path("name") name : String
+        @Body parameters: HashMap<String, Any>
     ):Call<ChatRoom>
 
     //채팅방 삭제

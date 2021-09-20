@@ -39,6 +39,8 @@
         <entry key="app/src/main/res/layout/bottom_navi_member_tab.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/bottom_navigation_tab.xml" value="0.13095238095238096" />
         <entry key="app/src/main/res/layout/content_study_room.xml" value="0.2128623188405797" />
+        <entry key="app/src/main/res/layout/dialog_chat.xml" value="0.2033514492753623" />
+        <entry key="app/src/main/res/layout/dialog_chatadd.xml" value="0.2033514492753623" />
         <entry key="app/src/main/res/layout/fragment_apply_study.xml" value="0.19972826086956522" />
         <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.13095238095238096" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.2128623188405797" />
@@ -65,7 +67,7 @@
         <entry key="app/src/main/res/layout/fragment_study_modify.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/item_add_member.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/item_applystatus.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/item_chatroom.xml" value="0.2128623188405797" />
+        <entry key="app/src/main/res/layout/item_chatroom.xml" value="0.32552856445312495" />
         <entry key="app/src/main/res/layout/item_group_member.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_grouplist.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/item_liketopic.xml" value="0.25" />
