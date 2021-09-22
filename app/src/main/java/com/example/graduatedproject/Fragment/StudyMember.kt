@@ -6,17 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.MemberListAdapter
-import com.example.graduatedproject.Adapter.MyStudyListAdapter
-import com.example.graduatedproject.Model.Profile
-import com.example.graduatedproject.R
+import com.example.graduatedproject.model.Profile
 import com.example.graduatedproject.Util.ServerUtil
 import com.example.graduatedproject.databinding.FragmentStudyMemberBinding
 import com.example.graduatedproject.viewmodel.MemberListViewModel
@@ -71,7 +67,7 @@ class StudyMember(studyRoomId: Int) : Fragment() {
         viewmodel = ViewModelProvider(requireActivity()).get(MemberListViewModel::class.java)
         viewmodel.memberListInfo.observe(viewLifecycleOwner, Observer {
             if(it != null){
-                recyclerAdapter = MemberListAdapter(requireContext(),memberInfo,accessToken,studyId)
+                recyclerAdapter = MemberListAdapter(requireContext(),viewmodel.memberListInfo,accessToken,studyId)
                 binding.memberList.adapter = recyclerAdapter
             }
         })

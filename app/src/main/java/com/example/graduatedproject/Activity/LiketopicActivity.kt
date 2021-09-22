@@ -7,19 +7,15 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.graduatedproject.Model.Likelist
+import com.example.graduatedproject.model.Likelist
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_liketopic.*
-import kotlinx.android.synthetic.main.fragment_login.view.*
-import kotlinx.android.synthetic.main.item_liketopic.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.zip.Inflater
 
 class LiketopicActivity : AppCompatActivity() {
     private val TAG = LiketopicActivity::class.java.simpleName

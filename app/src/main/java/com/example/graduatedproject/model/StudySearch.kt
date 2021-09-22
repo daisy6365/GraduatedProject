@@ -1,12 +1,13 @@
-package com.example.graduatedproject.Model
+package com.example.graduatedproject.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ChatList (
+data class StudySearch (
+    //스터디정보
     @SerializedName("content")
     @Expose
-    var content: ArrayList<Message>,
+    var content: ArrayList<Study>,
 
     //마지막 페이지 여부!!!
     @SerializedName("last")
@@ -39,4 +40,5 @@ data class ChatList (
     //값이 비 었는지 여부
     @SerializedName("empty")
     var empty: Boolean = true
+
 )

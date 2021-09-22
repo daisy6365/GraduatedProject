@@ -6,13 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.ListAdapter
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import retrofit2.Call
@@ -21,9 +20,9 @@ import retrofit2.Response
 
 class MemberListAdapter(
     var context: Context?,
-    var memberInfo: MutableList<Profile>?,
-    var accessToken : String,
-    var studyId : Int
+    var memberInfo: LiveData<ArrayList<Profile>>,
+    var accessToken: String,
+    var studyId: Int
     ) : RecyclerView.Adapter<MemberListAdapter.MemberViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberViewHolder {
         val view = LayoutInflater
@@ -36,7 +35,7 @@ class MemberListAdapter(
     @SuppressLint("NotifyDataSetChanged", "RecyclerView")
     override fun onBindViewHolder(holder: MemberViewHolder, position: Int) {
 
-        if(memberInfo!![position].image == null){
+        if(memberInfo!!.value!![position].image == null){
             Glide.with(holder.itemView.getContext())
                 .load(R.drawable.profile_init)
                 .override(55,55)
@@ -45,7 +44,7 @@ class MemberListAdapter(
         }
         else{
             Glide.with(holder.itemView.getContext())
-                .load(memberInfo!![position].image.thumbnailImage)
+                .load(memberInfo!!.value!![position].image.thumbnailImage)
                 .override(55,55)
                 .centerCrop()
                 .into(holder.member_img)
@@ -54,11 +53,11 @@ class MemberListAdapter(
         //val resourceId = context?.resources?.getIdentifier(memberInfo[position].image.thumbnailImage, "drawable", context!!.packageName)
 
         //member_img.setImageResource(resourceId!!)
-        holder.member_name.setText(memberInfo!![position].nickName)
+        holder.member_name.setText(memberInfo!!.value!![position].nickName)
         holder.member_out.setOnClickListener {
-            for(i in 0 .. memberInfo!!.size-1) {
-                if (holder.member_name.text == memberInfo!![i].nickName) {
-                    val userId = memberInfo!![i].userId
+            for(i in 0 .. memberInfo!!.value!!.size-1) {
+                if (holder.member_name.text == memberInfo!!.value!![i].nickName) {
+                    val userId = memberInfo!!.value!![i].userId
                     Log.d("userId", userId.toString())
 
                     ServerUtil.retrofitService.requestMemberDelete(accessToken,studyId,userId)
@@ -69,7 +68,7 @@ class MemberListAdapter(
 
                                     //adapter 리스트에서 삭제
                                     //adapter 리스트 갱신
-                                    memberInfo!!.removeAt(position)
+                                    memberInfo!!.value!!.removeAt(position)
                                     notifyDataSetChanged()
                                 }
                             }
@@ -85,7 +84,7 @@ class MemberListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return memberInfo!!.size
+        return memberInfo!!.value!!.size
     }
 
     class MemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

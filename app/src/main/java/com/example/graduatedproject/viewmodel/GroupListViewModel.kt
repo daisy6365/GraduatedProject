@@ -3,9 +3,8 @@ package com.example.graduatedproject.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.graduatedproject.Model.ChatRoom
-import com.example.graduatedproject.Model.Group
-import com.example.graduatedproject.Model.GroupList
+import com.example.graduatedproject.model.Group
+import com.example.graduatedproject.model.GroupList
 
 class GroupListViewModel : ViewModel() {
     private val TAG = GroupListViewModel::class.java.simpleName

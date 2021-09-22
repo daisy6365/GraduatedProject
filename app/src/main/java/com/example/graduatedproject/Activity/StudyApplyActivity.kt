@@ -6,11 +6,10 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.example.graduatedproject.Model.Study
+import com.example.graduatedproject.model.Study
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import kotlinx.android.synthetic.main.activity_study_apply.*
-import kotlinx.android.synthetic.main.fragment_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

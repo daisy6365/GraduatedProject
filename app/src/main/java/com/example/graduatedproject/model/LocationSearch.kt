@@ -1,21 +1,21 @@
-package com.example.graduatedproject.Model
+package com.example.graduatedproject.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Likesearch (
+data class LocationSearch (
     //보낼 관심주제 검색 키워드
     @SerializedName("content")
     @Expose
-    var content: ArrayList<ContentTag> = ArrayList(),
+    var content: ArrayList<ContentLocation>,
 
     //받을 관심주제 검색결과 리스트
     @Expose
-    val pageable: PageableTag = PageableTag(),
+    val pageable: PageableLocation = PageableLocation(),
 
     //마지막 페이지 여부!!!
     @SerializedName("last")
-    var last : Boolean = false,
+    var last : Boolean? = null,
 
     //총 페이지 수
     @SerializedName("totalPages")
@@ -49,9 +49,7 @@ data class Likesearch (
     var empty: Boolean = true
 )
 
-
-
-data class PageableTag (
+data class PageableLocation (
     var sort : Sort = Sort(),
 
     //페이지 크기
@@ -73,4 +71,5 @@ data class PageableTag (
     //비 페이징 여부
     @SerializedName("unpaged")
     var unpaged: Boolean = true
+
 )

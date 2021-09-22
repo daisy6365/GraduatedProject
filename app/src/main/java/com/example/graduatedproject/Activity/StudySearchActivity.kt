@@ -4,15 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.method.TextKeyListener.clear
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.StudySearchRecyclerAdapter
 import com.example.graduatedproject.Fragment.SearchStudy
-import com.example.graduatedproject.Model.Study
-import com.example.graduatedproject.Model.StudySearch
+import com.example.graduatedproject.model.StudySearch
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject
@@ -20,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_study_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Collections.addAll
 
 class StudySearchActivity : AppCompatActivity() {
     private val TAG = StudySearchActivity::class.java.simpleName

@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.StudyApplyStatusAdapter
-import com.example.graduatedproject.Model.ApplyStudy
+import com.example.graduatedproject.model.ApplyStudy
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import retrofit2.Call

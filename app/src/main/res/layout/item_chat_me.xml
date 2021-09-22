@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="message"
+            type="com.example.graduatedproject.model.Message" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="60dp"
+        android:clipToPadding="false">
+
+        <TextView
+            android:id="@+id/my_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@id/my_messagge"
+            android:padding="5dp"
+            android:text="@{message.createdAt}"
+            android:textColor="@color/colorBlack"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/my_messagge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chat_me_style"
+            android:textColor="@color/colorBlack"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:textSize="15sp"
+            android:layout_alignParentRight="true"
+            android:text="@{message.message}" />
+
+    </RelativeLayout>
+</layout>

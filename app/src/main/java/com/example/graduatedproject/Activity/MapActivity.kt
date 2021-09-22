@@ -16,9 +16,9 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.graduatedproject.Model.MapCode
-import com.example.graduatedproject.Model.MyLocation
-import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.model.MapCode
+import com.example.graduatedproject.model.MyLocation
+import com.example.graduatedproject.model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject

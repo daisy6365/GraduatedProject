@@ -3,8 +3,7 @@ package com.example.graduatedproject.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.graduatedproject.Model.ChatRoom
-import com.example.graduatedproject.Model.Group
+import com.example.graduatedproject.model.ChatRoom
 
 class ChatListViewModel : ViewModel() {
     private val TAG = ChatListViewModel::class.java.simpleName
@@ -18,7 +17,6 @@ class ChatListViewModel : ViewModel() {
     init {
         _chatListInfo.value = null
     }
-
 
     fun setData(chatListInfo: ArrayList<ChatRoom>) {
         _chatListInfo.value = chatListInfo

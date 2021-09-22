@@ -15,11 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.StudyCreateActivity
 import com.example.graduatedproject.Adapter.HomeListAdapter
-import com.example.graduatedproject.Model.StudySearch
+import com.example.graduatedproject.model.StudySearch
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

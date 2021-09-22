@@ -3,7 +3,7 @@ package com.example.graduatedproject.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.model.Profile
 
 //데이터의 변경을 알려줌
 

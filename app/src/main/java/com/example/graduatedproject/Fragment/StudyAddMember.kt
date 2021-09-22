@@ -7,13 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.MemberAddListAdapter
-import com.example.graduatedproject.Adapter.MemberListAdapter
-import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.example.graduatedproject.viewmodel.MemberListViewModel

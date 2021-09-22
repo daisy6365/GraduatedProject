@@ -12,15 +12,13 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.graduatedproject.Activity.LiketopicActivity
 import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.Activity.MapActivity
-import com.example.graduatedproject.Model.Image
-import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.example.graduatedproject.viewmodel.UserViewModel

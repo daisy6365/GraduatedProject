@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.graduatedproject.Activity.StudyApplyActivity
-import com.example.graduatedproject.Model.Study
+import com.example.graduatedproject.model.Study
 import com.example.graduatedproject.R
 
 class HomeListAdapter (

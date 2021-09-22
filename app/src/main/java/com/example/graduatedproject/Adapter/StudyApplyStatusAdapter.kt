@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.graduatedproject.Model.ApplyStudy
+import com.example.graduatedproject.model.ApplyStudy
 import com.example.graduatedproject.R
 
 class StudyApplyStatusAdapter (

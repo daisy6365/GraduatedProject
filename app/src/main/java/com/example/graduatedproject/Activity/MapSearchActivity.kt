@@ -1,22 +1,17 @@
 package com.example.graduatedproject.Activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.graduatedproject.Adapter.LikeSearchRecyclerAdapter
 import com.example.graduatedproject.Adapter.MapSearchRecyclerAdapter
-import com.example.graduatedproject.Model.Likesearch
-import com.example.graduatedproject.Model.LocationSearch
+import com.example.graduatedproject.model.LocationSearch
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_liketopic_search.*
 import kotlinx.android.synthetic.main.activity_map_search.*
 import retrofit2.Call
 import retrofit2.Callback

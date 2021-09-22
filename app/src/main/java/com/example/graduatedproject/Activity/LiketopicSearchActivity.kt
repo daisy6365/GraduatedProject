@@ -8,8 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Adapter.LikeSearchRecyclerAdapter
-import com.example.graduatedproject.Model.ContentTag
-import com.example.graduatedproject.Model.Likesearch
+import com.example.graduatedproject.model.Likesearch
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.gson.JsonObject

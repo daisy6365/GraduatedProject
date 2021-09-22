@@ -6,12 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.model.Profile
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.example.graduatedproject.viewmodel.MemberListViewModel
@@ -21,7 +20,7 @@ import retrofit2.Response
 
 class MemberAddListAdapter(
     var context: Context?,
-    var memberAddInfo: MutableList<Profile>?,
+    var memberAddInfo: ArrayList<Profile>?,
     var accessToken : String,
     var studyId : Int,
     private var viewmodel : MemberListViewModel
@@ -69,6 +68,7 @@ class MemberAddListAdapter(
                                 if (response.isSuccessful) {
                                     Log.d("MemberAddListAdapter", "지원멤버 추가 성공")
                                     viewmodel.addData(memberAddInfo!![position])
+                                    Log.d("MemberAddListAdapter", memberAddInfo!![position].toString())
 
                                     memberAddInfo!!.removeAt(i)
                                     notifyDataSetChanged()

@@ -10,7 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.LiketopicActivity
-import com.example.graduatedproject.Model.ContentTag
+import com.example.graduatedproject.model.ContentTag
 import com.example.graduatedproject.R
 
 class LikeSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {

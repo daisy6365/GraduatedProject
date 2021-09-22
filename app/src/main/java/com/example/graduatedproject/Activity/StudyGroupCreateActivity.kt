@@ -12,12 +12,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.graduatedproject.Model.Group
+import com.example.graduatedproject.model.Group
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.example.graduatedproject.databinding.FragmentStudyGroupListBinding
@@ -27,7 +26,6 @@ import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapReverseGeoCoder
 import net.daum.mf.map.api.MapView
 import kotlinx.android.synthetic.main.activity_study_group_create.*
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

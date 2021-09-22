@@ -3,7 +3,6 @@ package com.example.graduatedproject.Fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.example.graduatedproject.Activity.StudyMemberActivity
 import com.example.graduatedproject.Activity.StudyModifyActivity
-import com.example.graduatedproject.Model.Profile
 import com.example.graduatedproject.R
-import com.example.graduatedproject.Util.ServerUtil
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import android.app.AlertDialog
-import android.content.DialogInterface
 
 class StudyBuild(studyRoomId: Int) : Fragment() {
     val TAG = StudyBuild::class.java.simpleName

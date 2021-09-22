@@ -1,6 +1,6 @@
 package com.example.graduatedproject.Util
 
-import com.example.graduatedproject.Model.*
+import com.example.graduatedproject.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -319,9 +319,10 @@ interface InfoService {
     @GET("/chat-service/chatRooms/{chatRoomId}/chatMessages")
     abstract fun requestChat(
         @Header("Authorization") accessToken: String,
+        @Path("chatRoomId") chatRoomId : Int,
         @Query("page") page : Int,
         @Query("size") size : Int,
-        @Query("chatRoomId") searchName : String
+        @Query("lastMessageDate") lastMessageDate : String
     ):Call<ChatList>
 
 

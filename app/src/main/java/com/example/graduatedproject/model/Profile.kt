@@ -1,10 +1,6 @@
-package com.example.graduatedproject.Model
+package com.example.graduatedproject.model
 
-import android.os.Parcelable
-import android.provider.ContactsContract
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 
 data class Profile(
     //받을 사용자의 프로필 정보

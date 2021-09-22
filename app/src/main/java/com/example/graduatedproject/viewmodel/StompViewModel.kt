@@ -1,13 +1,12 @@
 package com.example.graduatedproject.viewmodel
 
-import android.R.attr.data
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.graduatedproject.Model.Message
-import com.example.graduatedproject.Model.SendMessage
+import com.example.graduatedproject.model.Message
+import com.example.graduatedproject.model.SendMessage
 import com.google.gson.Gson
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
@@ -18,10 +17,10 @@ import ua.naiksoftware.stomp.dto.StompMessage
 import java.util.*
 
 
-class ChatViewModel : ViewModel() {
+class StompViewModel : ViewModel() {
     //채팅 내용을 기록하는 뷰모델
     //채팅 리스트를 기록하는 뷰모델 필요 -> 스터디룸id에 따른 채팅방id, 채팅방 이름
-    private val TAG = ChatViewModel::class.java.simpleName
+    private val TAG = StompViewModel::class.java.simpleName
 
     private val SOCKET_URL = "ws://211.37.147.101:8000/chat-service/ws-stomp/websocket" // http = ws로 시작하며 https = wss로 시작
     private val MSSAGE_DESTINATION = "/sub/chat/room" // 소켓 주소
@@ -73,9 +72,6 @@ class ChatViewModel : ViewModel() {
                 )
             }
         }
-
-
-
     }
 
     fun sendMessage(message: String, studyChatId:Int, accesstoken : String) {   // 구독 하는 방과 같은 주소로 메세지 전송

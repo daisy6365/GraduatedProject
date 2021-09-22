@@ -11,7 +11,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.MapActivity
-import com.example.graduatedproject.Model.ContentLocation
+import com.example.graduatedproject.model.ContentLocation
 import com.example.graduatedproject.R
 
 class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {

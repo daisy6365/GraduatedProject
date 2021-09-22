@@ -12,12 +12,11 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.graduatedproject.Activity.StudySearchActivity
-import com.example.graduatedproject.Model.Category
+import com.example.graduatedproject.model.Category
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import kotlinx.android.synthetic.main.activity_study_create.*
 import kotlinx.android.synthetic.main.fragment_search_study.view.*
-import org.jetbrains.anko.find
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

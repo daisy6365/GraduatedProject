@@ -3,7 +3,7 @@ package com.example.graduatedproject.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.graduatedproject.Model.Group
+import com.example.graduatedproject.model.Group
 
 class GroupViewModel : ViewModel() {
     private val TAG = GroupViewModel::class.java.simpleName

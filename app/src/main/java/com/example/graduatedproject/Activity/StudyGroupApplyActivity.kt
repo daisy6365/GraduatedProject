@@ -2,7 +2,6 @@ package com.example.graduatedproject.Activity
 
 import android.Manifest
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -11,20 +10,14 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.graduatedproject.Fragment.GroupMember
-import com.example.graduatedproject.Model.Group
-import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.model.Group
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import kotlinx.android.synthetic.main.activity_study_group_apply.*

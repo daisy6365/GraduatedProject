@@ -2,11 +2,8 @@ package com.example.graduatedproject.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +12,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.graduatedproject.Model.Group
+import com.example.graduatedproject.model.Group
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapReverseGeoCoder

@@ -10,9 +10,6 @@ import android.view.*
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.view.marginLeft
-import androidx.core.view.marginRight
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,13 +19,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.StudyChatActivity
 import com.example.graduatedproject.Adapter.StudyChatListAdapter
 import com.example.graduatedproject.ItemTouchHelperCallback
-import com.example.graduatedproject.Model.ChatRoom
+import com.example.graduatedproject.model.ChatRoom
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.example.graduatedproject.databinding.FragmentStudyChatBinding
 import com.example.graduatedproject.viewmodel.ChatListViewModel
 import kotlinx.android.synthetic.main.fragment_study_chat.*
-import org.jetbrains.anko.ems
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

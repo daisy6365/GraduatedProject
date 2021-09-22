@@ -3,8 +3,7 @@ package com.example.graduatedproject.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.graduatedproject.Model.Group
-import com.example.graduatedproject.Model.Profile
+import com.example.graduatedproject.model.Profile
 
 class MemberListViewModel : ViewModel() {
     private val _memberListInfo: MutableLiveData<ArrayList<Profile>> = MutableLiveData()
