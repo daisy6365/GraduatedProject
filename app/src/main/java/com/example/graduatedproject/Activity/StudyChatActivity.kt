@@ -91,12 +91,11 @@ class StudyChatActivity : AppCompatActivity() {
         messageViewModel.messageInfo.observe(this, Observer { it ->
             if(it != null) {
                 if (messageViewModel.messageInfo.value!!.last == false) {
-                    recyclerAdapter.setList(messageViewModel.messageInfo.value!!.content)
-                    // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
-                    //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
-                    recyclerAdapter.notifyDataSetChanged()
                     if(PAGE_NUM == 0){
-                        binding.chatRecycler.smoothScrollToPosition(binding.chatRecycler.adapter!!.itemCount)
+                        recyclerAdapter.setList(messageViewModel.messageInfo.value!!.content)
+                        // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
+                        //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
+                        recyclerAdapter.notifyDataSetChanged()
                     }
                     PAGE_NUM++
                 }
@@ -107,7 +106,6 @@ class StudyChatActivity : AppCompatActivity() {
                         Toast.makeText(this, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
                     }
                     else{}
-
                 }
             }
         })

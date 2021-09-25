@@ -19,7 +19,8 @@ interface InfoService {
     @POST("/auth-service/auth")
     abstract fun requestLogin(
             //로그인시 전달 값
-            @Header("kakaoToken")  kakaoToken: String
+            @Header("kakaoToken")  kakaoToken: String,
+            @Header("fcmToken")  fcmToken: String
     ): Call<Void>
     // <> 안에 요청안에 데이터 or 응답에 대한 매핑
 
@@ -389,4 +390,12 @@ interface InfoService {
         @Header("Authorization") accessToken: String,
         @Path("gatheringId") gatheringId : Int
     ):Call<ArrayList<Profile>>
+
+    //fcm알림 조회
+    @GET("/notification-service/notifications")
+    abstract fun requestNotification(
+        @Header("Authorization") accessToken: String,
+        @Query("page") page : Int,
+        @Query("size") size : Int
+    ):Call<NotificationList>
 }

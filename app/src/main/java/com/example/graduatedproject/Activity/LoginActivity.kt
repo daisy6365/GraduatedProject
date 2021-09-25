@@ -64,14 +64,15 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show() //로그인 성공시 activity2로 이동
                 kakaoToken = token.accessToken
                 Log.d("kakaoToken",kakaoToken)
+                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
+                val editor = sp.edit()
+                var fcmToken = sp.getString("fcm_token", "").toString()
 
-                ServerUtil.retrofitService.requestLogin(kakaoToken)
+                ServerUtil.retrofitService.requestLogin(kakaoToken,fcmToken)
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
                                 //서버에서 받은 AccessToken과 RefreshToken을 받아옴
-                                val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-                                val editor = sp.edit()
 
                                 var accessToken = response.headers().get("accessToken").toString()
                                 Log.d(TAG,accessToken)

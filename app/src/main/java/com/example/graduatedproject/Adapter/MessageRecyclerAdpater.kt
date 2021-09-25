@@ -51,7 +51,7 @@ class MessageRecyclerAdpater(val userId : Int?) : RecyclerView.Adapter<RecyclerV
 
     fun setList(notice: MutableList<Message>) {
         notice.reverse()
-        messageInfo.addAll(0,notice)
+        messageInfo.addAll(0, notice)
     }
 
     fun add(message: Message) {

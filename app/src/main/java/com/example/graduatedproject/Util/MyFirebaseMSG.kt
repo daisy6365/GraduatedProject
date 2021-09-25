@@ -1,16 +1,22 @@
-package com.example.graduatedproject
+package com.example.graduatedproject.Util
 
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.example.graduatedproject.Activity.MainActivity
 import com.example.graduatedproject.R
+import com.example.graduatedproject.viewmodel.NoticeViewModel
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
+
 public class MyFirebaseMSG : FirebaseMessagingService() {
+    private lateinit var noticeviewModel : NoticeViewModel
 
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
@@ -20,6 +26,12 @@ public class MyFirebaseMSG : FirebaseMessagingService() {
     }
 
     private fun sendNotification(remoteMessage: RemoteMessage) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT)
+
+
         val title = remoteMessage.data["title"]
         val message = remoteMessage.data["message"]
         val CHANNEL_ID = "ChannerID"
@@ -44,6 +56,7 @@ public class MyFirebaseMSG : FirebaseMessagingService() {
         builder.setDefaults(Notification.DEFAULT_ALL)
         builder.setWhen(System.currentTimeMillis())
         builder.setSmallIcon(R.mipmap.ic_launcher)
+        builder.setContentIntent(pendingIntent)
         builder.setContentTitle(title)
         builder.setContentText(message)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {

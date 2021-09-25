@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="notice"
+            type="com.example.graduatedproject.model.Notice" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp">
+
+        <TextView
+            android:id="@+id/notice_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:text="@{notice.title}"
+            android:textColor="@color/colorBlack"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/notice_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_alignBottom="@+id/notice_title"
+            android:layout_marginBottom="5dp"
+            android:textSize="15sp"
+            android:text="@{notice.content}" />
+
+    </LinearLayout>
+</layout>

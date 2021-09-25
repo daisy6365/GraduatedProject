@@ -93,7 +93,7 @@ class LikeSearchRecyclerAdapter(private val context: Context): RecyclerView.Adap
     private fun moveDetail(addTagId: Int) {
         val intent : Intent = Intent(context, LiketopicActivity::class.java)
         intent.putExtra("add_item",addTagId)
-        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
 
 

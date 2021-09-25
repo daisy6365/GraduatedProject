@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val pref: SharedPreferences = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
-//        val editor = pref.edit();
+        val editor = pref.edit();
 //        editor.remove("access_token")
 //        editor.remove("refresh_token")
 //        editor.commit()
@@ -46,9 +46,12 @@ class MainActivity : AppCompatActivity() {
 
                 // Get new FCM registration token
                 fcmToken = task.result
+                editor.putString("fcm_token", fcmToken)
+                editor.commit()
                 Log.d("FCM토큰",fcmToken)
 
             })
+
 
 
         configureBottomNavigation(token)
