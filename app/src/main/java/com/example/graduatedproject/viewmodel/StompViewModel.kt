@@ -22,7 +22,7 @@ class StompViewModel : ViewModel() {
     //채팅 리스트를 기록하는 뷰모델 필요 -> 스터디룸id에 따른 채팅방id, 채팅방 이름
     private val TAG = StompViewModel::class.java.simpleName
 
-    private val SOCKET_URL = "ws://211.37.147.101:8000/chat-service/ws-stomp/websocket" // http = ws로 시작하며 https = wss로 시작
+    private val SOCKET_URL = "ws://54.180.75.139:8000/chat-service/ws-stomp/websocket" // http = ws로 시작하며 https = wss로 시작
     private val MSSAGE_DESTINATION = "/sub/chat/room" // 소켓 주소
     private val MSSAGE_DESTINATION1 = "/pub/chat/message" // 소켓 주소
 
@@ -39,7 +39,6 @@ class StompViewModel : ViewModel() {
     fun connectStomp(studyChatId: Int, accesstoken : String) {
         // add Header
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, SOCKET_URL)
-
         headerList = ArrayList()
         headerList.add(StompHeader("token", accesstoken))
         mStompClient.connect(headerList)
@@ -47,34 +46,27 @@ class StompViewModel : ViewModel() {
             .subscribe { stompMessage ->
                 Log.d(TAG, "receive messageData :" + stompMessage.payload)
                 val messageVO = gson.fromJson(stompMessage.payload, Message::class.java)
-                _message.postValue(messageVO)
-            }
-
+                _message.postValue(messageVO) }
         mStompClient.lifecycle().subscribe { lifecycleEvent: LifecycleEvent ->
             when (lifecycleEvent.type) {
                 LifecycleEvent.Type.OPENED -> Log.i(
                     TAG,
-                    "Stomp connection opened"
-                )
+                    "Stomp connection opened")
                 LifecycleEvent.Type.ERROR -> { Log.i(
                     TAG, "Error",
-                    lifecycleEvent.exception
-                )
-                    connectStomp(studyChatId,accesstoken)
-                }
+                    lifecycleEvent.exception)
+                    connectStomp(studyChatId,accesstoken) }
                 LifecycleEvent.Type.CLOSED -> Log.i(
                     TAG,
-                    "Stomp connection closed"
-                )
+                    "Stomp connection closed")
                 LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT -> Log.i(
                     TAG,
-                    "FAILED_SERVER_HEARTBEAT"
-                )
+                    "FAILED_SERVER_HEARTBEAT")
             }
         }
     }
 
-    fun sendMessage(message: String, studyChatId:Int, accesstoken : String) {   // 구독 하는 방과 같은 주소로 메세지 전송
+    fun sendMessage(message: String, studyChatId:Int, accesstoken : String) {
         val messageVO = SendMessage(message, studyChatId)
         val messageJson: String = gson.toJson(messageVO)
 

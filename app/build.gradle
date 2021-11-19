@@ -82,6 +82,9 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/libDaumMapAndroid.jar')
 
+    //스와이프
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+
     //GPS
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 

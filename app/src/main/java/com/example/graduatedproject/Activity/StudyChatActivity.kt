@@ -25,6 +25,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import com.example.graduatedproject.Util.ServerUtil
 import com.example.graduatedproject.viewmodel.MessageViewModel
+import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.fragment_study_chat.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -38,7 +40,7 @@ class StudyChatActivity : AppCompatActivity() {
     private lateinit var recyclerAdapter: MessageRecyclerAdpater
     var chatListInfo : ChatList? = null
     private var PAGE_NUM = 0 //현재페이지
-    private val LIST_LENGTH = 20 //리스트개수
+    private val LIST_LENGTH = 50 //리스트개수
     val paramObject = JsonObject()
     var userId : Int? = null
     lateinit var sendmessage : String
@@ -57,6 +59,9 @@ class StudyChatActivity : AppCompatActivity() {
         var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
         var accessToken: String =  pref.getString("access_token", "").toString()
         val studyChatId = intent.getIntExtra("studyChatId",0)
+        val studyChatName = intent.getStringExtra("studyChatName")
+
+        chat_toolbar_name.text = studyChatName
 
         messageViewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
         stompViewModel.connectStomp(studyChatId, accessToken)
@@ -91,18 +96,31 @@ class StudyChatActivity : AppCompatActivity() {
         messageViewModel.messageInfo.observe(this, Observer { it ->
             if(it != null) {
                 if (messageViewModel.messageInfo.value!!.last == false) {
+                    messageViewModel.messageInfo.value!!.content.reverse()
+                    recyclerAdapter.setList(messageViewModel.messageInfo.value!!.content)
+                    // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
+                    //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
+
+
                     if(PAGE_NUM == 0){
-                        recyclerAdapter.setList(messageViewModel.messageInfo.value!!.content)
-                        // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
-                        //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
-                        recyclerAdapter.notifyDataSetChanged()
+                        //recyclerAdapter.notifyDataSetChanged()
+                        binding.chatRecycler.scrollToPosition(binding.chatRecycler.adapter!!.itemCount-5)
                     }
+                    else{
+                        binding.chatRecycler.scrollToPosition(binding.chatRecycler.adapter!!.itemCount-(LIST_LENGTH*PAGE_NUM)+10)
+                    }
+                    //recyclerAdapter.notifyDataSetChanged()
+                    //recyclerAdapter.notifyItemRangeInserted((PAGE_NUM+1) * LIST_LENGTH, LIST_LENGTH)
                     PAGE_NUM++
                 }
                 else{
                     if(messageViewModel.messageInfo.value!!.numberOfElements != 0){
+                        messageViewModel.messageInfo.value!!.content.reverse()
                         recyclerAdapter.setList(messageViewModel.messageInfo.value!!.content)
-                        recyclerAdapter.notifyDataSetChanged()
+                        //recyclerAdapter.notifyDataSetChanged()
+                        //recyclerAdapter.notifyItemRangeInserted((PAGE_NUM+1) * LIST_LENGTH, LIST_LENGTH)
+                        binding.chatRecycler.scrollToPosition(binding.chatRecycler.adapter!!.itemCount-(LIST_LENGTH*PAGE_NUM)+10)
+
                         Toast.makeText(this, "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
                     }
                     else{}
@@ -126,6 +144,7 @@ class StudyChatActivity : AppCompatActivity() {
                     }
                 }
             }
+
         })
 
         binding.sendBtn.setOnClickListener {
@@ -175,10 +194,10 @@ class StudyChatActivity : AppCompatActivity() {
                         userId = profile.id
                         Log.d(TAG, userId.toString())
 
-                        binding.chatRecycler.apply{
-                            binding.chatRecycler.layoutManager = LinearLayoutManager(context)
+                        applicationContext.apply{
                             recyclerAdapter = MessageRecyclerAdpater(userId)
                             binding.chatRecycler.adapter = recyclerAdapter
+                            binding.chatRecycler.layoutManager = LinearLayoutManager(applicationContext)
                         }
                     }
                 }

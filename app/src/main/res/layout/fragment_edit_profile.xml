@@ -21,6 +21,7 @@
             android:layout_marginTop="25dp"
             android:layout_marginBottom="15dp"
             android:src="@drawable/profile_init"
+            android:background="@drawable/imageview_corner"
             />
 
         <LinearLayout
@@ -29,25 +30,30 @@
             android:orientation="horizontal"
             android:layout_marginBottom="20dp">
 
-            <Button
+            <TextView
                 android:id="@+id/change_img"
-                android:text="사진 가져오기"
-                android:textSize="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                />
+                android:padding="7dp"
+                android:background="@drawable/background_btn_green"
+                android:text="사진 가져오기"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:textSize="13dp" />
 
-            <Button
+            <TextView
                 android:id="@+id/change_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:background="@drawable/background_btn_green"
                 android:text="기본 이미지"
-                android:textSize="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"/>
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:textSize="13dp" />
+
         </LinearLayout>
-
-
-
 
 
         <EditText
@@ -64,24 +70,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
             >
-            <Button
-                android:id="@+id/edit_profile_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text = "취소"
-                android:layout_marginBottom="25dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="25dp"
-                />
 
-            <Button
-                android:id="@+id/edit_profile_apply"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/edit_profile_cancel"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:padding="10dp"
+                android:background="@drawable/background_button"
+                android:text = "취소"
+                android:gravity="center"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/edit_profile_apply"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:padding="10dp"
+                android:background="@drawable/background_btn_green"
                 android:text = "완료"
-                android:layout_marginRight="25dp"
-                />
+                android:gravity="center"
+                android:textColor="@color/colorWhite" />
 
         </LinearLayout>
     </LinearLayout>

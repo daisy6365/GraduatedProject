@@ -85,7 +85,7 @@ class SearchStudy : DialogFragment() {
         var edit_search : EditText = view.findViewById(R.id.edit_search)
         var search_check_offline :CheckBox = view.findViewById(R.id.search_check_offline)
         var search_check_online : CheckBox = view.findViewById(R.id.search_check_online)
-        var study_search_btn : LinearLayout = view.findViewById(R.id.study_search_btn)
+        var study_search_btn : TextView = view.findViewById(R.id.study_search_btn)
 
         //카테고리 기능 추가
         search_big_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -185,7 +185,7 @@ class SearchStudy : DialogFragment() {
                         this.putExtra("offline",offline) // 데이터 넣기
                         this.putExtra("online",online) // 데이터 넣기
                         dismiss()
-                        startActivity(intent)
+                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                     }
                 }
             }

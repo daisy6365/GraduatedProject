@@ -30,8 +30,6 @@ public class MyFirebaseMSG : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT)
-
-
         val title = remoteMessage.data["title"]
         val message = remoteMessage.data["message"]
         val CHANNEL_ID = "ChannerID"

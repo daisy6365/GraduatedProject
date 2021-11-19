@@ -53,17 +53,19 @@ class StudyChatListAdapter (
             for(i in 0 .. chatRoomInfo!!.value!!.size-1){
                 if(holder.chatroom_name.text == chatRoomInfo!!.value!![i].name){
                     val chatId = chatRoomInfo!!.value!![i].id
+                    val chatName = chatRoomInfo!!.value!![i].name
                     Log.d("userId", chatId.toString())
 
-                    moveDetail(chatId)
+                    moveDetail(chatId,chatName)
                 }
             }
         }
     }
 
-    private fun moveDetail(chatId: Int) {
+    private fun moveDetail(chatId: Int,chatName : String) {
         val intent : Intent = Intent(context, StudyChatActivity::class.java)
         intent.putExtra("studyChatId",chatId)
+        intent.putExtra("studyChatName",chatName)
         context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
@@ -85,6 +87,7 @@ class StudyChatListAdapter (
     }
 
     override fun onRightClick(position: Int, viewHolder: RecyclerView.ViewHolder) {
+        Log.d("StudyChatListAdapter", chatRoomInfo!!.value!![position].id.toString())
         ServerUtil.retrofitService.requestDeleteChat(accessToken, chatRoomInfo!!.value!![position].id)
             .enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {

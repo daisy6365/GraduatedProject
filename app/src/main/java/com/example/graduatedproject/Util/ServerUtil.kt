@@ -39,7 +39,7 @@ object ServerUtil {
         //다른 HTTP 모듈보다 빠름
         val retrofit = Retrofit
             .Builder()
-            .baseUrl("http://211.37.147.101:8000")
+            .baseUrl("http://54.180.75.139:8000")
             //Gson은 Json문서를 받아서 자동으로 java class 형태로 만들어주는 역할
             .addConverterFactory(GsonConverterFactory.create())
             .client(builder)
@@ -52,13 +52,10 @@ object ServerUtil {
             .addConverterFactory(GsonConverterFactory.create())
             .client(builder)
             .build()
-
         retrofitService = retrofit.create(InfoService::class.java)
         kakaoService = kakaoretrofit.create(InfoService::class.java)
         Log.d(TAG, "서버 연결")
-
     }
-
 }
 class AuthInterceptor(private val context: Context) : Interceptor {
     private val TAG = AuthInterceptor::class.java.simpleName

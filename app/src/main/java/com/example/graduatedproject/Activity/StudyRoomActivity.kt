@@ -23,6 +23,9 @@ class StudyRoomActivity : AppCompatActivity() {
 
         if (intent.hasExtra("studyRoomId")) {
             val studyRoomId = intent.getIntExtra("studyRoomId",0)
+            val studyRoomName = intent.getStringExtra("studyRoomName")
+            study_toolbar_name.text = studyRoomName
+
             study_frag_pager.adapter = StudyRoomAdapter(supportFragmentManager, 4,studyRoomId)
             study_top_menu.setupWithViewPager(study_frag_pager)
 

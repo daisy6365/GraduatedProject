@@ -42,7 +42,7 @@ class Home : Fragment() {
         val offline = true
         val online = true
         val searchKeyword : String = ""
-        val categoryId = 4
+        val categoryId = 0
 
         paramObject.addProperty("page", PAGE_NUM)
         paramObject.addProperty("size", LIST_LENGTH)

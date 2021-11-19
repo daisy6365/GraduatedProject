@@ -100,6 +100,7 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
         mapView = MapView(this)
         mapViewContainer = map_view
         mapViewContainer.addView(mapView)
+        create_study_cover_img.clipToOutline = true
 
         val permissionCheck =
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -312,15 +313,18 @@ class StudyCreateActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
                         mapViewContainer.removeView(mapView)
 
+
                         val intent = Intent(this@StudyCreateActivity, StudyApplyActivity::class.java)
                         intent.putExtra("studyId",studyId)
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 
+                        finish()
                     }
                 }
                 override fun onFailure(call: Call<Study>, t: Throwable) {
                     Log.d(TAG, "스터디생성정보 전송 실패")
                     Toast.makeText(this@StudyCreateActivity, "스터디생성정보 전송 실패", Toast.LENGTH_LONG).show()
+
                 }
             })
 

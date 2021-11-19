@@ -3,11 +3,13 @@ package com.example.graduatedproject.Adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduatedproject.Activity.LiketopicActivity
 import com.example.graduatedproject.model.ContentTag
@@ -93,10 +95,7 @@ class LikeSearchRecyclerAdapter(private val context: Context): RecyclerView.Adap
     private fun moveDetail(addTagId: Int) {
         val intent : Intent = Intent(context, LiketopicActivity::class.java)
         intent.putExtra("add_item",addTagId)
-        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-
-
-
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
     @SuppressLint("NotifyDataSetChanged")

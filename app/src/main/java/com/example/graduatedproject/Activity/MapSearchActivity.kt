@@ -34,7 +34,7 @@ class MapSearchActivity : AppCompatActivity() {
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
 
         applicationContext.apply{
-            mapadapter = MapSearchRecyclerAdapter(applicationContext)
+            mapadapter = MapSearchRecyclerAdapter(this@MapSearchActivity)
             placesearch_recycler.adapter = mapadapter
             placesearch_recycler.layoutManager = LinearLayoutManager(applicationContext)
         }

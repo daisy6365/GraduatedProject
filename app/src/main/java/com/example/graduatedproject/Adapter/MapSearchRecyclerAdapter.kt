@@ -98,7 +98,7 @@ class MapSearchRecyclerAdapter(private val context: Context): RecyclerView.Adapt
     private fun moveDetail(addTag: Int) {
         val intent : Intent = Intent(context, MapActivity::class.java)
         intent.putExtra("modify_item",addTag)
-        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 
     }
 

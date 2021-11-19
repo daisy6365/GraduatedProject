@@ -21,10 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/my_messagge"
             android:padding="5dp"
-            android:text="@{message.createdAt}"
             android:textColor="@color/colorBlack"
             android:textSize="10sp" />
 
@@ -37,8 +36,7 @@
             android:padding="10dp"
             android:elevation="2dp"
             android:textSize="15sp"
-            android:layout_alignParentRight="true"
-            android:text="@{message.message}" />
+            android:layout_alignParentRight="true" />
 
     </RelativeLayout>
 </layout>

@@ -196,7 +196,7 @@ interface InfoService {
         @Query("offline") offline : Boolean,
         @Query("online") online : Boolean,
         @Query("searchKeyword") searchKeyword : String,
-        @Query("categoryId") categoryId : Int,
+        @Query("categoryId") categoryId : Int
     ):Call<StudySearch>
 
     //스터디 참가 신청

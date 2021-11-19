@@ -43,7 +43,7 @@ class LiketopicSearchActivity : AppCompatActivity() {
                 paramObject.addProperty("size", LIST_LENGTH)
                 paramObject.addProperty("name", query.toString())
                 applicationContext.apply{
-                    likeadapter = LikeSearchRecyclerAdapter(applicationContext)
+                    likeadapter = LikeSearchRecyclerAdapter(this@LiketopicSearchActivity)
                     liketopicsearch_recycler.adapter = likeadapter
                     liketopicsearch_recycler.layoutManager = LinearLayoutManager(applicationContext)
                 }

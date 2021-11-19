@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:drawable="@drawable/study_unclick"
+        android:drawable="@drawable/mystudy_unclick"
         android:state_selected="false"/>
     <item
         android:state_selected="true"
-        android:drawable="@drawable/study_click" />
+        android:drawable="@drawable/mystudy_click" />
 </selector>

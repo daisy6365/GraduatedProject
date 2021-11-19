@@ -25,7 +25,10 @@ import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlinx.android.synthetic.main.activity_study_apply.*
 import kotlinx.android.synthetic.main.activity_study_modify.*
+import kotlinx.android.synthetic.main.activity_study_modify.big_category
+import kotlinx.android.synthetic.main.activity_study_modify.small_category
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapReverseGeoCoder
@@ -94,6 +97,7 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
         //칩 그룹 지정
         var chipGroup: ChipGroup = modify_chip_group
         var inflater: LayoutInflater = LayoutInflater.from(chipGroup.context)
+        modify_study_cover_img.clipToOutline = true
 
         mapView = MapView(this)
         mapViewContainer = modify_map_view
@@ -111,12 +115,18 @@ class StudyModifyActivity : AppCompatActivity(), MapView.MapViewEventListener {
                         override fun onResponse(call: Call<Study>, response: Response<Study>) {
                             if (response.isSuccessful) {
                                 studyInfo  = response.body()!!
-                                if(studyInfo!!.image!!.profileImage != null){
+
+                                if(studyInfo!!.image?.profileImage != null){
                                     Glide.with(this@StudyModifyActivity)
-                                        .load(studyInfo!!.image!!.profileImage)
+                                        .load(studyInfo!!.image?.profileImage)
                                         .centerCrop()
                                         .into(modify_study_cover_img)
-                                } else{}
+                                } else if(studyInfo!!.image == null){
+                                    Glide.with(this@StudyModifyActivity)
+                                        .load(R.drawable.applogo_gray)
+                                        .centerCrop()
+                                        .into(modify_study_cover_img)
+                                }
                                 modify_study_name.setText(studyInfo!!.name)
                                 people_num = studyInfo!!.numberOfPeople
                                 modify_people_number.setText(people_num.toString())

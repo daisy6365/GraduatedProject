@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.graduatedproject.Activity.StudyRoomActivity
 import com.example.graduatedproject.model.Study
+import kotlinx.android.synthetic.main.fragment_my_page.*
 
 
 class MyStudyListAdapter (
@@ -58,6 +59,7 @@ class MyStudyListAdapter (
     override fun onBindViewHolder(holder: MyStudyListViewHolder, position: Int) {
         holder.home_study_name.text = studyInfo!![position].name
 
+
         if(studyInfo!![position].online == true && studyInfo!![position].offline == true){
             holder.home_on_off.setText("OFFLINE/ONLINE")
         }
@@ -70,7 +72,7 @@ class MyStudyListAdapter (
 
         if(studyInfo!![position].image == null){
             Glide.with(holder.itemView.getContext())
-                .load(R.drawable.background_button)
+                .load(R.drawable.applogo_gray)
                 .centerCrop()
                 .into( holder.search_study_cover)
         }
@@ -80,6 +82,7 @@ class MyStudyListAdapter (
                 .centerCrop()
                 .into( holder.search_study_cover)
         }
+        holder.search_study_cover.clipToOutline = true
 
         if(studyInfo!![position].studyTags != null){
             for(i in 0..studyInfo!![position].studyTags!!.size-1){
@@ -116,9 +119,10 @@ class MyStudyListAdapter (
             for(i in 0 .. studyInfo!!.size-1){
                 if(holder.home_study_name.text == studyInfo!![i].name){
                     val studyId = studyInfo!![i].id
+                    val studyName = studyInfo!![i].name
                     Log.d("studyRoomId", studyId.toString())
 
-                    moveDetail(studyId)
+                    moveDetail(studyId,studyName)
 
 
                 }
@@ -126,9 +130,10 @@ class MyStudyListAdapter (
         }
     }
 
-    private fun moveDetail(studyId: Int) {
+    private fun moveDetail(studyId: Int, studyName:String) {
         val intent : Intent = Intent(context, StudyRoomActivity::class.java)
         intent.putExtra("studyRoomId",studyId)
+        intent.putExtra("studyRoomName",studyName)
         context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 

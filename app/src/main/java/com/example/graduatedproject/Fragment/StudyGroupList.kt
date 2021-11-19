@@ -13,6 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.graduatedproject.Activity.StudyGroupCreateActivity
 import com.example.graduatedproject.Adapter.StudyGroupListAdapter
 import com.example.graduatedproject.model.GroupList
@@ -43,49 +45,49 @@ class StudyGroupList(studyRoomId: Int) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStudyGroupListBinding.inflate(inflater,container,false)
-        //viewmodel = ViewModelProvider(requireActivity()).get(GroupListViewModel::class.java)
+        viewmodel = ViewModelProvider(requireActivity()).get(GroupListViewModel::class.java)
 
         paramObject.addProperty("page", PAGE_NUM)
         paramObject.addProperty("size", LIST_LENGTH)
 
-//        val group_recycler: RecyclerView = requireView().findViewById(R.id.group_recycler)
-//        val context = requireView().context
-//        context.apply {
-//            group_recycler.layoutManager = LinearLayoutManager(applicationContext)
-//            recyclerAdapter = StudyGroupListAdapter(applicationContext)
-//            group_recycler.adapter = recyclerAdapter
-//        }
+        val group_recycler: RecyclerView = binding.root.findViewById(R.id.group_recycler)
+        val context = binding.root.context
+        context.apply {
+            group_recycler.layoutManager = LinearLayoutManager(applicationContext)
+            recyclerAdapter = StudyGroupListAdapter(applicationContext)
+            group_recycler.adapter = recyclerAdapter
+        }
 
-//        binding.groupRecycler.apply{
-//            binding.groupRecycler.layoutManager = LinearLayoutManager(context)
-//            recyclerAdapter = StudyGroupListAdapter(context)
-//            binding.groupRecycler.adapter = recyclerAdapter
-//        }
-//
-//        loadList(paramObject)
-//
-//        viewmodel.groupListInfo.observe(viewLifecycleOwner, Observer {
-//            if(it != null){
-//                if(viewmodel.groupListInfo.value!!.last == false){
-//                    if(PAGE_NUM != 0){ recyclerAdapter.deleteLoading() }
-//                    recyclerAdapter.setList(viewmodel.groupListInfo.value!!.content)
-//                    // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
-//                    //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
-//                    recyclerAdapter.notifyDataSetChanged()
-//                    PAGE_NUM++
-//                }
-//                else{
-//                    if(viewmodel.groupListInfo.value!!.numberOfElements != 0){
-//                        if(PAGE_NUM != 0){ recyclerAdapter.deleteLoading() }
-//                        recyclerAdapter.setList(viewmodel.groupListInfo.value!!.content)
-//                        recyclerAdapter.deleteLoading()
-//                        recyclerAdapter.notifyDataSetChanged()
-//                        Toast.makeText(getActivity(), "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
-//                    }
-//                    else{}
-//                }
-//            }
-//        })
+        binding.groupRecycler.apply{
+            binding.groupRecycler.layoutManager = LinearLayoutManager(context)
+            recyclerAdapter = StudyGroupListAdapter(context)
+            binding.groupRecycler.adapter = recyclerAdapter
+        }
+
+        loadList(paramObject)
+
+        viewmodel.groupListInfo.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                if(viewmodel.groupListInfo.value!!.last == false){
+                    if(PAGE_NUM != 0){ recyclerAdapter.deleteLoading() }
+                    recyclerAdapter.setList(viewmodel.groupListInfo.value!!.content)
+                    // 새로운 게시물이 추가되었다는 것을 알려줌 (추가된 부분만 새로고침)
+                    //새로운 값을 추가했으니 거기만 새로 그릴것을 요청
+                    recyclerAdapter.notifyDataSetChanged()
+                    PAGE_NUM++
+                }
+                else{
+                    if(viewmodel.groupListInfo.value!!.numberOfElements != 0){
+                        if(PAGE_NUM != 0){ recyclerAdapter.deleteLoading() }
+                        recyclerAdapter.setList(viewmodel.groupListInfo.value!!.content)
+                        recyclerAdapter.deleteLoading()
+                        recyclerAdapter.notifyDataSetChanged()
+                        Toast.makeText(getActivity(), "마지막페이지 입니다!", Toast.LENGTH_LONG).show()
+                    }
+                    else{}
+                }
+            }
+        })
 
         return binding.root
     }

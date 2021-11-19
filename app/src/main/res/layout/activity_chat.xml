@@ -11,41 +11,70 @@
             type="com.example.graduatedproject.viewmodel.StompViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".Activity.StudyChatActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/chat_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            android:background="#FFFFFF"
+            app:layout_constraintVertical_weight="1"
+            tools:ignore="MissingConstraints"
+            >
+            <TextView
+                android:id="@+id/chat_toolbar_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:text="채팅방 이름"
+                android:layout_gravity="center"
+                />
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chat_recycler"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_height="match_parent">
-        </androidx.recyclerview.widget.RecyclerView>
-        <LinearLayout
-            android:layout_weight="12"
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_below="@+id/chat_toolbar"
+            android:layout_marginTop="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chat_recycler"
+            app:layout_constraintVertical_bias="0.967">
 
             <EditText
                 android:id="@+id/chat_edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"/>
+                android:layout_weight="2" />
 
             <ImageButton
                 android:id="@+id/send_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_baseline_arrow_upward_24"
-                android:background="@drawable/circle_accentcolor"
                 android:layout_margin="10dp"
-                android:layout_weight="11"/>
+                android:layout_weight="11"
+                android:background="@drawable/circle_accentcolor"
+                android:src="@drawable/ic_baseline_arrow_upward_24" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </layout>

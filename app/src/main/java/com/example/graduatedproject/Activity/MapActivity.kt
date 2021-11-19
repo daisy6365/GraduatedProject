@@ -31,6 +31,7 @@ import java.util.*
 
 class MapActivity : AppCompatActivity() {
     private val TAG = MapActivity::class.java.simpleName
+    lateinit var currentLatLng: Location
     val PERMISSIONS_REQUEST_CODE = 100
     var REQUIRED_PERMISSIONS = arrayOf<String>( Manifest.permission.ACCESS_FINE_LOCATION)
     var profile = Profile()
@@ -70,9 +71,8 @@ class MapActivity : AppCompatActivity() {
                     //변경된 seekbar의 값을 서버로 보냄
                     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                         var distance : Int = 0
-                        if(progress == 0){ distance = 0 }
-                        else if(progress == 1){ distance = 3 }
-                        else if(progress == 2){ distance = 6 }
+                        if(progress == 0){ distance = 3 }
+                        else if(progress == 1){ distance = 6 }
                         else { distance = 9 }
 
                         ServerUtil.retrofitService.requestDistance(accessToken, distance)
@@ -138,17 +138,14 @@ class MapActivity : AppCompatActivity() {
 
                                         my_place.setText(location!!.dong)
                                         user_distance.text = profile.searchDistance.toString() + "km"
-                                        if(profile.searchDistance == 0){
+                                        if(profile.searchDistance == 3){
                                             place_seekBar.setProgress(0)
                                         }
-                                        else if(profile.searchDistance == 3){
+                                        else if(profile.searchDistance == 6){
                                             place_seekBar.setProgress(1)
                                         }
-                                        else if(profile.searchDistance == 6){
-                                            place_seekBar.setProgress(2)
-                                        }
                                         else{
-                                            place_seekBar.setProgress(3)
+                                            place_seekBar.setProgress(2)
                                         }
 
                                         Log.d(TAG, "회원 지역정보 조회 성공")
@@ -266,7 +263,7 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun getLatLng(): Location{
-        lateinit var currentLatLng: Location
+
         var hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
             Manifest.permission.ACCESS_FINE_LOCATION)
         var hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this,

@@ -8,6 +8,7 @@
         <variable name="viewModel" type="com.example.graduatedproject.viewmodel.UserViewModel"/>
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,6 +19,8 @@
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints">
 
@@ -28,6 +31,7 @@
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
                 android:layout_gravity="center_vertical"
+                android:background="@drawable/imageview_corner"
                 app:imageUrl="@{viewModel.users.image.profileImage}"
                 />
 
@@ -35,36 +39,51 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 >
-
-                <Button
-                    android:id="@+id/my_page_apply_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="스터디 가입 내역"
-                    android:textSize="12dp"
-                    android:layout_marginTop="10dp"
-                    />
 
                 <TextView
                     android:id="@+id/my_page_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
                     android:text="@{viewModel.users.nickName}"
                     android:textSize="20dp"
                     android:textStyle="bold" />
-            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/profile_modify_btn"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="25dp"
-                android:src="@drawable/modify" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/profile_modify_btn"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="프로필 수정"
+                        android:textStyle="bold"
+                        android:textSize="14dp"
+                        android:background="@drawable/textview_background"
+                        android:gravity="center"
+                        android:textColor="@color/colorAccent"
+                        />
+
+                    <TextView
+                        android:id="@+id/my_page_apply_btn"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:text="스터디 가입 내역"
+                        android:textStyle="bold"
+                        android:textSize="14dp"
+                        android:background="@drawable/textview_background"
+                        android:gravity="center"
+                        android:textColor="@color/colorAccent"
+                        />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -76,37 +95,48 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
             tools:ignore="MissingConstraints">
 
-            <Button
+            <TextView
                 android:id="@+id/my_page_likes_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:background="@drawable/background_btn_green"
                 android:text="관심주제 설정"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
                 android:textSize="20dp" />
 
-            <Button
+            <TextView
                 android:id="@+id/my_page_place_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:text="동네정보 설정"
                 android:textSize="20dp"
-
+                android:background="@drawable/background_btn_green"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
                 />
 
-            <Button
+            <TextView
                 android:id="@+id/my_page_logout_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:background="@drawable/background_btn_green"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
                 android:text="로그아웃"
                 android:textSize="20dp" />
 
-            <Button
+            <TextView
                 android:id="@+id/my_page_delete_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:background="@drawable/background_btn_red"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
                 android:text="회원탈퇴"
                 android:textSize="20dp" />
 

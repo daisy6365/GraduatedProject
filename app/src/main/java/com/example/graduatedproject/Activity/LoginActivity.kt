@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
 
             else if (token != null) {
                 var kakaoToken : String = ""
-                Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show() //로그인 성공시 activity2로 이동
+                Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                 kakaoToken = token.accessToken
                 Log.d("kakaoToken",kakaoToken)
                 val sp = getSharedPreferences("login_sp", Context.MODE_PRIVATE)
@@ -93,11 +93,14 @@ class LoginActivity : AppCompatActivity() {
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                 finish()
                             }
+                            else if(response.code() == 400 || response.code() == 401 || response.code() == 402){
+                                Toast.makeText(this@LoginActivity, response.message(), Toast.LENGTH_LONG).show()
+                            }
                         }
 
                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.d(TAG, "로그인 실패")
-                            Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_LONG).show()
+                            Log.d(TAG, t.message.toString())
+                            Toast.makeText(this@LoginActivity, t.message.toString(), Toast.LENGTH_LONG).show()
                         }
                     })
 

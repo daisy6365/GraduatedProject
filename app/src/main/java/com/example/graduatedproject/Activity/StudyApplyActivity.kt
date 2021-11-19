@@ -10,6 +10,10 @@ import com.example.graduatedproject.model.Study
 import com.example.graduatedproject.R
 import com.example.graduatedproject.Util.ServerUtil
 import kotlinx.android.synthetic.main.activity_study_apply.*
+import kotlinx.android.synthetic.main.activity_study_apply.big_category
+import kotlinx.android.synthetic.main.activity_study_apply.people_number
+import kotlinx.android.synthetic.main.activity_study_apply.small_category
+import kotlinx.android.synthetic.main.activity_study_create.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +30,7 @@ class StudyApplyActivity : AppCompatActivity() {
         var pref = getSharedPreferences("login_sp", MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
         val studyId = intent.getIntExtra("studyId",0)
+        created_study_cover_img.clipToOutline = true
 
         Log.d("studyId", studyId.toString())
         if (intent.hasExtra("studyId")) {
@@ -86,7 +91,7 @@ class StudyApplyActivity : AppCompatActivity() {
 
                         if(studyInfo?.image?.profileImage == null){
                             Glide.with(this@StudyApplyActivity)
-                                .load(R.drawable.background_button)
+                                .load(R.drawable.applogo_gray)
                                 .centerCrop()
                                 .into(created_study_cover_img)
 

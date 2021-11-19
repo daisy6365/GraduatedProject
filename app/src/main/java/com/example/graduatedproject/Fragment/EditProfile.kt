@@ -52,6 +52,8 @@ class EditProfile() : DialogFragment() {
         user.users.observe(viewLifecycleOwner, Observer {
             if(it != null){
                 binding.editProfileName.setText(it.nickName)
+                binding.editProfileImg.clipToOutline = true
+                edit_profile_img.clipToOutline = true
                 if(it.image == null){
                     Glide.with(requireView().context)
                         .load(R.drawable.profile_init)

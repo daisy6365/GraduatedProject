@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -71,9 +72,12 @@ class MyPage : Fragment() {
         user.users.observe(viewLifecycleOwner, Observer {
             if(it != null){
                 binding.myPageName.text = it.nickName
+                binding.myPageProfile.clipToOutline = true
+                my_page_profile.clipToOutline = true
                 if(it.image == null){
                     Glide.with(requireView().context)
                         .load(R.drawable.profile_init)
+                        .centerCrop()
                         .into(my_page_profile)
                 }
                 else{
@@ -91,7 +95,7 @@ class MyPage : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        var profile_modify_btn : ImageView = view.findViewById(R.id.profile_modify_btn)
+        var profile_modify_btn : TextView = view.findViewById(R.id.profile_modify_btn)
         profile_modify_btn.setOnClickListener {
             //수정 버튼 누르면 새로운 프래그먼트 띄우기
             //EditProfile.kt 띄우기
@@ -101,7 +105,7 @@ class MyPage : Fragment() {
             dialog.show(requireActivity().getSupportFragmentManager(),"tag")
         }
 
-        val my_page_apply_btn : Button = view.findViewById(R.id.my_page_apply_btn)
+        val my_page_apply_btn : TextView = view.findViewById(R.id.my_page_apply_btn)
         my_page_apply_btn.setOnClickListener {
             val dialog = StudyApplyStatus().getInstance()
             dialog.show(requireActivity().getSupportFragmentManager(), "StudyApplyStatus")
@@ -110,7 +114,7 @@ class MyPage : Fragment() {
 
 
         //관심주제
-        val my_page_likes_btn: Button = view.findViewById(R.id.my_page_likes_btn)
+        val my_page_likes_btn: TextView = view.findViewById(R.id.my_page_likes_btn)
         my_page_likes_btn.setOnClickListener {
             activity?.let {
                 val intent = Intent(context, LiketopicActivity::class.java)
@@ -120,7 +124,7 @@ class MyPage : Fragment() {
         }
 
         //동네정보
-        val my_page_place_btn: Button = view.findViewById(R.id.my_page_place_btn)
+        val my_page_place_btn: TextView = view.findViewById(R.id.my_page_place_btn)
         my_page_place_btn.setOnClickListener {
             activity?.let {
                 val intent = Intent(context, MapActivity::class.java)
@@ -131,7 +135,7 @@ class MyPage : Fragment() {
 
 
         //로그아웃
-        val my_page_logout_btn: Button = view.findViewById(R.id.my_page_logout_btn)
+        val my_page_logout_btn: TextView = view.findViewById(R.id.my_page_logout_btn)
 
         /**
          * 만약 카카오 토큰이 존재한다면 만료시키고 없으면 그냥 아무것도 하지마
@@ -177,7 +181,7 @@ class MyPage : Fragment() {
 
 
         //회원탈퇴
-        val my_page_delete_btn: Button = view.findViewById(R.id.my_page_delete_btn)
+        val my_page_delete_btn: TextView = view.findViewById(R.id.my_page_delete_btn)
         my_page_delete_btn.setOnClickListener {
             //accessToken을 가져옴
             val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
@@ -223,6 +227,7 @@ class MyPage : Fragment() {
         fun bindImage(view:ImageView,url: String?) {
             Glide.with(view.context)
                 .load(url)
+                .centerCrop()
                 .into(view)
         }
     }

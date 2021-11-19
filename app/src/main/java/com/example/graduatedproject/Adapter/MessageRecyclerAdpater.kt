@@ -14,12 +14,29 @@ class MessageRecyclerAdpater(val userId : Int?) : RecyclerView.Adapter<RecyclerV
 
     class MyViewHolder(val binding : ItemChatMeBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(message: Message){
-            binding.message = message
+            val str = message.createdAt
+            val idT: Int = str!!.indexOf("T")
+            val time = str.substring(idT+1)
+
+            val timeList = time.split(":")
+            val time_group = timeList[0] + ":" + timeList[1]
+            binding.myMessagge.text = message.message.toString()
+            binding.myTime.text = time_group
         }
     }
     class YouViewHolder(val binding : ItemChatYouBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(message: Message){
-            binding.message = message
+            val str = message.createdAt
+            val idT: Int = str!!.indexOf("T")
+            val time = str.substring(idT+1)
+
+            val timeList = time.split(":")
+            val time_group = timeList[0] + ":" + timeList[1]
+
+            binding.otherName.text = message.sender.toString()
+            binding.otherMessage.text = message.message.toString()
+            binding.otherTime.text = time_group
+
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder{
@@ -50,8 +67,8 @@ class MessageRecyclerAdpater(val userId : Int?) : RecyclerView.Adapter<RecyclerV
     }
 
     fun setList(notice: MutableList<Message>) {
-        notice.reverse()
-        messageInfo.addAll(0, notice)
+        messageInfo.addAll(0,notice)
+        notifyDataSetChanged()
     }
 
     fun add(message: Message) {

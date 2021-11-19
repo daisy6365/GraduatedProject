@@ -75,8 +75,8 @@ class StudySearchActivity : AppCompatActivity() {
 
         study_searchview.setOnClickListener {
             //Activity 변경
-            val intent = Intent(this@StudySearchActivity, SearchStudy::class.java)
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            val dialog = SearchStudy()
+            dialog.show(supportFragmentManager, "SearchStudy")
         }
 
     }

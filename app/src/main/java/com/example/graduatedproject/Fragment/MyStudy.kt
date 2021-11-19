@@ -30,7 +30,7 @@ class MyStudy : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_my_study, container, false)
+        var view = inflater.inflate(R.layout.fragment_my_study, container, false)
 
         val pref = requireActivity().getSharedPreferences("login_sp", Context.MODE_PRIVATE)
         var accessToken: String = "Bearer " + pref.getString("access_token", "").toString()
@@ -48,7 +48,6 @@ class MyStudy : Fragment() {
 
                         recyclerView.layoutManager = linearLayoutManager
                         recyclerView.adapter = recyclerAdapter
-
 
                         Log.d(TAG, "회원 스터디 정보 받기 성공")
                     }

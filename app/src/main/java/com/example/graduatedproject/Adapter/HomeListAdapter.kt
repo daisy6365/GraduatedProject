@@ -59,6 +59,7 @@ class HomeListAdapter (
     }
     override fun onBindViewHolder(holder: HomeListViewHolder, position: Int) {
         holder.home_study_name.text = studyInfo!![position].name
+        holder.search_study_cover.clipToOutline = true
 
         if(studyInfo!![position].online == true && studyInfo!![position].offline == true){
             holder.home_on_off.setText("OFFLINE/ONLINE")
@@ -72,7 +73,7 @@ class HomeListAdapter (
 
         if(studyInfo!![position].image == null){
             Glide.with(holder.itemView.getContext())
-                .load(R.drawable.background_button)
+                .load(R.drawable.applogo_gray)
                 .centerCrop()
                 .into( holder.search_study_cover)
         }
@@ -82,6 +83,7 @@ class HomeListAdapter (
                 .centerCrop()
                 .into( holder.search_study_cover)
         }
+
 
         if(studyInfo!![position].studyTags != null){
             for(i in 0..studyInfo!![position].studyTags!!.size-1){

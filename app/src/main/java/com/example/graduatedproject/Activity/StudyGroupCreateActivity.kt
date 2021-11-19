@@ -94,9 +94,10 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
                 check_offline.setOnCheckedChangeListener { buttonView, isChecked ->
                     if(isChecked){
                         offline = true
-                        create_detail_place_edit.visibility = View.VISIBLE
-                        map_view.visibility = View.VISIBLE
-                        mapview_notice.visibility = View.VISIBLE
+                        location_group.visibility = View.VISIBLE
+//                        create_detail_place_edit.visibility = View.VISIBLE
+//                        map_view.visibility = View.VISIBLE
+//                        mapview_notice.visibility = View.VISIBLE
                     }
                     else{
                         offline = false
@@ -105,9 +106,10 @@ class StudyGroupCreateActivity : AppCompatActivity(), MapView.MapViewEventListen
                 check_online.setOnCheckedChangeListener { buttonView, isChecked ->
                     if(isChecked){
                         online = true
-                        create_detail_place_edit.visibility = View.GONE
-                        map_view.visibility = View.GONE
-                        mapview_notice.visibility = View.GONE
+                        location_group.visibility = View.GONE
+//                        create_detail_place_edit.visibility = View.GONE
+//                        map_view.visibility = View.GONE
+//                        mapview_notice.visibility = View.GONE
                     }
                     else{
                         online = false

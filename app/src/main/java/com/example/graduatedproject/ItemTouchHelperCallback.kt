@@ -138,7 +138,7 @@ open class ItemTouchHelperCallback : ItemTouchHelper.Callback {
                 itemView.right - 10.toFloat() ,
                 itemView.bottom - 10.toFloat()
             )
-            p.setColor(Color.RED)
+            p.setColor(Color.rgb(230,101,101))
             c.drawRoundRect(rightButton, corners, corners, p)
             drawText("삭제", c, rightButton, p)
             buttonInstance = rightButton
@@ -151,7 +151,7 @@ open class ItemTouchHelperCallback : ItemTouchHelper.Callback {
                 itemView.left + buttonWidthWithOutPadding,
                 itemView.bottom - 10.toFloat()
             )
-            p.setColor(Color.GRAY)
+            p.setColor(Color.rgb(128,128,128))
             c.drawRoundRect(leftButton, corners, corners, p)
             drawText("수정", c, leftButton, p)
             buttonInstance = leftButton

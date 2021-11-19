@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/colorbeige"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,141 +17,148 @@
             android:gravity="center"
             android:layout_margin="20dp"
             >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/background_white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="- 스터디 표지 설정"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/modify_study_cover_img"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/imageview_corner"
+                        android:padding="10dp"
+                        android:src="@drawable/applogo_gray" />
+
+                    <TextView
+                        android:id="@+id/modify_study_cover_btn"
+                        android:background="@drawable/background_btn_green"
+                        android:layout_width="140dp"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:textSize="15dp"
+                        android:text="표지 변경"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/colorWhite" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="80dp"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="- 스터디 참여인원"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="80dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:id="@+id/modify_number_minus"
+                            android:src="@drawable/ic_baseline_remove_24"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"/>
+
+                        <TextView
+                            android:id="@+id/modify_people_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:text="0"
+                            android:textSize="30dp"/>
+
+                        <ImageView
+                            android:id="@+id/modify_number_plus"
+                            android:src="@drawable/ic_baseline_add_24"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#DBE3CB"
-                android:layout_marginTop="20dp"
+                android:background="@drawable/background_white"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
+                android:layout_gravity="center_vertical"
                 >
-                <LinearLayout
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="- 스터디 이름입력"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <EditText
+                    android:id="@+id/modify_study_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingTop="10dp"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:ems="8"
+                    android:textSize="20dp"
+                    android:hint="스터디 이름" />
 
-                    <LinearLayout
-                        android:layout_margin="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
-                        >
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:layout_gravity="center_horizontal"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="참여인원"/>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:layout_gravity="center"
-                                android:orientation="horizontal">
-                                <ImageView
-                                    android:id="@+id/modify_number_minus"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"/>
-
-                                <TextView
-                                    android:id="@+id/modify_people_number"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textSize="25dp"/>
-
-                                <ImageView
-                                    android:id="@+id/modify_number_plus"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"/>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
+            </LinearLayout>
 
 
-                        <EditText
-                            android:id="@+id/modify_study_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginBottom="10dp"
-                            android:ems="8"
-                            android:textSize="20dp"
-                            android:hint="스터디 이름" />
-
-                        <LinearLayout
-                            android:layout_marginBottom="10dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                android:id="@+id/modify_edit_tag"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="관련태그 입력"
-                                android:textSize="18dp"
-                                android:ems="6"
-                                />
-                            <Button
-                                android:id="@+id/add_tag_btn"
-                                android:layout_width="50dp"
-                                android:layout_height="40dp"
-                                android:text="추가"
-                                android:textSize="8dp"
-                                android:layout_marginLeft="10dp"
-                                />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginRight="10dp"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:id="@+id/modify_study_cover_img"
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
-                            android:layout_weight="2"
-                            android:src="@drawable/background_button"
-                            />
-                        <Button
-                            android:id="@+id/modify_study_cover_btn"
-                            android:layout_width="140dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:textSize="15dp"
-                            android:text="표지 변경"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/modify_chip_group"
-                    android:layout_margin="5dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/background_white"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                >
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                </com.google.android.material.chip.ChipGroup>
-
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="15dp"
+                    android:text="- 스터디 주제설정"/>
 
                 <LinearLayout
                     android:layout_marginLeft="10dp"
@@ -175,7 +184,7 @@
                         android:gravity="center"
                         android:textSize="15dp"
                         android:padding="8dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
                         android:text="작은 카테고리"
                         android:background="@drawable/textview_background"/>
                 </LinearLayout>
@@ -185,8 +194,63 @@
                     android:textSize="13dp"
                     android:padding="5dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"
                     android:text="* 스터디의 카테고리는 변경할 수 없습니다."/>
+                    <LinearLayout
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal">
 
+                        <EditText
+                            android:id="@+id/modify_edit_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="관련태그 입력"
+                            android:textSize="18dp"
+                            android:ems="6"
+                            />
+
+                        <TextView
+                            android:id="@+id/add_tag_btn"
+                            android:background="@drawable/background_btn_green"
+                            android:layout_width="50dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:textSize="10dp"
+                            android:text="추가"
+                            android:padding="5dp"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/colorWhite" />
+
+                    </LinearLayout>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/modify_chip_group"
+                    android:layout_margin="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </com.google.android.material.chip.ChipGroup>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/background_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="15dp"
+                    android:text="-스터디 상세소개 입력"/>
                 <EditText
                     android:id="@+id/modify_introduce_text"
                     android:inputType="textMultiLine"
@@ -194,14 +258,24 @@
                     android:minLines="2"
                     android:maxLines="5"
                     android:scrollbars="vertical"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="스터디를 소개해주세요."
                     android:textSize="15dp"
                     />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/background_white"
+                android:paddingLeft="10dp"
+                >
 
                 <Switch
                     android:id="@+id/study_close"
@@ -211,16 +285,24 @@
                     android:textSize="15dp"
                     android:text="모집마감"/>
 
-                <LinearLayout
-                    android:id="@+id/check_group"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:paddingLeft="10dp">
+                    android:textSize="15dp"
+                    android:text="- 스터디 활동상태설정"/>
 
+                <LinearLayout
+                    android:id="@+id/check_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/background_white"
+                    >
                     <CheckBox
                         android:id="@+id/modify_check_offline"
                         android:layout_width="wrap_content"
@@ -233,29 +315,43 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:text="온라인"/>
-
                 </LinearLayout>
+            </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/modify_map_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/background_white"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    />
+                    android:textSize="15dp"
+                    android:text="- 위치 설정"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="원하는 위치를 길게눌러서 마커를 찍으세요."
-                    android:textSize="13dp"
+                    android:textSize="15dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/modify_map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     />
 
-
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -263,20 +359,27 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 >
-                <Button
+                <TextView
                     android:id="@+id/modify_study_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_btn_green"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:textSize="15dp"
                     android:text="수정완료"
-                    android:layout_margin="10dp"
-                    />
-                <Button
+                    android:layout_margin="20dp"
+                    android:textColor="@color/colorWhite" />
+
+                <TextView
                     android:id="@+id/delete_study"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_button"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:textSize="15dp"
                     android:text="삭제하기"
-                    android:layout_margin="10dp"
-                    />
+                    android:layout_margin="20dp"
+                    android:textColor="@color/colorWhite" />
 
             </LinearLayout>
 
